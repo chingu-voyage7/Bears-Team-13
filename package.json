@@ -3,12 +3,25 @@
   "version": "0.1.0",
   "private": true,
   "dependencies": {
+    "body-parser": "^1.18.3",
+    "connect-mongo": "^2.0.2",
+    "dotenv": "^6.1.0",
+    "express": "^4.16.4",
+    "express-session": "^1.15.6",
+    "mongodb": "^3.1.10",
+    "mongoose": "^5.3.13",
+    "passport": "^0.4.0",
+    "passport-local": "^1.0.0",
     "react": "^16.6.3",
     "react-dom": "^16.6.3",
-    "react-scripts": "2.1.1"
+    "react-router-dom": "^4.3.1",
+    "react-scripts": "2.1.1",
+    "styled-components": "^4.1.1"
   },
   "scripts": {
+    "beast": "start cmd /k \"nodemon --watch src/js/server src/js/server/server.js\" && set PORT=3000 && react-scripts start",
     "start": "react-scripts start",
+    "api": "nodemon --watch src/js/server src/js/server/server.js",
     "build": "react-scripts build",
     "test": "react-scripts test",
     "eject": "react-scripts eject"
@@ -16,10 +29,14 @@
   "eslintConfig": {
     "extends": "react-app"
   },
+  "proxy": "http://localhost",
   "browserslist": [
     ">0.2%",
     "not dead",
     "not ie <= 11",
     "not op_mini all"
-  ]
+  ],
+  "devDependencies": {
+    "nodemon": "^1.18.6"
+  }
 }

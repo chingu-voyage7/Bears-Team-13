@@ -1,6 +1,7 @@
 var mongoose = require('mongoose');
 var schema = require('./schema.js');
 
+console.log(process.env.DB_URI);
 module.exports = {
   connectToServer: function ( callback ) {
     mongoose.connect(process.env.DB_URI, { useNewUrlParser: true}).then(() => {

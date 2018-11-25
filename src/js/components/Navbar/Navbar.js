@@ -1,5 +1,7 @@
 import React, {Component} from 'react';
 import {Link, Redirect} from 'react-router-dom';
+import {Nav, AppName} from './nav-style'
+
 
 export default class Navbar extends Component {
   constructor(props) {
@@ -22,8 +24,8 @@ export default class Navbar extends Component {
     }
 
     return (
-      <nav>
-        <h2>Secret Santa</h2>
+      <Nav>
+        <AppName>Secret Santa</AppName>
         {this.props.globals.user?(
           <div>
             <Link to="#" onClick={this.toggleLogout.bind(this)}>Logout</Link>
@@ -34,7 +36,7 @@ export default class Navbar extends Component {
             <Link to="/login">Login</Link>
           </div>
         )}
-      </nav>
+      </Nav>
     );
   }
 }

@@ -13,7 +13,7 @@ router.post('/adduser', function (req, res) {
   User.findOne({username: req.body.username}, (err, existing) => {
     if (err) return res.sendStatus(500);
 
-    console.log("existing? " + existing);
+    console.log("existing? " + existing?true:false);
 
     if (!existing) {
       User.create(req.body, (err, user) => {

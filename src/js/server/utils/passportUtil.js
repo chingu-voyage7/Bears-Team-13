@@ -19,12 +19,13 @@ let setupPassport = function (app) {
   
   passport.use(new LocalStrategy(
     function (usernameOrEmail, password, done) {
-        User.findOne({usernameOrEmail}, (err, user) => {
+        User.findOne({$or:[{email: usernameOrEmail},{username: usernameOrEmail}]}, (err, user) => {
         console.log("User " + usernameOrEmail + " attempted to log in.");
         if (err) { return done(err); }
         if (!user) { return done(null, false); }
         if (password !== user.password) { return done(null, false); }
         console.log("User " + usernameOrEmail + " logged in.");
+        user.password = null;
         return done(null, user);
       });
     }

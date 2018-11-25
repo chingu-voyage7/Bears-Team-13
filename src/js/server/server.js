@@ -1,10 +1,11 @@
+require('dotenv').config();
 const express = require('express');
 const app = express();
 const bodyParser = require('body-parser');
 const mongoUtil = require('./utils/mongoUtil.js');
 const api = require('./api.js');
 
-require('dotenv').config();
+
 const PORT = process.env.PORT || 80;
 
 // Parse body

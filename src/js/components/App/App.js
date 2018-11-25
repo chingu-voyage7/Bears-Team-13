@@ -1,9 +1,18 @@
 import React, { Component } from 'react';
 import {BrowserRouter as Router, Route, Link} from 'react-router-dom';
+import Navbar from '../Navbar/Navbar.js';
 
 const ROUTES = [{
   path: '/',
-  component: require('../../pages/Index/Index').default,
+  component: require('../../pages/Index/Index.js').default,
+  exact: true
+}, {
+  path: '/signup',
+  component: require('../../pages/Signup/Signup.js').default,
+  exact: true
+}, {
+  path: '/login',
+  component: require('../../pages/Login/Login.js').default,
   exact: true
 }];
 
@@ -24,7 +33,7 @@ class App extends Component {
     return (
       <Router>
         <div>
-          <navbar>I'm the navbar!</navbar>    
+          <Navbar globals={this.state} setGlobal={this.setGlobal.bind(this)}/> 
           {ROUTES.map(({path, component: C, exact}) => {
             if (exact) {
               return (

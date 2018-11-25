@@ -8,10 +8,12 @@ const isAuth = passportUtil.isAuth;
 
 router.post('/adduser', function (req, res) {
 
+  console.log("BODY: " + JSON.stringify(req.body));
+
   User.findOne({username: req.body.username}, (err, existing) => {
     if (err) return res.sendStatus(500);
 
-    console.log(existing);
+    console.log("existing? " + existing?true:false);
 
     if (!existing) {
       User.create(req.body, (err, user) => {
@@ -23,11 +25,11 @@ router.post('/adduser', function (req, res) {
         res.sendStatus(200);
       });
     } else {
-      return res.sendStatus(400);
+      return res.json({error: "username or email exists."}).status(400);
     }
   });
 
-  console.log("BODY: " + JSON.stringify(req.body));
+  
 });
 
 module.exports = router;

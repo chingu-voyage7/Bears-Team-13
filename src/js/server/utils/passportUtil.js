@@ -18,13 +18,14 @@ let setupPassport = function (app) {
   if (setup) return;
   
   passport.use(new LocalStrategy(
-    function (username, password, done) {
-        User.findOne({username}, (err, user) => {
-        console.log("User " + username + " attempted to log in.");
+    function (usernameOrEmail, password, done) {
+        User.findOne({$or:[{email: usernameOrEmail},{username: usernameOrEmail}]}, (err, user) => {
+        console.log("User " + usernameOrEmail + " attempted to log in.");
         if (err) { return done(err); }
         if (!user) { return done(null, false); }
         if (password !== user.password) { return done(null, false); }
-        console.log("User " + username + " logged in.");
+        console.log("User " + usernameOrEmail + " logged in.");
+        user.password = null;
         return done(null, user);
       });
     }

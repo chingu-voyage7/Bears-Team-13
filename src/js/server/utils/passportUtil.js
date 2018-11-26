@@ -25,14 +25,13 @@ let setupPassport = function (app) {
         if (!user) { return done(null, false); }
         if (password !== user.password) { return done(null, false); }
         console.log("User " + usernameOrEmail + " logged in.");
-        user.password = null;
         return done(null, user);
       });
     }
   ));
 
   app.use(session({
-    secret: 'super_secret1209348237',
+    secret: process.env.SESSION_SECRET,
     resave: true,
     saveUninitialized: true,
     store: new MongoStore({mongooseConnection: mongoUtil.getConnection()})
@@ -56,7 +55,6 @@ let setupPassport = function (app) {
   });
 
   setup = true;
-
 }
 
 let isAuth = function(req, res, next) {

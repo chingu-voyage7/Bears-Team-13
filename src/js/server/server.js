@@ -1,10 +1,19 @@
+const config = require('../../config.js');
+let keys = Object.keys(config);
+keys.map((key) => {
+  if (!process.env[key]) {
+    process.env[key] = config[key];
+  } else {
+    console.log("process.env." + key + " already defined.");
+  }
+});
 const express = require('express');
 const app = express();
 const bodyParser = require('body-parser');
 const mongoUtil = require('./utils/mongoUtil.js');
 const api = require('./api.js');
 
-const PORT = process.env.REACT_APP_PORT || 80;
+const PORT = process.env.PORT || 80;
 
 // Parse body
 app.use(bodyParser.urlencoded({extended: true}));

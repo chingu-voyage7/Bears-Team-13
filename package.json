@@ -21,7 +21,7 @@
   "scripts": {
     "beast": "start cmd /k \"nodemon --watch src/js/server src/js/server/server.js\" && set PORT=3000 && react-scripts start",
     "start": "react-scripts start",
-    "api": "nodemon -r dotenv/config --watch src/js/server src/js/server/server.js",
+    "api": "nodemon --watch src/js/server src/js/server/server.js",
     "build": "react-scripts build",
     "test": "react-scripts test",
     "eject": "react-scripts eject"

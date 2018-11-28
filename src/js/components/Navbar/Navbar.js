@@ -1,5 +1,7 @@
 import React, {Component} from 'react';
 import {Link, Redirect} from 'react-router-dom';
+import {Nav, AppName, LinksContainer, LinkStyle} from './nav-style'
+
 
 export default class Navbar extends Component {
   constructor(props) {
@@ -22,19 +24,23 @@ export default class Navbar extends Component {
     }
 
     return (
-      <nav>
-        <h2>Secret Santa</h2>
+      <Nav>
+        <AppName>Secret Santa</AppName>
+        
         {this.props.globals.user?(
+          
           <div>
-            <Link to="#" onClick={this.toggleLogout.bind(this)}>Logout</Link>
+            <Link style={{ textDecoration: 'none' }} to="#" onClick={this.toggleLogout.bind(this)}>Logout</Link>
           </div>
         ):(
-          <div>
-            <Link to="/signup">Signup</Link>
-            <Link to="/login">Login</Link>
-          </div>
+          <LinksContainer>
+        
+           <Link to="/signup" style={{ textDecoration: 'none' }}>  <LinkStyle>Signup</LinkStyle></Link>
+          <Link to="/login" style={{ textDecoration: 'none' }}>  <LinkStyle> Login </LinkStyle></Link>
+     
+          </LinksContainer>
         )}
-      </nav>
+      </Nav>
     );
   }
 }

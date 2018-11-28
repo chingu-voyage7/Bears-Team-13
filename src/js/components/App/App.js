@@ -1,6 +1,9 @@
 import React, { Component } from 'react';
 import {BrowserRouter as Router, Route, Link} from 'react-router-dom';
 import Navbar from '../Navbar/Navbar.js';
+import {MainContainer} from './app-style'
+import Footer from '../Footer/Footer.js'
+
 
 const ROUTES = [{
   path: '/',
@@ -32,7 +35,7 @@ class App extends Component {
   render() {
     return (
       <Router>
-        <div>
+        <MainContainer>
           <Navbar globals={this.state} setGlobal={this.setGlobal.bind(this)}/> 
           {ROUTES.map(({path, component: C, exact}) => {
             if (exact) {
@@ -52,7 +55,9 @@ class App extends Component {
                 />);
             }
           })}
-        </div> 
+          <Footer></Footer>
+
+        </MainContainer> 
       </Router>
     );
   }

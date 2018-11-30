@@ -27,6 +27,7 @@ export default class Navbar extends Component {
         {this.props.globals.user?(
           <div>
             <Link to="#" onClick={this.toggleLogout.bind(this)}>Logout</Link>
+            <Link to="/myaccount">My Account</Link>
           </div>
         ):(
           <div>

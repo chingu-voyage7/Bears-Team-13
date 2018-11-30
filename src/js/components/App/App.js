@@ -14,6 +14,10 @@ const ROUTES = [{
   path: '/login',
   component: require('../../pages/Login/Login.js').default,
   exact: true
+}, {
+  path: '/myaccount',
+  component: require('../../pages/MyAccount/MyAccount.js').default,
+  exact: true
 }];
 
 class App extends Component {
@@ -33,7 +37,7 @@ class App extends Component {
     return (
       <Router>
         <div>
-          <Navbar globals={this.state} setGlobal={this.setGlobal.bind(this)}/> 
+          <Navbar globals={this.state} setGlobal={this.setGlobal.bind(this)}/>
           {ROUTES.map(({path, component: C, exact}) => {
             if (exact) {
               return (
@@ -41,10 +45,10 @@ class App extends Component {
                   key={path}
                   path={path}
                   render={(props) => <C {...props} setGlobal={this.setGlobal.bind(this)} globals={this.state}/>}
-                  exact 
+                  exact
                 />);
             } else {
-              return ( 
+              return (
                 <Route
                   key={path}
                   path={path}
@@ -52,7 +56,7 @@ class App extends Component {
                 />);
             }
           })}
-        </div> 
+        </div>
       </Router>
     );
   }

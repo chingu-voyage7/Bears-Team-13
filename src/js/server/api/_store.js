@@ -16,4 +16,8 @@ router.get("/finditem", (req, res) => {
   }).skip(req.query.page * 10).limit(10);
 });
 
+router.post('/purchase', (req, res) => {
+  
+});
+
 module.exports = router;

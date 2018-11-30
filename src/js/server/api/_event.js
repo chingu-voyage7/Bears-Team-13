@@ -7,6 +7,7 @@ const mongoUtil = require('../utils/mongoUtil.js');
 const Event = mongoUtil.compile("Event");
 
 // Returns a list of events
+// Given ["key", "value", "key", "value"...]
 router.get("/getevents", (req, res) => {
   const parsed = JSON.parse(req.query.query);
   const temp = {};
@@ -32,7 +33,7 @@ router.get("/getevents", (req, res) => {
 router.post('/addevent', isAuth, (req, res) => {
   console.log("BODY: " + JSON.stringify(req.body));
   const event = req.body;
-  event.author = req.user.username;
+  event.author = {_id: req.user._id, username: req.user.username};
   event.creationDate = Date.now();
   Event.create(event, (err, result) => {
     if (err) { return res.sendStatus(500); }
@@ -70,10 +71,9 @@ router.delete('/deleteevent', isAuth, (req, res) => {
 
     console.log(JSON.stringify(findDoc.members));
     console.log(req.user.username);
-    console.log(findDoc.members.indexOf({name: req.user.username, role: "author"}));
 
     // Authorized to delete?
-    if (findDoc.author === req.user.username) {
+    if (findDoc.author._id === req.user._id) {
       Event.updateOne({_id: ObjectID(req.body._id)}, (err, doc) => {
         if (err) { return res.sendStatus(500); }
         if (!doc) { return res.sendStatus(400); }

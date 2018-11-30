@@ -28,10 +28,15 @@ router.post('/adduser', function (req, res) {
     if (err) return res.sendStatus(500);
 
     if (!existing) {
-      User.create(req.body, (err, user) => {
+      var user = new User();
+      user.username = req.body.username;
+      user.email = req.body.email;
+      user.password = user.generateHash(req.body.password);
+      user.firstName = req.body.firstName;
+      User.create(user, (err, user) => {
         if (err) return res.sendStatus(500);
         if (!user) return res.sendStatus(500);
-  
+        console.log(JSON.stringify(user));
         console.log("User " + req.body.username + " was added.");
         passport.authenticate('local');
         res.sendStatus(200);
@@ -87,7 +92,7 @@ router.delete('/deleteuser', isAuth, function (req, res) {
   User.deleteOne({username: req.user.username}, (err, doc) => {
     if (err) { return res.sendStatus(500); }
     if (!doc) { return res.sendStatus(400); }
-    console.log("User " + req.user.username + " was obliterated.");
+    console.log("User " + req.user.username + " was deleted.");
     res.sendStatus(200);
   });
 });

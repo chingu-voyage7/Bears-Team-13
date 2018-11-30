@@ -8,8 +8,6 @@ const session = require('express-session');
 const mongoUtil = require('./mongoUtil.js');
 const ObjectID = require('mongodb').ObjectID;
 const MongoStore = require('connect-mongo')(session);
-
-// Compile schema
 const User = mongoUtil.compile('User');
 
 var setup = false;
@@ -23,7 +21,7 @@ let setupPassport = function (app) {
         console.log("User " + usernameOrEmail + " attempted to log in.");
         if (err) { return done(err); }
         if (!user) { return done(null, false); }
-        if (password !== user.password) { return done(null, false); }
+        if (!user.validPassword(password)) { return done(null, false); }
         console.log("User " + usernameOrEmail + " logged in.");
         return done(null, user);
       });
@@ -48,7 +46,6 @@ let setupPassport = function (app) {
     User.findOne(
       {_id: new ObjectID(id)},
       (err, doc) => {
-        delete doc.password;
         done(null, doc);
       }
     );

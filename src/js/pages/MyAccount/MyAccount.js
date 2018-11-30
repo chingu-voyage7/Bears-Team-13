@@ -51,7 +51,11 @@ export default class MyAccount extends Component {
   }
 
   onUpdateGeneral = (e) => {
-    const updates = {...this.state.user};
+    const updates = {
+      updates: this.state.user
+    };
+
+    console.log(updates)
 
     e.preventDefault();
 

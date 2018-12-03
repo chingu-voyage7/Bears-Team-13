@@ -2,8 +2,10 @@ const router = require('express').Router();
 const passportUtil = require('../utils/passportUtil.js');
 const passport = passportUtil.getPassport();
 const isAuth = passportUtil.isAuth;
-const mongoUtil = require('../utils/mongoUtil.js');
-const User = mongoUtil.compile("User");
+const ObjectID = require('mongodb').ObjectID;
+const schema = require('../utils/schema.js');
+const User = schema.User;
+const Event = schema.Event;
 
 // Returns User's PUBLIC info
 // (Everything less {email, password})
@@ -20,24 +22,24 @@ router.get('/getuser', function (req, res) {
     console.log(doc);
     res.json(doc);
   });
-})
+});
 
 // Adds user to the DB
 router.post('/adduser', function (req, res) {
-  User.findOne({username: req.body.username}, (err, existing) => {
-    if (err) return res.sendStatus(500);
+  if (!req.body.email || !req.body.username || !req.body.password) {
+    return res.send("Error. Email, Username, Password required").status(400);
+  }
+
+  User.findOne({$or: [{username: req.body.username}, {email: req.body.email}]}, { id: 1}, (err, existing) => {
+    if (err) { return res.sendStatus(500); }
 
     if (!existing) {
-      var user = new User();
-      user.username = req.body.username;
-      user.email = req.body.email;
+      var user = new User(req.body);
       user.password = user.generateHash(req.body.password);
-      user.firstName = req.body.firstName;
-      User.create(user, (err, user) => {
-        if (err) return res.sendStatus(500);
-        if (!user) return res.sendStatus(500);
-        console.log(JSON.stringify(user));
-        console.log("User " + req.body.username + " was added.");
+      User.create(user, {id: 1}, (err, doc) => {
+        if (err) { return res.sendStatus(500); }
+        if (!doc) { return res.sendStatus(500); }
+        console.log("User " + user.username + " was added.");
         passport.authenticate('local');
         res.sendStatus(200);
       });
@@ -94,6 +96,27 @@ router.delete('/deleteuser', isAuth, function (req, res) {
     if (!doc) { return res.sendStatus(400); }
     console.log("User " + req.user.username + " was deleted.");
     res.sendStatus(200);
+  });
+});
+
+// Returns a list of user's events
+router.get('/myevents', isAuth, function(req, res) {
+  var page = req.query.page;
+  delete req.query.page;
+  User.findOne({_id: new ObjectID(req.user._id)}, {events: 1}, (err, userDoc) => {
+    const eventIDs = userDoc.events;
+    if (err) { return res.sendStatus(500); }
+    if (!eventIDs) { return res.sendStatus(404); }
+    console.log("User Events found...");
+    console.log(JSON.stringify(eventIDs));
+
+    Event.find({_id: { $in: eventIDs}}, req.query, (err, events) => {
+      if (err) { return res.sendStatus(500); }
+      if (!events) { return res.sendStatus(404); }
+      console.log(JSON.stringify(events));
+      res.json(events);
+    }).skip(page * 10).limit(10);
+
   });
 });
 

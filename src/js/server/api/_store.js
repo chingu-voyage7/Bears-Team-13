@@ -1,6 +1,5 @@
 const router = require('express').Router();
-const mongoUtil = require('../utils/mongoUtil.js');
-const Item = mongoUtil.compile("Item");
+const Item = require('../utils/schema.js').Item;
 
 router.get("/finditem", (req, res) => {
   if (!req.query.query) { return res.sendStatus(400); }

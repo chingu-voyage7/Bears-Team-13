@@ -6,9 +6,10 @@ const session = require('express-session');
 
 // Mongoose
 const mongoUtil = require('./mongoUtil.js');
+const schema = require('./schema.js');
 const ObjectID = require('mongodb').ObjectID;
 const MongoStore = require('connect-mongo')(session);
-const User = mongoUtil.compile('User');
+const User = schema.User;
 
 var setup = false;
 

@@ -3,8 +3,9 @@ const passportUtil = require('../utils/passportUtil.js');
 const passport = passportUtil.getPassport();
 const isAuth = passportUtil.isAuth;
 const ObjectID = require('mongodb').ObjectID;
-const mongoUtil = require('../utils/mongoUtil.js');
-const Event = mongoUtil.compile("Event");
+const schema = require('../utils/schema.js');
+const Event = schema.Event;
+const User = schema.User;
 
 // Returns a list of events
 // Given ["key", "value", "key", "value"...]
@@ -31,16 +32,20 @@ router.get("/getevents", (req, res) => {
 
 // POSTS an event to our db
 router.post('/addevent', isAuth, (req, res) => {
-  console.log("BODY: " + JSON.stringify(req.body));
-  const event = req.body;
-  event.author = {_id: req.user._id, username: req.user.username};
+  var event = req.body;
+  event.author = [req.user._id, req.user.username];
   event.creationDate = Date.now();
   Event.create(event, (err, result) => {
     if (err) { return res.sendStatus(500); }
     if (!result) { return res.sendStatus(404); }
-    console.log("Event added.");
-    console.log(JSON.stringify(result));
-    res.json(result);
+      console.log("Event " + event.name + " added.");
+    User.updateOne({_id: new ObjectID(req.user._id)}, {$push: {events: result._id}}, (err, raw) => {
+      if (err) { return res.sendStatus(500); }
+      if (!raw) { return res.sendStatus(404); }
+      console.log("Event added to " + req.user.username + "'s list.");
+      res.json(result);
+    });
+
   });
 });
 

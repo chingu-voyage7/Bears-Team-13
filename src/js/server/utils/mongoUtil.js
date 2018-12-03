@@ -1,5 +1,4 @@
 var mongoose = require('mongoose');
-var schema = require('./schema.js');
 
 module.exports = {
   connectToServer: function ( callback ) {
@@ -14,16 +13,8 @@ module.exports = {
     return mongoose.connection.db;
   },
 
-  getConnection: function() {
+  getConnection: function getConnection() {
     return mongoose.connection;
-  },
-
-  compile: function(schemaName) {
-    if (schema[schemaName]) {
-      return mongoose.connection.model(schemaName, schema[schemaName]);
-    } else {
-      console.log("ERROR: " + schemaName + " schema does not exist.");
-      return null;
-    }
   }
+
 }

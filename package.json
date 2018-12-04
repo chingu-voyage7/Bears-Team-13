@@ -4,6 +4,7 @@
   "private": true,
   "dependencies": {
     "axios": "^0.18.0",
+    "bcrypt-nodejs": "0.0.3",
     "body-parser": "^1.18.3",
     "connect-mongo": "^2.0.2",
     "express": "^4.16.4",

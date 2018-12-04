@@ -5,7 +5,6 @@ let isAuth = passportUtil.isAuth;
 
 router.post('/login', passport.authenticate('local'),
 function (req, res) {
-  console.log("BODY: " + JSON.stringify(req.body));
   var user = req.user;
   user.password = null;
   res.json(user);

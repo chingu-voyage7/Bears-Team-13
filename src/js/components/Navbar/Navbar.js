@@ -30,13 +30,13 @@ export default class Navbar extends Component {
         {this.props.globals.user?(
           
           <div>
-            <Link style={{ textDecoration: 'none' }} to="#" onClick={this.toggleLogout.bind(this)}>Logout</Link>
+            <Link style={{ textDecoration: 'none' }} to="#" onClick={this.toggleLogout.bind(this)}>logout</Link>
           </div>
         ):(
           <LinksContainer>
         
-           <Link to="/signup" style={{ textDecoration: 'none' }}>  <LinkStyle>Signup</LinkStyle></Link>
-          <Link to="/login" style={{ textDecoration: 'none' }}>  <LinkStyle> Login </LinkStyle></Link>
+            <Link to="/signup" style={{ textDecoration: 'none' }}>  <LinkStyle>signup</LinkStyle></Link>
+            <Link to="/login" style={{ textDecoration: 'none' }}>  <LinkStyle> login </LinkStyle></Link>
      
           </LinksContainer>
         )}

@@ -1,7 +1,7 @@
 import React, { Component } from 'react';
 import {BrowserRouter as Router, Route, Link} from 'react-router-dom';
 import Navbar from '../Navbar/Navbar.js';
-import {MainContainer} from './app-style'
+import {MainContainer, SpaceBottom, SpaceTop} from './app-style'
 import Footer from '../Footer/Footer.js'
 
 
@@ -37,6 +37,8 @@ class App extends Component {
       <Router>
         <MainContainer>
           <Navbar globals={this.state} setGlobal={this.setGlobal.bind(this)}/> 
+          <SpaceTop></SpaceTop>
+
           {ROUTES.map(({path, component: C, exact}) => {
             if (exact) {
               return (
@@ -55,6 +57,7 @@ class App extends Component {
                 />);
             }
           })}
+          <SpaceBottom></SpaceBottom>
           <Footer></Footer>
 
         </MainContainer> 

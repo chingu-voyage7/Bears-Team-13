@@ -45,7 +45,7 @@ router.post('/adduser', function (req, res) {
       console.log("ERR: username or email already exists.");
       return res.json({error: "username or email already exists."}).status(400);
     }
-  });  
+  });
 });
 
 // Returns callback(status) regarding a doc update.
@@ -59,7 +59,7 @@ function validUpdates(updates, callback) {
       if (err) { return callback(500); }
       if (!doc) { return callback(200); }
       if (doc) { return callback(400); }
-    }); 
+    });
   } else {
     return callback(200);
   }
@@ -68,6 +68,7 @@ function validUpdates(updates, callback) {
 // Edit User {key, value}
 router.put('/edituser', isAuth, function (req, res) {
   const updates = req.body.updates;
+  const fieldsToUpdate = req.body.updates.updates
 
   console.log(updates);
 
@@ -76,12 +77,12 @@ router.put('/edituser', isAuth, function (req, res) {
       return res.sendStatus(status);
     }
 
-    User.updateOne({username: req.user.username}, {$set: updates}, (err, doc) => {
+    User.updateOne({username: req.user.username}, {$set: fieldsToUpdate}, (err, doc) => {
       if (err) { res.sendStatus(500); }
       if (!doc) { res.sendStatus(400); }
       console.log("User '" + req.user.username + "' was updated.");
       res.sendStatus(200);
-    });  
+    });
   });
 
 });

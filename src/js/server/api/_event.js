@@ -96,7 +96,8 @@ router.delete('/deleteevent', isAuth, (req, res) => {
 router.post('/invite', isAuth, (req, res) => {
   console.log("Inviting user...");
   console.log(req.body);
-  mailer.invite(req.body.email, req.user.username);
+  mailer.invite(req.body.to, req.user.username);
+  res.send(200);
 });
 
 module.exports = router;

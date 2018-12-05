@@ -4,6 +4,7 @@ sgMail.setApiKey(config.SG_KEY);
 
 module.exports = {
   invite: function(to, firstName) {
+    console.log("TO: " + to);
     sgMail.send({
       to: to,
       from: "test@example.com",

@@ -29,7 +29,6 @@ class App extends Component {
   }
 
   setGlobal(object, callback) {
-    console.log(JSON.stringify(object) + " global object was set.");
     this.setState(object, callback);
   }
 

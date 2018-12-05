@@ -34,12 +34,12 @@ router.post('/adduser', function (req, res) {
     if (err) { return res.sendStatus(500); }
 
     if (!existing) {
-      var user = new User(req.body);
-      user.password = user.generateHash(req.body.password);
-      User.create(user, {id: 1}, (err, doc) => {
+      var user = new User();
+      req.body.password = user.generateHash(req.body.password);
+      User.create(req.body, (err, doc) => {
         if (err) { return res.sendStatus(500); }
-        if (!doc) { return res.sendStatus(500); }
-        console.log("User " + user.username + " was added.");
+        if (!doc) { return res.sendStatus(404); }
+        console.log("User " + doc.username + " was added.");
         passport.authenticate('local');
         res.sendStatus(200);
       });

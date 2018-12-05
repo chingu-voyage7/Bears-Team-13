@@ -6,12 +6,8 @@ export default class MyAccount extends Component {
     super(props);
 
     this.state = {
-      user: {
-        firstName: String,
-        email: String,
-        username: String,
-        password: String,
-      },
+      user: {},
+      updates: {}
     }
   }
 
@@ -21,7 +17,7 @@ export default class MyAccount extends Component {
 
   onFetchUser() {
 
-    axios.get('/api/getuser?username=nevi')
+    axios.get('/api/getuser?username=nevi11')
     .then(res => {
         const { firstName, username } = res.data
         const fetchedUser = {
@@ -40,26 +36,38 @@ export default class MyAccount extends Component {
   }
 
   handleChange = (e) => {
-    let userEdit = { ...this.state.user, };
+    let userEdit = { ...this.state.updates, };
     const { name, value } = e.target;
 
     userEdit[name] = value;
 
     this.setState({
-      user: userEdit
+      updates: userEdit
     });
   }
 
   onUpdateGeneral = (e) => {
-    const updates = {
-      updates: this.state.user
-    };
-
-    console.log(updates)
-
     e.preventDefault();
 
-    axios.put('/api/edituser', {updates})
+    let updates = {
+      updates: this.state.updates
+    }
+
+    const { password, ...general } = this.state.updates
+
+    const hasPassword = updates.updates.hasOwnProperty('password')
+
+    if (hasPassword && e.target.name == 'updatePassword') {
+      updates.updates = !!password
+        ? { password }
+        : {}
+    } else if (hasPassword && e.target.name == "updateGeneral") {
+      updates.updates = {
+        ...general
+      }
+    }
+
+    axios.put('/api/edituser', {updates} )
       .then(res => {
         alert('User edited');
       })
@@ -80,7 +88,7 @@ export default class MyAccount extends Component {
               <label>First Name</label>
               <input
                 type="text"
-                name="firsName"
+                name="firstName"
                 defaultValue={user.firstName}
                 onChange={this.handleChange}/>
             </div>
@@ -100,7 +108,10 @@ export default class MyAccount extends Component {
                 defaultValue="nvi74@gmail.com"
                 onChange={this.handleChange}/>
             </div>
-            <button onClick={this.onUpdateGeneral}>Update Information</button>
+            <button
+              onClick={this.onUpdateGeneral}
+              name="updateGeneral"
+              >Update Information</button>
           </div>
         </article>
         <article>
@@ -108,17 +119,26 @@ export default class MyAccount extends Component {
           <div>
             <div>
               <label>Old password</label>
-              <input type="text"/>
+              <input type="password"/>
             </div>
             <div>
               <label>New password</label>
-              <input type="text"/>
+              <input
+                name="password"
+                type="password"
+                onChange={this.handleChange}/>
             </div>
             <div>
               <label>Confirm new password</label>
-              <input type="text"/>
+              <input
+                type="password"
+                name="confirmPassword"/>
             </div>
-            <button>Update password</button>
+            <button
+              onClick={this.onUpdateGeneral}
+              name="updatePassword">
+              Update password
+            </button>
           </div>
         </article>
       </section>

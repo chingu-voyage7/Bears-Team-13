@@ -1,9 +1,9 @@
 import React, { Component } from 'react';
 import {BrowserRouter as Router, Route, Link} from 'react-router-dom';
 import Navbar from '../Navbar/Navbar.js';
-import {MainContainer, SpaceBottom, SpaceTop} from './app-style'
-import Footer from '../Footer/Footer.js'
-
+import {MainContainer, SpaceBottom, SpaceTop} from './app-style';
+import Footer from '../Footer/Footer.js';
+import axios from 'axios';
 
 const ROUTES = [{
   path: '/',
@@ -30,6 +30,18 @@ class App extends Component {
     this.state = {
       user: undefined
     };
+  }
+
+  componentDidMount() {
+    console.log("Attempting to fetch session...");
+    axios.get('/api/myuser')
+    .then((res) => {
+      console.log("Success! globals.user = \n" + JSON.stringify(res.data));
+      this.setState({user: res.data});
+    })
+    .catch((err) => {
+      console.log(err);
+    });
   }
 
   setGlobal(object, callback) {

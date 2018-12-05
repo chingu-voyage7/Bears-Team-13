@@ -1,11 +1,11 @@
 const router = require('express').Router();
 const passportUtil = require('../utils/passportUtil.js');
-const passport = passportUtil.getPassport();
 const isAuth = passportUtil.isAuth;
 const ObjectID = require('mongodb').ObjectID;
 const schema = require('../utils/schema.js');
 const Event = schema.Event;
 const User = schema.User;
+const mailer = require('../utils/mailer.js');
 
 // Returns a list of events
 // Given ["key", "value", "key", "value"...]
@@ -89,6 +89,15 @@ router.delete('/deleteevent', isAuth, (req, res) => {
     } else {
       res.sendStatus(401);
     }
+  });
+});
+
+// Sends Email Invite
+router.post('/invite', isAuth, (req, res) => {
+  console.log("Inviting user...");
+  console.log(req.body);
+  mailer.inviteUser(req.body.email, req.user.firstName, req.body.eventID, () => {
+    res.send("msg");
   });
 });
 

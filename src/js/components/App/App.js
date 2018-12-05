@@ -1,6 +1,9 @@
 import React, { Component } from 'react';
 import {BrowserRouter as Router, Route, Link} from 'react-router-dom';
 import Navbar from '../Navbar/Navbar.js';
+import {MainContainer, SpaceBottom, SpaceTop} from './app-style'
+import Footer from '../Footer/Footer.js'
+
 
 const ROUTES = [{
   path: '/',
@@ -36,8 +39,9 @@ class App extends Component {
   render() {
     return (
       <Router>
-        <div>
-          <Navbar globals={this.state} setGlobal={this.setGlobal.bind(this)}/>
+        <MainContainer>
+          <Navbar globals={this.state} setGlobal={this.setGlobal.bind(this)}/> 
+          <SpaceTop></SpaceTop>
           {ROUTES.map(({path, component: C, exact}) => {
             if (exact) {
               return (
@@ -56,7 +60,10 @@ class App extends Component {
                 />);
             }
           })}
-        </div>
+          <SpaceBottom></SpaceBottom>
+          <Footer></Footer>
+
+        </MainContainer> 
       </Router>
     );
   }

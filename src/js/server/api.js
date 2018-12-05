@@ -9,4 +9,9 @@ router.use('/', require('./api/_login.js'));
 
 router.use('/', require('./api/_user.js'));
 
+router.use('/', require("./api/_store.js"));
+
+router.use('/', require('./api/_event.js'));
+
+
 module.exports = router;

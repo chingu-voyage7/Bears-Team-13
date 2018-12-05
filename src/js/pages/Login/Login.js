@@ -1,6 +1,7 @@
 import React, {Component} from 'react';
 import {Link, Redirect} from 'react-router-dom';
 import axios from 'axios';
+import {LoginContainer, Form, Input, Submit, Label } from './login-style'
 
 export default class Login extends Component {
   constructor(props) {
@@ -39,25 +40,23 @@ export default class Login extends Component {
     }
 
     return(
-      <div>
-        <h1>Login</h1>
-        <form onSubmit={this.onSubmit.bind(this)}>
-          <label>Username or Email</label>
-          <input 
+      <LoginContainer>
+        <Form onSubmit={this.onSubmit.bind(this)}>
+          <Label>Username or Email</Label>
+          <Input 
             name="usernameOrEmail"
             type="text"
             onChange={this.handleChange.bind(this)}/>
-          <label>Password</label>
-          <input 
+          <Label>Password</Label>
+          <Input 
             name="password"
             type="password"
             onChange={this.handleChange.bind(this)}/>
-          <input 
+          <Submit
             type="submit"
           />
-          <p>If time, we'll add G+/FB/TW Authorization later.</p>
-        </form>
-      </div>
+        </Form>
+      </LoginContainer>
     );
   }
 }

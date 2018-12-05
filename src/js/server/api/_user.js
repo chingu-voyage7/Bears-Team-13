@@ -20,7 +20,14 @@ router.get('/getuser', function (req, res) {
     console.log(doc);
     res.json(doc);
   });
-})
+});
+
+router.get('/myuser', isAuth, function (req, res) {
+  console.log(req.user);
+  var user = req.user;
+  user.password = null;
+  res.json(user);
+});
 
 // Adds user to the DB
 router.post('/adduser', function (req, res) {

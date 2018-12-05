@@ -26,6 +26,8 @@ export default class Login extends Component {
       password: this.state.password
     })
     .then((res) => {
+      alert("USER set:\n" + JSON.stringify(res.data));
+      this.props.setGlobal({user: res.data});
       this.setState({redirect: true});
     })
     .catch((err) => {

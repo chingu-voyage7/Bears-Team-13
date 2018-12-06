@@ -122,5 +122,24 @@ router.get('/myevents', isAuth, function(req, res) {
   });
 });
 
+// Returns a list of events the user is invited to
+router.get('/myinvites', isAuth, function(req, res) {
+  if (!req.user.invites || req.user.invites.length === 0) {
+    return res.sendStatus(404);
+  }
+  console.log("MY INVITES: \n" + JSON.stringify(req.user.invites));
+  const page = req.query.page;
+  delete req.query.page;
+
+  const invites = req.user.invites.map((id) => {
+    return new ObjectID(id);
+  });
+
+  Event.find({$in: invites}, req.query, (err, docs) => {
+    if (err) { return res.sendStatus(500); }
+    if (!docs) { return res.sendStatus(404); }
+    return res.json(docs);
+  }).skip(page * 10).limit(10);
+});
 
 module.exports = router;

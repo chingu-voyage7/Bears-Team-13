@@ -10,7 +10,7 @@ module.exports = {
       subject: firstName + " invited you to his Secret Santa event.",
       html: 
         '<body>' + firstName + ' invited you to his Secret Santa Event.' +
-          '<a href="' + config.HOST_NAME + '/signup?redirect=dashboard">Click here to join</a> the gift exchange, FREE of charge.' + 
+          '<a href="' + config.HOST_NAME + '/signup?redirect=/dashboard">Click here to join</a> the gift exchange, FREE of charge.' + 
         '</body>'
     });
   },

@@ -17,6 +17,10 @@ const ROUTES = [{
   path: '/login',
   component: require('../../pages/Login/Login.js').default,
   exact: true
+}, {
+  path: '/dashboard/invites',
+  component: require('../../pages/Invites/Invites.js').default,
+  exact: true
 }];
 
 class App extends Component {

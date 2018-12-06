@@ -1,24 +1,26 @@
 import React, {Component} from 'react';
-import {IndexContainer, TextIndex, AboutContainer, SantaImage, AboutTextContainer, ButtonContainer, AboutText} from './index-style'
+import {IndexContainer, TitleIndex, AboutContainer, SantaImage, AboutTextContainer, ButtonContainer, AboutText, StartExchange,Button, TitleGift} from './index-style'
 
 
 export default class Index extends Component {
   render () {
     return (
      <IndexContainer>
-       <TextIndex> SECRET SANTS MADE EASY</TextIndex>
+       <TitleIndex> SECRET SANTA MADE EASY</TitleIndex>
        <AboutContainer>
-         <SantaImage> Santa graphic goes here </SantaImage>
+         <SantaImage> </SantaImage>
          <AboutTextContainer>
            <AboutText>Lorem ipsum dolor sit amet, consectetur adipiscing elit. Quisque bibendum odio ligula, vel ultricies sapien maximus non. Praesent ullamcorper lorem at consequat accumsan. Integer feugiat scelerisque commodo.</AboutText>
-           <h5> start your exchange </h5>
+           <StartExchange> start your exchange </StartExchange>
              <ButtonContainer>
-                  <button> sign up </button>
-                  <button> sign in </button>
+                  <Button> sign up </Button>
+                  <Button> sign in </Button>
               </ButtonContainer>
          </AboutTextContainer>
 
        </AboutContainer>
+
+       <TitleGift> GIFTS UNDER $20</TitleGift>
 
      </IndexContainer>
     );

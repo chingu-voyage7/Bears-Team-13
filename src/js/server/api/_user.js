@@ -25,6 +25,13 @@ router.get('/getuser', function (req, res) {
   });
 });
 
+router.get('/myuser', isAuth, function (req, res) {
+  console.log(req.user);
+  var user = req.user;
+  user.password = null;
+  res.json(user);
+});
+
 // Adds user to the DB
 router.post('/adduser', function (req, res) {
   if (!req.body.email || !req.body.username || !req.body.password) {
@@ -47,7 +54,7 @@ router.post('/adduser', function (req, res) {
       console.log("ERR: username or email already exists.");
       return res.json({error: "username or email already exists."}).status(400);
     }
-  });  
+  });
 });
 
 // Returns callback(status) regarding a doc update.
@@ -64,6 +71,7 @@ function validUpdates(updates, callback) {
     }); 
   } else if (updates.password) {
     updates.password = user.generateHash(password);
+    });
   } else {
     return callback(200);
   }
@@ -72,6 +80,7 @@ function validUpdates(updates, callback) {
 // Edit User {key, value}
 router.put('/edituser', isAuth, function (req, res) {
   const updates = req.body.updates;
+  const fieldsToUpdate = req.body.updates.updates
 
   console.log(updates);
 
@@ -80,12 +89,12 @@ router.put('/edituser', isAuth, function (req, res) {
       return res.sendStatus(status);
     }
 
-    User.updateOne({username: req.user.username}, {$set: updates}, (err, doc) => {
+    User.updateOne({username: req.user.username}, {$set: fieldsToUpdate}, (err, doc) => {
       if (err) { res.sendStatus(500); }
       if (!doc) { res.sendStatus(404); }
       console.log("User '" + req.user.username + "' was updated.");
       res.sendStatus(200);
-    });  
+    });
   });
 
 });

@@ -1,9 +1,9 @@
 import React, { Component } from 'react';
 import {BrowserRouter as Router, Route, Link} from 'react-router-dom';
 import Navbar from '../Navbar/Navbar.js';
-import {MainContainer} from './app-style'
-import Footer from '../Footer/Footer.js'
-
+import {MainContainer, SpaceBottom, SpaceTop} from './app-style';
+import Footer from '../Footer/Footer.js';
+import axios from 'axios';
 
 const ROUTES = [{
   path: '/',
@@ -21,6 +21,10 @@ const ROUTES = [{
   path: '/dashboard/invites',
   component: require('../../pages/Invites/Invites.js').default,
   exact: true
+}, {
+  path: '/myaccount',
+  component: require('../../pages/MyAccount/MyAccount.js').default,
+  exact: true
 }];
 
 class App extends Component {
@@ -32,6 +36,18 @@ class App extends Component {
     };
   }
 
+  componentDidMount() {
+    console.log("Attempting to fetch session...");
+    axios.get('/api/myuser')
+    .then((res) => {
+      console.log("Success! globals.user = \n" + JSON.stringify(res.data));
+      this.setState({user: res.data});
+    })
+    .catch((err) => {
+      console.log(err);
+    });
+  }
+
   setGlobal(object, callback) {
     this.setState(object, callback);
   }
@@ -41,6 +57,7 @@ class App extends Component {
       <Router>
         <MainContainer>
           <Navbar globals={this.state} setGlobal={this.setGlobal.bind(this)}/> 
+          <SpaceTop></SpaceTop>
           {ROUTES.map(({path, component: C, exact}) => {
             if (exact) {
               return (
@@ -48,10 +65,10 @@ class App extends Component {
                   key={path}
                   path={path}
                   render={(props) => <C {...props} setGlobal={this.setGlobal.bind(this)} globals={this.state}/>}
-                  exact 
+                  exact
                 />);
             } else {
-              return ( 
+              return (
                 <Route
                   key={path}
                   path={path}
@@ -59,6 +76,7 @@ class App extends Component {
                 />);
             }
           })}
+          <SpaceBottom></SpaceBottom>
           <Footer></Footer>
 
         </MainContainer> 

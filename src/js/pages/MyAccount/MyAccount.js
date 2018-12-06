@@ -54,6 +54,7 @@ export default class MyAccount extends Component {
   }
 
   render() {
+    const { user } = this.props.globals
     return (
       <section>
         <article>
@@ -64,7 +65,7 @@ export default class MyAccount extends Component {
               <input
                 type="text"
                 name="firstName"
-                // defaultValue={user.firstName}
+                defaultValue={user.firstName}
                 onChange={this.handleChange}/>
             </div>
             <div>
@@ -72,7 +73,7 @@ export default class MyAccount extends Component {
               <input
                 type="text"
                 name="username"
-                // defaultValue={user.username}
+                defaultValue={user.username}
                 onChange={this.handleChange}/>
             </div>
             <div>
@@ -80,7 +81,7 @@ export default class MyAccount extends Component {
               <input
                 type="text"
                 name="email"
-                defaultValue="nvi74@gmail.com"
+                defaultValue={user.email}
                 onChange={this.handleChange}/>
             </div>
             <button

@@ -29,7 +29,8 @@ var userSchema = new Schema({
   username: String,
   password: String,
   events: Array, // [event_id, event_id...]
-  purchases: Array // {item_id, recipient_id}
+  purchases: Array, // {item_id, recipient_id}
+  invites: Array // [event_id, event_id...]
 }, 
 { collection: "users"} );
 

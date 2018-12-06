@@ -95,9 +95,16 @@ router.delete('/deleteevent', isAuth, (req, res) => {
 // Sends Email Invite
 router.post('/invite', isAuth, (req, res) => {
   console.log("Inviting user...");
-  console.log(req.body);
-  mailer.invite(req.body.to, req.user.username);
-  res.send(200);
+  console.log(JSON.stringify(req.body));
+  User.updateOne({email: req.body.email}, {$push: {invites: req.body.email}}, (err, result) => {
+    if (err) { return res.sendStatus(500); }
+    if (result.nModified === 0) { 
+      mailer.signupAndJoin(req.body.email, req.user.username); // signup required
+      return res.sendStatus(200);
+    }
+    mailer.invite(req.body.email, req.user.username); // no signup
+    res.sendStatus(200);
+  });
 });
 
 module.exports = router;

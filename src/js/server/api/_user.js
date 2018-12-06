@@ -6,6 +6,7 @@ const ObjectID = require('mongodb').ObjectID;
 const schema = require('../utils/schema.js');
 const User = schema.User;
 const Event = schema.Event;
+var user = new User();
 
 // Returns User's PUBLIC info
 // (Everything less {email, password})
@@ -34,7 +35,6 @@ router.post('/adduser', function (req, res) {
     if (err) { return res.sendStatus(500); }
 
     if (!existing) {
-      var user = new User();
       req.body.password = user.generateHash(req.body.password);
       User.create(req.body, (err, doc) => {
         if (err) { return res.sendStatus(500); }
@@ -62,6 +62,8 @@ function validUpdates(updates, callback) {
       if (!doc) { return callback(200); }
       if (doc) { return callback(400); }
     }); 
+  } else if (updates.password) {
+    updates.password = user.generateHash(password);
   } else {
     return callback(200);
   }
@@ -80,7 +82,7 @@ router.put('/edituser', isAuth, function (req, res) {
 
     User.updateOne({username: req.user.username}, {$set: updates}, (err, doc) => {
       if (err) { res.sendStatus(500); }
-      if (!doc) { res.sendStatus(400); }
+      if (!doc) { res.sendStatus(404); }
       console.log("User '" + req.user.username + "' was updated.");
       res.sendStatus(200);
     });  

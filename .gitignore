@@ -14,8 +14,8 @@ node_modules
 
 # misc
 /src/config.js
-.DS_Store
 .env
+.DS_Store
 .env.local
 .env.development.local
 .env.test.local

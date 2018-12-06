@@ -1,7 +1,7 @@
 const router = require('express').Router();
-let passportUtil = require('../utils/passportUtil.js');
-let passport = passportUtil.getPassport();
-let isAuth = passportUtil.isAuth;
+const passportUtil = require('../utils/passportUtil.js');
+const passport = passportUtil.getPassport();
+const isAuth = passportUtil.isAuth;
 
 router.post('/login', passport.authenticate('local'),
 function (req, res) {

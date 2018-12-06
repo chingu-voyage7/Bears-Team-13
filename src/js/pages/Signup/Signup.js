@@ -1,4 +1,6 @@
 import React, {Component} from 'react';
+import { Redirect } from 'react-router-dom';
+import queryString from 'query-string';
 import axios from 'axios';
 import {InputStyle, FormContainer, SignupContainer, TextSignup, GraphicContainer, LabelSignUp, InputSubmit} from "./signup-style";
 
@@ -7,6 +9,8 @@ export default class Signup extends Component {
     super(props);
 
     this.state = {
+      redirect: false,
+      redirectTo: String,
       user: {
         firstName: String,
         email: String,
@@ -16,6 +20,10 @@ export default class Signup extends Component {
     }
   }
 
+  componentDidMount() {
+    this.setState({redirectTo: queryString.parse(this.props.location.search).redirect});
+  }
+
   handleChange(e) {
     var newUser = this.state.user;
     newUser[e.target.name] = e.target.value;
@@ -23,18 +31,21 @@ export default class Signup extends Component {
   }
 
   onSubmit(e) {
-    alert(JSON.stringify(this.state.user));
     e.preventDefault();
     axios.post('/api/adduser', this.state.user)
     .then((res) => {
-      alert("Account created!");
+      this.setState({redirect: true});
     })
     .catch((err) => {
-      alert(JSON.stringify(err.response));
     })
   }
 
   render() {
+    if (this.state.redirect && this.state.redirectTo && this.state.redirectTo.length > 0) {
+      this.setState({redirect: false});
+      return <Redirect to={this.state.redirectTo}/>;
+    }
+
     return(
       <SignupContainer>
         <TextSignup>CHRISTMAS JOY IS JUST A FEW QUESTIONS AWAY</TextSignup>

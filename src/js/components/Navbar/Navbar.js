@@ -26,18 +26,19 @@ export default class Navbar extends Component {
     return (
       <Nav>
         <AppName>Secret Santa</AppName>
-        
+
         {this.props.globals.user?(
-          
+
           <div>
-            <Link style={{ textDecoration: 'none' }} to="#" onClick={this.toggleLogout.bind(this)}>logout</Link>
+            <Link style={{ textDecoration: 'none', marginRight: '10px' }} to="#" onClick={this.toggleLogout.bind(this)}>logout</Link>
+            <Link style={{ textDecoration: 'none' }} to="/myaccount">Your Account</Link>
           </div>
         ):(
           <LinksContainer>
-        
+
             <Link to="/signup" style={{ textDecoration: 'none' }}>  <LinkStyle>signup</LinkStyle></Link>
             <Link to="/login" style={{ textDecoration: 'none' }}>  <LinkStyle> login </LinkStyle></Link>
-     
+
           </LinksContainer>
         )}
       </Nav>

@@ -55,6 +55,7 @@ export default class MyAccount extends Component {
 
   render() {
     const { user } = this.props.globals
+
     return (
       <section>
         <article>

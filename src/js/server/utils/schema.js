@@ -34,6 +34,13 @@ var userSchema = new Schema({
 }, 
 { collection: "users"} );
 
+// TEMP USER
+var tempUserSchema = new Schema({
+  email: String,
+  invites: Array,
+  createdAt: {type: Date, expires: 30, default: Date.now }
+});
+
 userSchema.methods.generateHash = function(password) {
   return bcrypt.hashSync(password, bcrypt.genSaltSync(8), null);
 };
@@ -43,6 +50,7 @@ userSchema.methods.validPassword = function(password) {
 }
 
 var schemas = { 
+  TempUser: connection.model('TempUser', tempUserSchema),
   User : connection.model('User', userSchema),
   Event : connection.model('Event', eventSchema),
   Item : connection.model('Item', itemSchema)

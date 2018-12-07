@@ -25,6 +25,7 @@ router.get('/getuser', function (req, res) {
   });
 });
 
+// Returns session user
 router.get('/myuser', isAuth, function (req, res) {
   console.log(req.user);
   var user = req.user;
@@ -71,7 +72,6 @@ function validUpdates(updates, callback) {
     }); 
   } else if (updates.password) {
     updates.password = user.generateHash(password);
-    });
   } else {
     return callback(200);
   }

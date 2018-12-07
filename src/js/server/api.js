@@ -13,5 +13,7 @@ router.use('/', require("./api/_store.js"));
 
 router.use('/', require('./api/_event.js'));
 
+router.use('/', require('./api/_invite.js'));
+
 
 module.exports = router;

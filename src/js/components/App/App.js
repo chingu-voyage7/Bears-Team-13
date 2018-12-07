@@ -56,7 +56,7 @@ class App extends Component {
     return (
       <Router>
         <MainContainer>
-          <Navbar globals={this.state} setGlobal={this.setGlobal.bind(this)}/> 
+          <Navbar globals={this.state} setGlobal={this.setGlobal.bind(this)}/>
           <SpaceTop></SpaceTop>
           {ROUTES.map(({path, component: C, exact}) => {
             if (exact) {
@@ -79,7 +79,7 @@ class App extends Component {
           <SpaceBottom></SpaceBottom>
           <Footer></Footer>
 
-        </MainContainer> 
+        </MainContainer>
       </Router>
     );
   }

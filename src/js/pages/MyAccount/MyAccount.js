@@ -11,30 +11,6 @@ export default class MyAccount extends Component {
     }
   }
 
-  componentDidMount() {
-    this.onFetchUser();
-  }
-
-  onFetchUser() {
-
-    axios.get('/api/getuser?username=nevi11')
-    .then(res => {
-        const { firstName, username } = res.data
-        const fetchedUser = {
-          ...this.state.user,
-          firstName,
-          username
-        }
-
-        this.setState({
-          user: fetchedUser
-        })
-      })
-      .catch(err => {
-        console.log('error');
-      })
-  }
-
   handleChange = (e) => {
     let userEdit = { ...this.state.updates, };
     const { name, value } = e.target;
@@ -53,15 +29,16 @@ export default class MyAccount extends Component {
       updates: this.state.updates
     }
 
+    // Delete the property that is empty
+    Object.entries(updates.updates).forEach( ([key, val]) => {
+      if (!val) delete updates.updates[key]
+    })
+
     const { password, ...general } = this.state.updates
 
-    const hasPassword = updates.updates.hasOwnProperty('password')
-
-    if (hasPassword && e.target.name == 'updatePassword') {
-      updates.updates = !!password
-        ? { password }
-        : {}
-    } else if (hasPassword && e.target.name == "updateGeneral") {
+    if (e.target.name == 'updatePassword') {
+      updates.updates = { password }
+    } else if (e.target.name == "updateGeneral") {
       updates.updates = {
         ...general
       }
@@ -77,7 +54,7 @@ export default class MyAccount extends Component {
   }
 
   render() {
-    const { user } = this.state
+    const { user } = this.props.globals
 
     return (
       <section>
@@ -105,7 +82,7 @@ export default class MyAccount extends Component {
               <input
                 type="text"
                 name="email"
-                defaultValue="nvi74@gmail.com"
+                defaultValue={user.email}
                 onChange={this.handleChange}/>
             </div>
             <button

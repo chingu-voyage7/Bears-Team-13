@@ -20,7 +20,9 @@ var itemSchema = new Schema({
   name: String,
   usd: Number,
   description: String
-}, { collection: "store" });
+}, { 
+  collection: "store"
+});
 
 // USER
 var userSchema = new Schema({
@@ -31,14 +33,17 @@ var userSchema = new Schema({
   events: Array, // [event_id, event_id...]
   purchases: Array, // {item_id, recipient_id}
   invites: Array // [event_id, event_id...]
-}, 
-{ collection: "users"} );
+}, { 
+  collection: "users" 
+});
 
 // TEMP USER
 var tempUserSchema = new Schema({
   email: String,
   invites: Array,
-  createdAt: {type: Date, expires: 30, default: Date.now }
+  createdAt: {type: Date, expires: '10s', default: Date.now }
+}, { 
+  collection: "tempusers" 
 });
 
 userSchema.methods.generateHash = function(password) {

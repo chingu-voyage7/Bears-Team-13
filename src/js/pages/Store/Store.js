@@ -7,18 +7,29 @@ export default class Store extends Component {
     super(props);
 
     this.state = {
-      items: {}
+      items: {},
+      query: ''
     }
   }
 
-  componentDidMount() {
-    const query = {
-      query: {
-        name: 'Candy'
-      }
-    }
+  handleInputSearch = (e) => {
+    const { value } = e.target
 
-    axios.get('/api/finditem?keywords=Candy')
+    this.setState({
+      query: value
+    })
+  }
+
+  handleSearch = (e) => {
+    e.preventDefault()
+
+    const { query } = this.state
+
+    const url = `/api/finditem?keywords=Candy+Canes&page=0`
+
+    console.log(url)
+
+    axios.get(url)
       .then(res => {
         console.log(res.data)
       })
@@ -32,10 +43,10 @@ export default class Store extends Component {
       <>
       <section>
         <form>
-          <input type="text"/>
+          <input type="text" onChange={this.handleInputSearch}/>
           <div style={{ display: 'inline-block' }}>
             <button>Price Dropdown</button>
-            <button type="submit">Search</button>
+            <button type="submit" onClick={this.handleSearch}>Search</button>
           </div>
         </form>
       </section>

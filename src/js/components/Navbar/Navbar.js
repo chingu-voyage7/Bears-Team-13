@@ -35,7 +35,7 @@ export default class Navbar extends Component {
         ):(
           <LinksContainer>
         
-            <Link to="/signup" style={{ textDecoration: 'none' }}>  <LinkStyle>signup</LinkStyle></Link>
+            <Link to="/signup" style={{ textDecoration: 'none' }}>  <LinkStyle>sign up</LinkStyle></Link>
             <Link to="/login" style={{ textDecoration: 'none' }}>  <LinkStyle> login </LinkStyle></Link>
      
           </LinksContainer>

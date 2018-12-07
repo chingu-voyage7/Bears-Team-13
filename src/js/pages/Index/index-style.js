@@ -7,6 +7,9 @@ flex-direction:column;
 /* border:1px red solid; */
 width:380px;
 margin:20px auto;
+@media only screen and (min-width:800px){
+    width:600px;
+}
 `
 
 const TitleIndex = styled.div`
@@ -31,10 +34,13 @@ flex-direction:column;
 /* border:1px gray solid; */
 background-color:white;
 box-shadow:5px 5px 5px rgba(0,0,0,0.5);
-border-radius:10px;
+border-radius:5px;
 padding:30px;
 margin-top:20px;
 justify-content:space-between;
+@media only screen and (min-width:800px){
+    width:600px;
+}
 `
 
 const SantaImage = styled.div`

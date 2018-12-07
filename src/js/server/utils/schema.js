@@ -19,7 +19,8 @@ var eventSchema = new Schema({
 var itemSchema = new Schema({
   name: String,
   usd: Number,
-  description: String
+  description: String,
+  keywords: Array
 }, { collection: "store" });
 
 // USER

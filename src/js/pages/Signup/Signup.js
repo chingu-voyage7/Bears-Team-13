@@ -49,7 +49,7 @@ export default class Signup extends Component {
     return(
       <SignupContainer>
         <TextSignup>CHRISTMAS JOY IS JUST A FEW QUESTIONS AWAY</TextSignup>
-       <GraphicContainer> Santa graphic goes here</GraphicContainer>
+       <GraphicContainer> </GraphicContainer>
         <FormContainer onSubmit={this.onSubmit.bind(this)}>
           <LabelSignUp>First Name</LabelSignUp>
           <InputStyle 
@@ -63,7 +63,7 @@ export default class Signup extends Component {
             type="text"
             onChange={this.handleChange.bind(this)}/>
          
-          <LabelSignUp>Street Address</LabelSignUp>
+          {/* <LabelSignUp>Street Address</LabelSignUp>
           <InputStyle 
             name="streetAddress"
             type="text"
@@ -91,7 +91,7 @@ export default class Signup extends Component {
           <InputStyle 
             name="zipCode"
             type="text"
-            onChange={this.handleChange.bind(this)}/>
+            onChange={this.handleChange.bind(this)}/> */}
          
           <LabelSignUp>Email</LabelSignUp>
           <InputStyle

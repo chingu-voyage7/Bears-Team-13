@@ -22,7 +22,7 @@ router.post('/invite', isAuth, (req, res) => {
 
       // Signup Required (Email not found)
       if (result.nModified === 0) {
-        TempUser.updateOne({email: email}, {$addToSet: {invites: new ObjectID(req.body.eventID)}}, {upsert: true}, (err, doc) => {
+        TempUser.updateOne({email: email}, {$addToSet: {invites: req.body.eventID}}, {upsert: true}, (err, doc) => {
           if (err) { return res.sendStatus(500); }
           if (!doc) { return res.sendStatus(400); }
           console.log("Doc exists? " + doc.n);

@@ -1,5 +1,6 @@
 import React, { Component } from 'react';
 import axios from 'axios'
+import {} from "./myAccount-style";
 
 export default class MyAccount extends Component {
   constructor(props) {
@@ -36,9 +37,9 @@ export default class MyAccount extends Component {
 
     const { password, ...general } = this.state.updates
 
-    if (e.target.name == 'updatePassword') {
+    if (e.target.name === 'updatePassword') {
       updates.updates = { password }
-    } else if (e.target.name == "updateGeneral") {
+    } else if (e.target.name === "updateGeneral") {
       updates.updates = {
         ...general
       }
@@ -59,7 +60,14 @@ export default class MyAccount extends Component {
     return (
       <section>
         <article>
-          <h3>General Information</h3>
+          {/* <h3>General Information</h3> */}
+          <div>
+            <h1> Hello, {user.firstName}</h1>
+            <button> Make Event </button>
+            <button> Edit Profile </button>
+
+          </div>
+         
           <div>
             <div>
               <label>First Name</label>

@@ -1,6 +1,6 @@
 import React, {Component} from 'react';
 import {Link, Redirect} from 'react-router-dom';
-import {Nav, AppName, LinksContainer, LinkStyle} from './nav-style'
+import {Nav, AppName, LinksContainer, LinkStyle, LinksContainerLoggedIn} from './nav-style'
 
 
 export default class Navbar extends Component {
@@ -29,10 +29,10 @@ export default class Navbar extends Component {
 
         {this.props.globals.user?(
 
-          <div>
-            <Link style={{ textDecoration: 'none', marginRight: '10px' }} to="#" onClick={this.toggleLogout.bind(this)}>logout</Link>
-            <Link style={{ textDecoration: 'none' }} to="/myaccount">Your Account</Link>
-          </div>
+         <LinksContainerLoggedIn>
+            <Link style={{ textDecoration: 'none', marginRight: '10px' }} to="#" onClick={this.toggleLogout.bind(this)}><LinkStyle>logout</LinkStyle></Link>
+            <Link style={{ textDecoration: 'none' }} to="/myaccount"><LinkStyle>Your Account</LinkStyle></Link>
+          </LinksContainerLoggedIn>
         ):(
           <LinksContainer>
 

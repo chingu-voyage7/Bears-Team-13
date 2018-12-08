@@ -29,6 +29,15 @@ justify-content:space-between;
 padding-right:30px;
 `
 
+
+const LinksContainerLoggedIn = styled.div`
+display:flex;
+width:180px;
+justify-content:space-between;
+/* border:1px blue solid; */
+padding-right:30px;
+`
+
 const LinkStyle = styled.div`
 /* color:rgb(234, 93, 93); */
 font-weight:500;
@@ -37,5 +46,5 @@ color:#13491C;
 
 
 
-export {Nav, AppName, LinksContainer, LinkStyle };
+export {Nav, AppName, LinksContainer, LinkStyle, LinksContainerLoggedIn };
 

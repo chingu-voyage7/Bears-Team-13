@@ -1,7 +1,7 @@
 import React, {Component} from 'react';
 import {Link, Redirect} from 'react-router-dom';
 import {Nav, AppName, LinksContainer, LinkStyle} from './nav-style'
-
+import axios from 'axios';
 
 export default class Navbar extends Component {
   constructor(props) {
@@ -12,9 +12,14 @@ export default class Navbar extends Component {
     }
   }
 
-  toggleLogout() {
-    const other = !this.state.logout;
-    this.setState({logout: other});
+  logout() {
+    axios.get('/api/logout')
+    .then((res) => {
+      this.props.setGlobal({user: {}});
+    })
+    .catch((err) => {
+      alert("Failed to logout. Please try again.");
+    });
   }
 
   render() {
@@ -27,10 +32,10 @@ export default class Navbar extends Component {
       <Nav>
        <Link to="/" style={{ textDecoration: 'none' }}>  <AppName>Secret Santa</AppName></Link>
 
-        {this.props.globals.user?(
+        {this.props.globals.user.username?(
 
           <div>
-            <Link style={{ textDecoration: 'none', marginRight: '10px' }} to="#" onClick={this.toggleLogout.bind(this)}>logout</Link>
+            <Link style={{ textDecoration: 'none', marginRight: '10px' }} to="#" onClick={this.logout.bind(this)}>logout</Link>
             <Link style={{ textDecoration: 'none' }} to="/myaccount">Your Account</Link>
           </div>
         ):(

@@ -5,6 +5,10 @@ const MainContainer = styled.div`
 font-family:"Roboto", "Helvetica", sans-serif;
 font-size:16px;
 background-color:#F9F9F9;
+min-height:100vh;
+position: relative;
+display: block;
+
 `
 
 const SpaceBottom = styled.div`

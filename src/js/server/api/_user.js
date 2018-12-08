@@ -71,11 +71,7 @@ function validUpdates(updates, callback) {
     }); 
   } else if (updates.password) {
     updates.password = user.generateHash(password);
-<<<<<<< HEAD
-    } else {
-=======
   } else {
->>>>>>> origin/master
     return callback(200);
   }
 }

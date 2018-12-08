@@ -9,6 +9,9 @@ height:50px;
 /* border-top:1px red solid; */
 align-items:center;
 background-color:white;
+position: absolute;
+ bottom: 0;
+ width: 100%;
 `
 
 const IconsFooterContainer = styled.div`

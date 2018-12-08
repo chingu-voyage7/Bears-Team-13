@@ -1,6 +1,6 @@
 import React, { Component } from 'react';
 import axios from 'axios'
-import {} from "./myAccount-style";
+import {Name, MyAccountWrap, NameButtonsWrap, ButtonsWrap, Button, Greeting, PasswordButton, AboutWrap} from "./myAccount-style";
 
 export default class MyAccount extends Component {
   constructor(props) {
@@ -56,19 +56,28 @@ export default class MyAccount extends Component {
 
   render() {
     const { user } = this.props.globals
-
+    console.log(user);
     return (
-      <section>
-        <article>
-          {/* <h3>General Information</h3> */}
-          <div>
-            <h1> Hello, {user.firstName}</h1>
-            <button> Make Event </button>
-            <button> Edit Profile </button>
+      
+      <MyAccountWrap>
+          <NameButtonsWrap>
+            <Greeting> Hello, <Name>{user.firstName}</Name></Greeting>
+            <ButtonsWrap>
+              <Button> make event </Button>
+              <Button> edit profile </Button>
+            </ButtonsWrap>
+          </NameButtonsWrap>
 
-          </div>
+          <AboutWrap>
+            <h2> About </h2>
+            <p> name : {user.firstName}</p>
+            <p> email : {user.email} </p>
+            <p> username : {user.username} </p>
+    
+            <PasswordButton> change password </PasswordButton>
+          </AboutWrap>
          
-          <div>
+          {/* <div>
             <div>
               <label>First Name</label>
               <input
@@ -98,8 +107,7 @@ export default class MyAccount extends Component {
               name="updateGeneral"
               >Update Information</button>
           </div>
-        </article>
-        <article>
+
           <h3>Security Information</h3>
           <div>
             <div>
@@ -125,8 +133,8 @@ export default class MyAccount extends Component {
               Update password
             </button>
           </div>
-        </article>
-      </section>
+      */}
+      </MyAccountWrap>
     );
   }
 }

@@ -20,18 +20,18 @@ export default class Login extends Component {
 
   onSubmit(e) {
     e.preventDefault();
-    alert(JSON.stringify(this.state));
+    // alert(JSON.stringify(this.state));
     axios.post('/api/login', {
       username: this.state.usernameOrEmail,
       password: this.state.password
     })
     .then((res) => {
-      alert("USER set:\n" + JSON.stringify(res.data));
+      // alert("USER set:\n" + JSON.stringify(res.data));
       this.props.setGlobal({user: res.data});
       this.setState({redirect: true});
     })
     .catch((err) => {
-      alert(JSON.stringify(err.response));
+      // alert(JSON.stringify(err.response));
     })
   }
 

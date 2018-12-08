@@ -25,7 +25,7 @@ export default class Navbar extends Component {
 
     return (
       <Nav>
-        <AppName>Secret Santa</AppName>
+       <Link to="/" style={{ textDecoration: 'none' }}>  <AppName>Secret Santa</AppName></Link>
 
         {this.props.globals.user?(
 

@@ -27,8 +27,12 @@ margin-top:70px;
 `
 
 const Input = styled.input`
-width:90%;
-border-radius:5px;
+width:60%;
+height:30px;
+width:200px;
+border-radius:10px;
+/* border-style:solid; */
+border:1px #45c132  solid;
 margin:0 auto;
 `
 const Submit = styled.input`
@@ -41,6 +45,21 @@ border:1px #D10A0A solid;
 color:#D10A0A;
 font-weight:bold;
 box-shadow:2px 2px 2px rgba(0,0,0,0.5);
+transition:.2s all linear;
+
+ &:hover {
+    background: #D10A0A;
+    color:white;
+  }
+
+  &:focus{
+      outline:0;
+  }
+  &:active{
+    box-shadow:0px 0px 0px;
+    top:2px;
+
+  }
 `
 const Label = styled.label`
 color:#D10A0A;

@@ -23,7 +23,7 @@ font-size:18px;
 
 const LinksContainer = styled.div`
 display:flex;
-width:120px;
+width:140px;
 justify-content:space-between;
 /* border:1px blue solid; */
 padding-right:30px;

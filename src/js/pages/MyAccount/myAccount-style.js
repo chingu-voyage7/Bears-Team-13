@@ -1,4 +1,6 @@
 import styled from 'styled-components';
+import myImage from '../../../assets/images/gift-profile.jpeg';
+
  
 const Greeting = styled.h1` 
 color:#D10A0A;
@@ -20,7 +22,7 @@ justify-content:space-between;
 margin-bottom:40px;
 `
 const ButtonsWrap = styled.div`
-width:210px;
+width:250px;
 /* border:1px green solid; */
 display:flex;
 margin-top:-10px;
@@ -48,13 +50,15 @@ transition:.2s all linear;
   &:active{
     box-shadow:0px 0px 0px;
     top:2px;
+    background-color:#13491c;
+    border-color:#13491c;
   }
 `
 
 const PasswordButton = styled.button`
 color:#D10A0A;
 border:none;
-/* background-color:#F9F9F9; */
+background-color:#F9F9F9;
 border-bottom:1px #D10A0A solid;
 box-shadow:none;
 padding:5px;
@@ -63,12 +67,9 @@ margin:0 auto;
 
 transition:.2s all linear;
 &:hover {
-    /* background: #D10A0A; */
-    /* color:white; */
     cursor:pointer;
-    /* padding-bottom:8px; */
-    /* border-radius:5px; */
-    border:0;
+     border-bottom:1px #F9F9F9 solid;
+
   }
 
   &:focus{
@@ -76,7 +77,7 @@ transition:.2s all linear;
   }
   &:active{
     /* border:#D10A0A; */
-    color:#D10A0A;
+    color:#13491c;
     /* background-color:#F9F9F9; */
     box-shadow:0px 0px 0px;
     top:2px;
@@ -90,10 +91,45 @@ flex-direction:column;
 background-color:white;
 box-shadow:5px 5px 5px rgba(0,0,0,0.5);
 border-radius:10px;
-padding:30px;
+/* padding:30px; */
 margin-top:20px;
-justify-content:space-between;
+/* justify-content:space-between; */
 height:300px;
+/* width:300px; */
+/* text-align:center; */
 `
 
-export {Name, MyAccountWrap, NameButtonsWrap, ButtonsWrap, Button, Greeting, PasswordButton, AboutWrap}
+const H2 = styled.h2`
+ color:#D10A0A;
+ /* text-align:center; */
+ text-transform:uppercase;
+ font-size:18px;
+ margin-left:0;
+ padding-top:20px;
+ padding-left:30px;
+`
+
+const P = styled.p`
+color:#D10A0A;
+margin-top:5px;
+padding-left:30px;
+/* margin-left:40px; */
+
+`
+
+const Span = styled.span`
+font-weight:bold;
+color:#13491c;
+`
+
+const Image = styled.div`
+background-image:url(${myImage});
+background-position:bottom;
+background-size:cover;
+/* border:1px red solid; */
+height:250px;
+width:380px;
+margin-top:10px;
+`
+
+export {Name, MyAccountWrap, NameButtonsWrap, ButtonsWrap, Button, Greeting, PasswordButton, AboutWrap, H2, P, Span, Image}

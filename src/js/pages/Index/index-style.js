@@ -76,6 +76,14 @@ color:white;
 box-shadow:2px 2px 2px rgba(0,0,0,0.5);
 border-radius:5px;
 padding:10px;
+&:hover{
+  cursor:pointer;
+  color:#D10A0A;
+  background-color:white;
+  &:focus{
+    outline:0;
+  }
+}
 `
 
 const Grid = styled.div`

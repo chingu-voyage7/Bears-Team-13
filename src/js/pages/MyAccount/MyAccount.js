@@ -1,6 +1,6 @@
 import React, { Component } from 'react';
 import axios from 'axios'
-import {Name, MyAccountWrap, NameButtonsWrap, ButtonsWrap, Button, Greeting, PasswordButton, AboutWrap} from "./myAccount-style";
+import {Name, MyAccountWrap, NameButtonsWrap, ButtonsWrap, Button, Greeting,  AboutWrap, H2, P, Span, Image} from "./myAccount-style";
 
 export default class MyAccount extends Component {
   constructor(props) {
@@ -63,18 +63,21 @@ export default class MyAccount extends Component {
           <NameButtonsWrap>
             <Greeting> Hello, <Name>{user.firstName}</Name></Greeting>
             <ButtonsWrap>
-              <Button> make event </Button>
+              {/* <Button> make event </Button> */}
               <Button> edit profile </Button>
+              <Button> change password </Button>
             </ButtonsWrap>
           </NameButtonsWrap>
 
           <AboutWrap>
-            <h2> About </h2>
-            <p> name : {user.firstName}</p>
-            <p> email : {user.email} </p>
-            <p> username : {user.username} </p>
-    
-            <PasswordButton> change password </PasswordButton>
+        
+              <H2> your info </H2>
+              <P> <Span>name :</Span> {user.firstName}</P>
+              <P> <Span>email : </Span>{user.email} </P>
+              <P> <Span>username : </Span>{user.username} </P>
+              <Image></Image>
+  
+            
           </AboutWrap>
          
           {/* <div>

@@ -86,33 +86,39 @@ transition:.2s all linear;
 
 const AboutWrap = styled.div`
 display:flex;
+border:1px dashed #45c132;
+border-bottom:1px rgba(0,0,0,0) solid;
 flex-direction:column;
 /* border:1px gray solid; */
 background-color:white;
-box-shadow:5px 5px 5px rgba(0,0,0,0.5);
+/* box-shadow:5px 5px 5px rgba(0,0,0,0.5); */
 border-radius:10px;
-/* padding:30px; */
 margin-top:20px;
-/* justify-content:space-between; */
-height:300px;
-/* width:300px; */
-/* text-align:center; */
+height:340px;
+padding:0%;
+
 `
 
 const H2 = styled.h2`
  color:#D10A0A;
+ padding-bottom:10px;
+ width:100px;
+ border-bottom:1px #13491c solid;
  /* text-align:center; */
  text-transform:uppercase;
  font-size:18px;
  margin-left:0;
- padding-top:20px;
- padding-left:30px;
+ margin-top:20px;
+ margin-left:30px;
+ margin-bottom:30px;
 `
 
 const P = styled.p`
 color:#D10A0A;
-margin-top:5px;
+margin:0px;
 padding-left:30px;
+margin-top:10px;
+margin-bottom:10px;
 /* margin-left:40px; */
 
 `
@@ -128,8 +134,17 @@ background-position:bottom;
 background-size:cover;
 /* border:1px red solid; */
 height:250px;
-width:380px;
+width:378px;
+margin:0 auto;
 margin-top:10px;
 `
 
-export {Name, MyAccountWrap, NameButtonsWrap, ButtonsWrap, Button, Greeting, PasswordButton, AboutWrap, H2, P, Span, Image}
+const InfoWrap = styled.div`
+/* border:1px dashed #45c132;
+padding:0;
+padding:10px;
+width:340px;
+margin:0 auto; */
+`
+
+export {Name, MyAccountWrap, NameButtonsWrap, ButtonsWrap, Button, Greeting, PasswordButton, AboutWrap, H2, P, Span, Image, InfoWrap}

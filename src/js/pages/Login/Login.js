@@ -1,5 +1,5 @@
 import React, {Component} from 'react';
-import {Link, Redirect} from 'react-router-dom';
+import { Redirect} from 'react-router-dom';
 import axios from 'axios';
 import {LoginContainer, Form, Input, Submit, Label } from './login-style'
 

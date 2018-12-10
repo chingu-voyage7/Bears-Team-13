@@ -1,5 +1,5 @@
 import React, { Component } from 'react';
-import {BrowserRouter as Router, Route, Link} from 'react-router-dom';
+import {BrowserRouter as Router, Route,} from 'react-router-dom';
 import Navbar from '../Navbar/Navbar.js';
 import {MainContainer, SpaceBottom, SpaceTop} from './app-style';
 import Footer from '../Footer/Footer.js';

@@ -32,7 +32,7 @@ padding-right:30px;
 
 const LinksContainerLoggedIn = styled.div`
 display:flex;
-width:180px;
+width:200px;
 justify-content:space-between;
 /* border:1px blue solid; */
 padding-right:30px;

@@ -64,14 +64,16 @@ function validUpdates(updates, callback) {
     return callback(400);
   }
 
+  if (updates.password) {
+    updates.password = user.generateHash(updates.password);
+  }
+
   if (updates.username || updates.email) {
     User.findOne({$or: [{username: updates.username},{email: updates.email}]}, (err, doc) => {
       if (err) { return callback(500); }
       if (!doc) { return callback(200); }
       if (doc) { return callback(400); }
     }); 
-  } else if (updates.password) {
-    updates.password = user.generateHash(password);
   } else {
     return callback(200);
   }
@@ -79,21 +81,20 @@ function validUpdates(updates, callback) {
 
 // Edit User {key, value}
 router.put('/edituser', isAuth, function (req, res) {
-  const updates = req.body.updates;
-  const fieldsToUpdate = req.body.updates.updates
+  const updates = req.body;
 
   console.log(updates);
 
-  validUpdates(updates, (status) => {
+  validUpdates(req.body, (status) => {
     if (status !== 200) {
       return res.sendStatus(status);
     }
 
-    User.updateOne({username: req.user.username}, {$set: fieldsToUpdate}, (err, doc) => {
-      if (err) { res.sendStatus(500); }
-      if (!doc) { res.sendStatus(404); }
+    User.updateOne({username: req.user.username}, {$set: updates}, (err, doc) => {
+      if (err) { return res.sendStatus(500); }
+      if (!doc) { return res.sendStatus(404); }
       console.log("User '" + req.user.username + "' was updated.");
-      res.sendStatus(200);
+      return res.sendStatus(200);
     });
   });
 

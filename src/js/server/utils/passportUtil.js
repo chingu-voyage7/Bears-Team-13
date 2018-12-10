@@ -44,7 +44,7 @@ let isAuth = function(req, res, next) {
   if (req.isAuthenticated()) {
     return next();
   } else {
-    console.log("WARN: User unathenticated.");
+    console.log("401 Not Authorized.");
   }
 }
 

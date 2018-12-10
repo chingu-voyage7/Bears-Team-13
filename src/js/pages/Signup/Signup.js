@@ -21,6 +21,7 @@ export default class Signup extends Component {
   }
 
   componentDidMount() {
+    alert(this.props.location.search);
     this.setState({redirectTo: queryString.parse(this.props.location.search).redirect});
   }
 

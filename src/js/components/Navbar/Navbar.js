@@ -27,7 +27,7 @@ export default class Navbar extends Component {
       <Nav>
        <Link to="/" style={{ textDecoration: 'none' }}>  <AppName>Secret Santa</AppName></Link>
 
-        {this.props.globals.user?(
+        {this.props.globals.user.username?(
 
           <div>
             <Link style={{ textDecoration: 'none', marginRight: '10px' }} to="#" onClick={this.toggleLogout.bind(this)}>logout</Link>

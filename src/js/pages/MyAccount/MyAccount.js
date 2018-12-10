@@ -6,7 +6,6 @@ export default class MyAccount extends Component {
     super(props);
 
     this.state = {
-      user: {},
       updates: {}
     }
   }
@@ -25,28 +24,15 @@ export default class MyAccount extends Component {
   onUpdateGeneral = (e) => {
     e.preventDefault();
 
-    let updates = {
-      updates: this.state.updates
-    }
+    let updates = this.state.updates;
 
-    // Delete the property that is empty
-    Object.entries(updates.updates).forEach( ([key, val]) => {
-      if (!val) delete updates.updates[key]
-    })
-
-    const { password, ...general } = this.state.updates
-
-    if (e.target.name == 'updatePassword') {
-      updates.updates = { password }
-    } else if (e.target.name == "updateGeneral") {
-      updates.updates = {
-        ...general
-      }
-    }
+    Object.entries(updates).forEach( ([key, val]) => {
+      if (!val || val === "") delete updates[key];
+    });
 
     axios.put('/api/edituser', {updates} )
       .then(res => {
-        alert('User edited');
+        console.log(res.data);
       })
       .catch(err => {
         console.log(err.response)

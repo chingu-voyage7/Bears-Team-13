@@ -46,10 +46,18 @@ router.post('/invite', isAuth, (req, res) => {
 
 // Accept Email Invite
 router.post('/acceptinvite', isAuth, (req, res) => {
+  /* 
+    1) Remove event_id from invites []
+    2) Add event_id to User events
+    3) Add user_id to event.memebers
+  */
   res.sendStatus(500);
 });
 
 router.delete('/rejectinvite', isAuth, (req, res) => {
+  /*
+    1) Remove event_id from invites []
+  */
   res.sendStatus(500);
 });
 

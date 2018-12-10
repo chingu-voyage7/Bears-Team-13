@@ -30,7 +30,7 @@ export default class MyAccount extends Component {
       if (!val || val === "") delete updates[key];
     });
 
-    axios.put('/api/edituser', {updates} )
+    axios.put('/api/edituser', updates)
       .then(res => {
         console.log(res.data);
       })

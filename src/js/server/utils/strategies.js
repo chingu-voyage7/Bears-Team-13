@@ -9,7 +9,6 @@ passport.use(new LocalStrategy(
   function (usernameOrEmail, password, done) {
     User.findOne({$or:[{email: usernameOrEmail},{username: usernameOrEmail}]}, {events: 0, purchases: 0, invites: 0}, (err, user) => {
       console.log("User " + usernameOrEmail + " attempted to log in.");
-      console.log(err);
       if (err) { return done(err); }
       if (!user) {  return done(null, false); }
       if (!user.validPassword(password)) { return done(null, false); }

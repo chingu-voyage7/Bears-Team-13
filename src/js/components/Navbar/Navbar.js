@@ -15,7 +15,9 @@ export default class Navbar extends Component {
   logout() {
     axios.get('/api/logout')
     .then((res) => {
-      this.props.setGlobal({user: {}});
+      this.props.setGlobal({user: {}}, () => {
+        this.setState({redirect: true});
+      });
     })
     .catch((err) => {
       alert("Failed to logout. Please try again.");

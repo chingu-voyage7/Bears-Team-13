@@ -44,7 +44,7 @@ let isAuth = function(req, res, next) {
   if (req.isAuthenticated()) {
     return next();
   } else {
-    console.log("401 Not Authorized.");
+    console.log("401 Login failed.");
   }
 }
 

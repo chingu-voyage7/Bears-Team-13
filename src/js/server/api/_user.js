@@ -27,7 +27,7 @@ router.get('/getuser', function (req, res) {
 
 // Returns session user
 router.get('/myuser', isAuth, function (req, res) {
-  console.log("User fetched");
+  console.log("/myuser fetched.");
   var user = req.user;
   user.password = null;
   res.json(user);
@@ -64,6 +64,9 @@ function validUpdates(updates, callback) {
     return callback(400);
   }
 
+  // Not Authorized to update your own vendor status
+  updates.vendor?delete updates.vendor:"";
+
   if (updates.password) {
     updates.password = user.generateHash(updates.password);
   }
@@ -74,8 +77,6 @@ function validUpdates(updates, callback) {
       if (!doc) { return callback(200); }
       if (doc) { return callback(400); }
     });
-  } else if (updates.password) {
-    updates.password = user.generateHash(password);
   } else {
     return callback(200);
   }
@@ -83,18 +84,18 @@ function validUpdates(updates, callback) {
 
 // Edit User {key, value}
 router.put('/edituser', isAuth, function (req, res) {
-  const updates = req.body;
-
-  console.log(updates);
+  console.log("Updates:");
+  console.log(req.body);
 
   validUpdates(req.body, (status) => {
     if (status !== 200) {
       return res.sendStatus(status);
     }
 
-    User.updateOne({username: req.user.username}, {$set: updates}, (err, doc) => {
+    User.updateOne({_id: new ObjectID(req.user._id)}, {$set: req.body}, (err, doc) => {
       if (err) { return res.sendStatus(500); }
       if (!doc) { return res.sendStatus(404); }
+
       console.log("User '" + req.user.username + "' was updated.");
       return res.sendStatus(200);
     });

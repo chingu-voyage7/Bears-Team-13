@@ -36,7 +36,8 @@ var userSchema = new Schema({
   events: Array, // [event_id, event_id...]
   purchases: Array, // {item_id, recipient_id}
   invites: Array, // [event_id, event_id...]
-  verified: false
+  verified: false,
+  vendor: false
 }, { 
   collection: "users" 
 });

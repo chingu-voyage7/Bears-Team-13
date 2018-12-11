@@ -64,6 +64,9 @@ function validUpdates(updates, callback) {
     return callback(400);
   }
 
+  // Not Authorized to update your own vendor status
+  updates.vendor?delete updates.vendor:"";
+
   if (updates.password) {
     updates.password = user.generateHash(updates.password);
   }

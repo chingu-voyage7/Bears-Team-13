@@ -31,7 +31,6 @@ export default class MyAccount extends Component {
      } 
   }
 
-
   closePasswordPopUp = ()  => {
     if(this.state.passwordPopUpShown === true){
         this.setState({
@@ -40,8 +39,6 @@ export default class MyAccount extends Component {
         })
     }
 }
-
-
 
   render() {
     const { user } = this.props.globals

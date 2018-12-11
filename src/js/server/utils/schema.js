@@ -20,7 +20,9 @@ var itemSchema = new Schema({
   name: String,
   usd: Number,
   description: String
-}, { collection: "store" });
+}, { 
+  collection: "store"
+});
 
 itemSchema.index({
   name: 'text'
@@ -34,9 +36,11 @@ var userSchema = new Schema({
   password: String,
   events: Array, // [event_id, event_id...]
   purchases: Array, // {item_id, recipient_id}
-  invites: Array // [event_id, event_id...]
-},
-{ collection: "users"} );
+  invites: Array, // [event_id, event_id...]
+  verified: false
+}, { 
+  collection: "users" 
+});
 
 userSchema.methods.generateHash = function(password) {
   return bcrypt.hashSync(password, bcrypt.genSaltSync(8), null);

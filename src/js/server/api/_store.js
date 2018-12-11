@@ -17,7 +17,7 @@ router.get("/finditem", (req, res) => {
 });
 
 router.post('/purchase', (req, res) => {
-
+  res.sendStatsu(500);
 });
 
 module.exports = router;

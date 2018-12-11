@@ -42,10 +42,8 @@ class App extends Component {
   }
 
   componentDidMount() {
-    console.log("Attempting to fetch session...");
     axios.get('/api/myuser')
     .then((res) => {
-      console.log("Success! globals.user = \n" + JSON.stringify(res.data));
       this.setState({user: res.data});
     })
     .catch((err) => {

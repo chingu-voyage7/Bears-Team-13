@@ -25,8 +25,9 @@ router.get('/getuser', function (req, res) {
   });
 });
 
+// Returns session user
 router.get('/myuser', isAuth, function (req, res) {
-  console.log(req.user);
+  console.log("User fetched");
   var user = req.user;
   user.password = null;
   res.json(user);
@@ -35,7 +36,7 @@ router.get('/myuser', isAuth, function (req, res) {
 // Adds user to the DB
 router.post('/adduser', function (req, res) {
   if (!req.body.email || !req.body.username || !req.body.password) {
-    return res.send("Error. Email, Username, Password required").status(400);
+    return res.sendStatus(400).send("Email, Username, Password required");
   }
 
   User.findOne({$or: [{username: req.body.username}, {email: req.body.email}]}, { id: 1}, (err, existing) => {
@@ -63,6 +64,10 @@ function validUpdates(updates, callback) {
     return callback(400);
   }
 
+  if (updates.password) {
+    updates.password = user.generateHash(updates.password);
+  }
+
   if (updates.username || updates.email) {
     User.findOne({$or: [{username: updates.username},{email: updates.email}]}, (err, doc) => {
       if (err) { return callback(500); }
@@ -78,21 +83,20 @@ function validUpdates(updates, callback) {
 
 // Edit User {key, value}
 router.put('/edituser', isAuth, function (req, res) {
-  const updates = req.body.updates;
-  const fieldsToUpdate = req.body.updates.updates
+  const updates = req.body;
 
   console.log(updates);
 
-  validUpdates(updates, (status) => {
+  validUpdates(req.body, (status) => {
     if (status !== 200) {
       return res.sendStatus(status);
     }
 
-    User.updateOne({username: req.user.username}, {$set: fieldsToUpdate}, (err, doc) => {
-      if (err) { res.sendStatus(500); }
-      if (!doc) { res.sendStatus(404); }
+    User.updateOne({username: req.user.username}, {$set: updates}, (err, doc) => {
+      if (err) { return res.sendStatus(500); }
+      if (!doc) { return res.sendStatus(404); }
       console.log("User '" + req.user.username + "' was updated.");
-      res.sendStatus(200);
+      return res.sendStatus(200);
     });
   });
 
@@ -128,26 +132,6 @@ router.get('/myevents', isAuth, function(req, res) {
     }).skip(page * 10).limit(10);
 
   });
-});
-
-// Returns a list of events the user is invited to
-router.get('/myinvites', isAuth, function(req, res) {
-  if (!req.user.invites || req.user.invites.length === 0) {
-    return res.sendStatus(404);
-  }
-  console.log("MY INVITES: \n" + JSON.stringify(req.user.invites));
-  const page = req.query.page;
-  delete req.query.page;
-
-  const invites = req.user.invites.map((id) => {
-    return new ObjectID(id);
-  });
-
-  Event.find({$in: invites}, req.query, (err, docs) => {
-    if (err) { return res.sendStatus(500); }
-    if (!docs) { return res.sendStatus(404); }
-    return res.json(docs);
-  }).skip(page * 10).limit(10);
 });
 
 module.exports = router;

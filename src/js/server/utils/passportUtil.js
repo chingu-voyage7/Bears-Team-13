@@ -30,6 +30,7 @@ let setupPassport = function (app) {
   passport.deserializeUser((id, done) => {
     User.findOne(
       {_id: new ObjectID(id)},
+      {events: 0, purchases: 0, invites: 0, password: 0},
       (err, doc) => {
         done(null, doc);
       }
@@ -43,7 +44,7 @@ let isAuth = function(req, res, next) {
   if (req.isAuthenticated()) {
     return next();
   } else {
-    console.log("WARN: User unathenticated.");
+    console.log("401 Not Authorized.");
   }
 }
 

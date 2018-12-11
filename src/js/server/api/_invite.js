@@ -63,22 +63,27 @@ router.delete('/rejectinvite', isAuth, (req, res) => {
 
 // Returns a list of events the user is invited to
 router.get('/myinvites', isAuth, function(req, res) {
-  if (!req.user.invites || req.user.invites.length === 0) {
-    return res.sendStatus(404);
-  }
-  console.log("MY INVITES: \n" + JSON.stringify(req.user.invites));
   const page = req.query.page;
   delete req.query.page;
 
-  const invites = req.user.invites.map((id) => {
-    return new ObjectID(id);
+  User.findOne({_id: new ObjectID(req.user._id)}, (err, user) => {
+    if (err) { return res.sendStatus(500); }
+    if (!user) { return res.sendStatus(404).send("User not found."); }
+    
+    const invites = user.invites.map((id) => {
+      return new ObjectID(id);
+    });
+    console.log(user);
+    Event.find({_id: {$in: invites}}, req.query, (err, docs) => {
+      console.log(err);
+      if (err) { return res.sendStatus(500); }
+      if (!docs) { return res.sendStatus(404).send("Invites not found"); }
+      console.log(docs);
+      return res.json(docs);
+    }).skip(page * 10).limit(10);
+  
   });
 
-  Event.find({$in: invites}, req.query, (err, docs) => {
-    if (err) { return res.sendStatus(500); }
-    if (!docs) { return res.sendStatus(404); }
-    return res.json(docs);
-  }).skip(page * 10).limit(10);
 });
 
 

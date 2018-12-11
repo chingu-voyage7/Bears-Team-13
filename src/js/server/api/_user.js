@@ -27,7 +27,7 @@ router.get('/getuser', function (req, res) {
 
 // Returns session user
 router.get('/myuser', isAuth, function (req, res) {
-  console.log(req.user);
+  console.log("User fetched");
   var user = req.user;
   user.password = null;
   res.json(user);

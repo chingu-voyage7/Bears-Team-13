@@ -36,7 +36,7 @@ router.get('/myuser', isAuth, function (req, res) {
 // Adds user to the DB
 router.post('/adduser', function (req, res) {
   if (!req.body.email || !req.body.username || !req.body.password) {
-    return res.send("Error. Email, Username, Password required").status(400);
+    return res.sendStatus(400).send("Email, Username, Password required");
   }
 
   User.findOne({$or: [{username: req.body.username}, {email: req.body.email}]}, { id: 1}, (err, existing) => {

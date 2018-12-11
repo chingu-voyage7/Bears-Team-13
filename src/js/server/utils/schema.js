@@ -32,18 +32,10 @@ var userSchema = new Schema({
   password: String,
   events: Array, // [event_id, event_id...]
   purchases: Array, // {item_id, recipient_id}
-  invites: Array // [event_id, event_id...]
+  invites: Array, // [event_id, event_id...]
+  verified: false
 }, { 
   collection: "users" 
-});
-
-// TEMP USER
-var tempUserSchema = new Schema({
-  email: String,
-  invites: Array,
-  createdAt: {type: Date, expires: '10s', default: Date.now }
-}, { 
-  collection: "tempusers" 
 });
 
 userSchema.methods.generateHash = function(password) {
@@ -55,7 +47,6 @@ userSchema.methods.validPassword = function(password) {
 }
 
 var schemas = { 
-  TempUser: connection.model('TempUser', tempUserSchema),
   User : connection.model('User', userSchema),
   Event : connection.model('Event', eventSchema),
   Item : connection.model('Item', itemSchema)

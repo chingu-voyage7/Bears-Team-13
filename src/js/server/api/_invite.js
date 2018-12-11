@@ -14,42 +14,45 @@ router.post('/invite', isAuth, (req, res) => {
   console.log(JSON.stringify(req.body));
   const email = req.body.email;
 
-  if (email && /^.*@[a-z]*.[a-z]*$/gm.test(email)) {
-    User.updateOne({email: email}, {$addToSet: {invites: req.body.eventID}}, (err, result) => {
-      if (err) { return res.sendStatus(500); }
-
-      console.log("User exists? " + result.nModified);
-
-      // Signup Required (Email not found)
-      if (result.nModified === 0) {
-        TempUser.updateOne({email: email}, {$addToSet: {invites: req.body.eventID}}, {upsert: true}, (err, doc) => {
-          if (err) { return res.sendStatus(500); }
-          if (!doc) { return res.sendStatus(400); }
-          console.log("Doc exists? " + doc.n);
-          mailer.signupAndJoin(email, req.user.username);
-          return res.sendStatus(200);
-        });
-
-      // Signup NOT Required (Email found)
-      } else {
-      mailer.invite(email, req.user.username);
-      return res.sendStatus(200);
-      }
-    });
-
-  } else {
+  if (!(email && /^.*@[a-z]*.[a-z]*$/gm.test(email))) {
     console.log("Bad format");
     return res.status(400).send("Bad format");
   }
 
+  Event.findOne({_id: new ObjectID(req.body.eventID)}, {members: 1, author: 1}, (err, event) => {
+    if (err) { return res.sendStatus(500); }
+    if (!event) { return res.sendStatus(404).send("Event not found"); }
+
+    console.log("Sender is Author or Member?");
+    console.log(event);
+
+    const member = req.user._id !== event.author[0] || event.members.indexOf(req.user._id) !== -1;
+
+    if (member) {
+      console.log("Verified member");
+
+      User.updateOne({email: email}, {$addToSet: {invites: req.body.eventID}}, {upsert: true}, (err, result) => {
+        if (err) { return res.sendStatus(500); }
+        if (!result) { return res.sendStatus(500); }
+    
+        mailer.invite(email, req.user.username);
+        return res.sendStatus(200);
+      });
+  
+    } else {
+      return res.sendStatus(401);
+    }
+
+  
+  });
 });
 
 // Accept Email Invite
 router.post('/acceptinvite', isAuth, (req, res) => {
   /* 
-    1) Remove event_id from invites []
-    2) Add event_id to User events
-    3) Add user_id to event.memebers
+    1) Remove event_id from user.invites []
+    2) Add event_id to user.events []
+    3) Add user_id to event.members []
   */
   res.sendStatus(500);
 });

@@ -1,5 +1,7 @@
 import React, {Component} from 'react';
-import {IndexContainer, TitleIndex, AboutContainer, SantaImage, AboutTextContainer, ButtonContainer, AboutText, StartExchange,Button, TitleGift} from './index-style'
+import {IndexContainer, TitleIndex, AboutContainer, SantaImage, AboutTextContainer, ButtonContainer, AboutText, StartExchange,Button, TitleGift, Grid, GridItem} from './index-style'
+import {Link} from 'react-router-dom';
+
 
 
 export default class Index extends Component {
@@ -13,14 +15,29 @@ export default class Index extends Component {
            <AboutText>Lorem ipsum dolor sit amet, consectetur adipiscing elit. Quisque bibendum odio ligula, vel ultricies sapien maximus non. Praesent ullamcorper lorem at consequat accumsan. Integer feugiat scelerisque commodo.</AboutText>
            <StartExchange> start your exchange </StartExchange>
              <ButtonContainer>
-                  <Button> sign up </Button>
-                  <Button> sign in </Button>
+                 <Link to="/signup" styles={{textDecoration:'none'}}><Button> sign up </Button></Link> 
+                  <Link to="/login" style={{ textDecoration: 'none' }}> <Button> log in </Button></Link>
               </ButtonContainer>
          </AboutTextContainer>
 
        </AboutContainer>
 
        <TitleGift> GIFTS UNDER $20</TitleGift>
+       <Grid>
+         <GridItem></GridItem>
+         <GridItem></GridItem>
+         <GridItem></GridItem>
+         <GridItem></GridItem>
+         <GridItem></GridItem>
+         <GridItem></GridItem>
+         <GridItem></GridItem>
+         <GridItem></GridItem>
+         <GridItem></GridItem>
+         <GridItem></GridItem>
+         <GridItem></GridItem>
+         <GridItem></GridItem>
+
+       </Grid>
 
      </IndexContainer>
     );

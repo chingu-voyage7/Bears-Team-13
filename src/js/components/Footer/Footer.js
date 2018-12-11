@@ -1,6 +1,6 @@
 import React, {Component} from 'react';
 import {Link} from 'react-router-dom';
-import {FooterStyle, IconFooter, IconsFooterContainer} from './footer-style'
+import {FooterStyle, IconsFooterContainer} from './footer-style'
 
 const iconStyle = {
   fontSize: '22px',

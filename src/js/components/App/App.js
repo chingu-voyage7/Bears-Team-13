@@ -5,7 +5,7 @@ import {MainContainer, SpaceBottom, SpaceTop} from './app-style';
 import Footer from '../Footer/Footer.js';
 import './app.css';
 import axios from 'axios';
- 
+
 const ROUTES = [{
   path: '/',
   component: require('../../pages/Index/Index.js').default,
@@ -18,6 +18,10 @@ const ROUTES = [{
   path: '/login',
   component: require('../../pages/Login/Login.js').default,
   exact: true
+}, {
+  path: '/dashboard',
+  component: require('../../pages/Dashboard/Dashboard.js').default,
+  exacr: true
 }, {
   path: '/dashboard/invites',
   component: require('../../pages/Invites/Invites.js').default,

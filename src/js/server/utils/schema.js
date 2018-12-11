@@ -8,10 +8,9 @@ const bcrypt = require('bcrypt-nodejs');
 var eventSchema = new Schema({
   name: String,
   author: Array,
-  public: Boolean,
+  public: false,
   creationDate: Date,
-  drawDate: Date, // Gifts are revealed
-  endDate: Date,
+  startDate: Date, // Date Exchange Starts. No one can join after this date.
   members: Array, // [{_id: ObjectID, role: "member"}, {_id: ObjectID, role: "admin"}]
 }, { collection: "events"} );
 

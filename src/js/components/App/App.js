@@ -23,6 +23,14 @@ const ROUTES = [{
   component: require('../../pages/Invites/Invites.js').default,
   exact: true
 }, {
+  path: '/dashboard/create',
+  component: require('../../pages/CreateEvent/CreateEvent.js').default,
+  exact: true
+}, {
+  path: '/event/:event_id',
+  component: require('../../pages/Event/Event.js').default,
+  exact: true
+}, {
   path: '/myaccount',
   component: require('../../pages/MyAccount/MyAccount.js').default,
   exact: true

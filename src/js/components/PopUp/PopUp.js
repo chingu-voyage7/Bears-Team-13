@@ -9,7 +9,6 @@ export default class PasswordPopUp extends Component {
     super(props);
 
     this.state = {
-      user: {},
       updates: {},
     }
   }
@@ -27,28 +26,26 @@ export default class PasswordPopUp extends Component {
 
   
   
-  onUpdateGeneral = (e) => {
+  onUpdateGeneral = (e) => { 
     e.preventDefault();
     // this.props.closePopUp();
 
-    let updates = {
-      updates: this.state.updates
-    }
+    let updates = this.state.updates;
+
    // Delete the property that is empty
-     Object.entries(updates.updates).forEach( ([key, val]) => {
-      if (!val) delete updates.updates[key]
-    })
-     const { password, ...general } = this.state.updates
+     Object.entries(updates).forEach( ([key, val]) => {
+      if (!val) delete updates[key];
+    });
+
+     const { password, ...general } = updates;
 
     if (e.target.name === 'updatePassword') {
-      updates.updates = { password }
+      updates = { password }
     } else if (e.target.name === "updateGeneral") {
-      updates.updates = {
-        ...general
-      }
+      updates = { ...general }
     }
 
-    axios.put('/api/edituser', {updates} )
+    axios.put('/api/edituser', updates )
       .then(res => {
         alert('User edited');
       })

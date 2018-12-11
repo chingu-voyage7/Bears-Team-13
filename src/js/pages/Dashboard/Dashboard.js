@@ -28,7 +28,6 @@ export default class Dashboard extends Component {
 
   handleEventClick(eventId) {
     const { history } = this.props
-    console.log(`/dashboard/${eventId}`)
 
     history.push(`/dashboard/${eventId}`)
   }
@@ -69,6 +68,16 @@ export default class Dashboard extends Component {
     return (
       <main>
         <section>
+          <article>
+            <img src="" alt="bg-img"/>
+            <div>
+              <button>Create</button>
+              <button>Shop</button>
+            </div>
+          </article>
+        </section>
+        <section>
+          <h2>Events</h2>
           {
             loader
               ? 'Loading...'

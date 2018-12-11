@@ -2,12 +2,12 @@ const router = require('express').Router();
 const Item = require('../utils/schema.js').Item;
 
 router.get("/finditem", (req, res) => {
-  if (!req.query.query) { return res.sendStatus(400); }
-  console.log(query);
-  Item.find({name: {$text: {
+  if (!req.query) { return res.sendStatus(400); }
+  // console.log(query);
+  Item.find({$text: {
     $search: req.query.keywords,
     $caseSensitive: false,
-  } }}, (err, docs) => {
+  } }, (err, docs) => {
     if (err) { return res.sendStatus(500);}
     if (!docs) { return res.sendStatus(400); }
     console.log("Found items...");
@@ -17,7 +17,7 @@ router.get("/finditem", (req, res) => {
 });
 
 router.post('/purchase', (req, res) => {
-  
+
 });
 
 module.exports = router;

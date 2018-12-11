@@ -22,6 +22,10 @@ var itemSchema = new Schema({
   description: String
 }, { collection: "store" });
 
+itemSchema.index({
+  name: 'text'
+});
+
 // USER
 var userSchema = new Schema({
   firstName: String,
@@ -31,7 +35,7 @@ var userSchema = new Schema({
   events: Array, // [event_id, event_id...]
   purchases: Array, // {item_id, recipient_id}
   invites: Array // [event_id, event_id...]
-}, 
+},
 { collection: "users"} );
 
 userSchema.methods.generateHash = function(password) {
@@ -42,7 +46,7 @@ userSchema.methods.validPassword = function(password) {
   return bcrypt.compareSync(password, this.password);
 }
 
-var schemas = { 
+var schemas = {
   User : connection.model('User', userSchema),
   Event : connection.model('Event', eventSchema),
   Item : connection.model('Item', itemSchema)

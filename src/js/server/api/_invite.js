@@ -19,7 +19,7 @@ router.post('/invite', isAuth, (req, res) => {
     return res.status(400).send("Bad format");
   }
 
-  Event.findOne({_id: new ObjectID(req.body.eventID)}, {members: 1, author: 1}, (err, event) => {
+  Event.findOne({_id: new ObjectID(req.body.event_id)}, {members: 1, author: 1}, (err, event) => {
     if (err) { return res.sendStatus(500); }
     if (!event) { return res.sendStatus(404).send("Event not found"); }
 
@@ -31,7 +31,7 @@ router.post('/invite', isAuth, (req, res) => {
     if (member) {
       console.log("Verified member");
 
-      User.updateOne({email: email}, {$addToSet: {invites: req.body.eventID}}, {upsert: true}, (err, result) => {
+      User.updateOne({email: email}, {$addToSet: {invites: req.body.event_id}}, {upsert: true}, (err, result) => {
         if (err) { return res.sendStatus(500); }
         if (!result) { return res.sendStatus(500); }
     

@@ -6,6 +6,31 @@ const schema = require('../utils/schema.js');
 const Event = schema.Event;
 const User = schema.User;
 
+// Returns an event given event_id
+router.get('/event', (req, res) => {
+  console.log(JSON.stringify(req.query));
+
+  Event.findOne({_id: new ObjectID(req.query.event_id)}, (err, event) => {
+    if (err) { return res.sendStatus(500); }
+    if (!event) { return res.sendStatus(404); }
+
+    if (!event.public) {
+      if (req.user) {
+
+        if (ObjectID.toString(event.author[0]) === ObjectID.toString(req.user._id)) {
+          return res.json(event);
+        }
+        if (event.members.indexOf(req.user._id) !== -1) {
+          return res.json(event);
+        }
+      }
+      return res.sendStatus(401);
+    }
+
+    return res.json(doc);
+  })
+})
+
 // Returns a list of events
 // Given ["key", "value", "key", "value"...]
 router.get("/getevents", (req, res) => {

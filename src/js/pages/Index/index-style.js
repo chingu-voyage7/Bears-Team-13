@@ -18,7 +18,7 @@ margin-top:-15px;
 `
 
 const TitleGift = styled.div`
-margin-top:50px;
+margin-top:100px;
 font-size:28px;
 font-weight:bold;
 text-align:center;
@@ -76,7 +76,30 @@ color:white;
 box-shadow:2px 2px 2px rgba(0,0,0,0.5);
 border-radius:5px;
 padding:10px;
+&:hover{
+  cursor:pointer;
+  color:#D10A0A;
+  background-color:white;
+  &:focus{
+    outline:0;
+  }
+}
 `
 
+const Grid = styled.div`
+margin-top:30px;
+display:grid;
+grid-template-columns: repeat(auto-fill, minmax(100px, 1fr));
+grid-gap: 15px;
+`
+const GridItem = styled.div`
+  height:100px;
+  width:100px;
+  border:1px gray solid;
+  &:hover{
+      cursor:pointer;
+  }
 
-export {IndexContainer, TitleIndex, AboutContainer,SantaImage, AboutTextContainer, ButtonContainer, AboutText,StartExchange, Button, TitleGift};
+`
+
+export {IndexContainer, TitleIndex, AboutContainer,SantaImage, AboutTextContainer, ButtonContainer, AboutText,StartExchange, Button, TitleGift, Grid, GridItem};

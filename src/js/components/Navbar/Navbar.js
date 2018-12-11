@@ -1,7 +1,9 @@
 import React, {Component} from 'react';
 import {Link, Redirect} from 'react-router-dom';
-import {Nav, AppName, LinksContainer, LinkStyle} from './nav-style'
+import {Nav, AppName, LinksContainer, LinkStyle, LinksContainerLoggedIn} from './nav-style'
 import axios from 'axios';
+
+
 
 export default class Navbar extends Component {
   constructor(props) {
@@ -36,10 +38,11 @@ export default class Navbar extends Component {
 
         {this.props.globals.user.username?(
 
-          <div>
-            <Link style={{ textDecoration: 'none', marginRight: '10px' }} to="#" onClick={this.logout.bind(this)}>logout</Link>
-            <Link style={{ textDecoration: 'none' }} to="/myaccount">Your Account</Link>
-          </div>
+          <LinksContainerLoggedIn>
+            <Link style={{ textDecoration: 'none' }} to="/myaccount"><LinkStyle>my account</LinkStyle></Link>
+            <Link style={{ textDecoration: 'none', marginRight: '10px' }} to="#" onClick={this.logout.bind(this)}><LinkStyle>logout</LinkStyle></Link>
+
+          </LinksContainerLoggedIn>
         ):(
           <LinksContainer>
 

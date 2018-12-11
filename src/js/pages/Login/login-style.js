@@ -50,6 +50,7 @@ transition:.2s all linear;
  &:hover {
     background: #D10A0A;
     color:white;
+    cursor:pointer;
   }
 
   &:focus{

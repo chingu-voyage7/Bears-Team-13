@@ -73,7 +73,9 @@ function validUpdates(updates, callback) {
       if (err) { return callback(500); }
       if (!doc) { return callback(200); }
       if (doc) { return callback(400); }
-    }); 
+    });
+  } else if (updates.password) {
+    updates.password = user.generateHash(password);
   } else {
     return callback(200);
   }

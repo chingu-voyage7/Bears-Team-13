@@ -24,6 +24,10 @@ var itemSchema = new Schema({
   collection: "store"
 });
 
+itemSchema.index({
+  name: 'text'
+});
+
 // USER
 var userSchema = new Schema({
   firstName: String,
@@ -46,7 +50,7 @@ userSchema.methods.validPassword = function(password) {
   return bcrypt.compareSync(password, this.password);
 }
 
-var schemas = { 
+var schemas = {
   User : connection.model('User', userSchema),
   Event : connection.model('Event', eventSchema),
   Item : connection.model('Item', itemSchema)

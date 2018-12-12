@@ -1,5 +1,6 @@
 import React, { Component } from 'react'
 import axios from 'axios'
+import {StoreWrap} from "./store-style.js"
 
 const Item = ({item}) => {
   return (
@@ -20,6 +21,7 @@ export default class Store extends Component {
       items: [],
       query: '',
       loader: false,
+      searchPerformed: false
     }
   }
 
@@ -47,6 +49,7 @@ export default class Store extends Component {
         this.setState({
           items: res.data,
           loader: false,
+          searchPerformed:true
         })
       })
       .catch(err => {
@@ -60,7 +63,11 @@ export default class Store extends Component {
   render() {
     const { items, loader } = this.state
     let storeItems
+     console.log(items.length);
 
+     if(!this.state.searchPerformed){
+      storeItems = "";
+     } else {
     if (items.length > 0) {
       storeItems = items.map(item => {
         return (
@@ -68,12 +75,14 @@ export default class Store extends Component {
         )
       })
     } else {
-      storeItems = "Items not found";
+      storeItems = "item not found";
+
     }
+  }
 
     return (
-      <>
-        <section>
+  
+        <StoreWrap>
           <form>
             <input type="text" onChange={this.handleInputSearch}/>
             <div style={{ display: 'inline-block' }}>
@@ -81,11 +90,11 @@ export default class Store extends Component {
               <button type="submit" onClick={this.handleSearch}>Search</button>
             </div>
           </form>
-        </section>
+  
         <section>
           {storeItems}
         </section>
-      </>
+        </StoreWrap>
     )
   }
 }

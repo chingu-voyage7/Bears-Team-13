@@ -32,7 +32,7 @@ padding-right:30px;
 
 const LinksContainerLoggedIn = styled.div`
 display:flex;
-width:200px;
+width:300px;
 justify-content:space-between;
 /* border:1px blue solid; */
 padding-right:30px;
@@ -43,8 +43,13 @@ const LinkStyle = styled.div`
 font-weight:500;
 color:#13491C;
 `
+const LinkStyleShop = styled.div`
+/* color:rgb(234, 93, 93); */
+font-weight:500;
+color:#d10a0a;
+`
 
 
 
-export {Nav, AppName, LinksContainer, LinkStyle, LinksContainerLoggedIn };
+export {Nav, AppName, LinksContainer, LinkStyle, LinksContainerLoggedIn, LinkStyleShop };
 

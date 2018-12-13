@@ -83,7 +83,7 @@ export default class Store extends Component {
     let storeItems;
 
      if(!this.state.searchPerformed){
-      storeItems = items.map(item => {
+      storeItems = items.slice(0, 8).map(item => {
         return (
            <Item item={item} key={item._id}></Item>
       

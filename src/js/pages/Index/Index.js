@@ -52,7 +52,7 @@ export default class Index extends Component {
     let storeItems;
 
 
-      storeItems = items.map(item => {
+      storeItems = items.slice(0, 8).map(item => {
         return (
            <Item item={item} key={item._id}></Item>)
           })

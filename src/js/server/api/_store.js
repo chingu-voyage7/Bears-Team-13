@@ -5,7 +5,7 @@ const User = schema.User;
 const Item = schema.Item;
 
 router.get('/items', (req, res) => {
-  Item.find(({}, err, docs) => {
+  Item.find({}, (err, docs) => {
     if (err) { return res.sendStatus(500) }
     if (!docs) { return res.sendStatus(400) }
 

@@ -23,6 +23,16 @@ export default class Store extends Component {
     }
   }
 
+  componentDidMount() {
+    console.log('mounted')
+
+    axios.get('/api/items')
+      .then(res => {
+        console.log(res.data)
+      })
+      .catch(err => console.log(err.response))
+  }
+
   handleInputSearch = (e) => {
     const { value } = e.target
 

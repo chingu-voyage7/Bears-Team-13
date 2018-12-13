@@ -23,5 +23,18 @@ font-weight:bold;
 color:#D10A0A;
 `
 
+const ItemWrap = styled.div`
+padding:10px;
+/* border-top:1px #D10A0A solid; */
+border-bottom:1px #D10A0A solid;
+display:flex;
+justify-content:space-between;
 
-export {StoreWrap, SearchForm, Title}
+`
+
+const ItemName = styled.p`
+color:#D10A0A;
+`
+
+
+export {StoreWrap, SearchForm, Title, ItemWrap}

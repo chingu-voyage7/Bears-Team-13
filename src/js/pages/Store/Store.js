@@ -3,16 +3,19 @@ import axios from 'axios';
 import {StoreWrap, SearchForm, Title} from "./store-style.js";
 import {InputStyle} from '../Signup/signup-style.js';
 import {Button} from '../MyAccount/myAccount-style.js';
+import {Grid, GridItem} from '../Index/index-style.js';
 
 const Item = ({item}) => {
   return (
-    <article>
+
+    <GridItem>
       <h3>{item.name}</h3>
       <img src="" alt="img "/>
       <div>
         <span>{item.usd}</span>
       </div>
-    </article>
+    </GridItem>
+
   )
 }
 export default class Store extends Component {
@@ -67,12 +70,22 @@ export default class Store extends Component {
     let storeItems;
 
      if(!this.state.searchPerformed){
-      storeItems = "";
+      storeItems = 
+      <Grid>
+      <GridItem></GridItem>
+      <GridItem></GridItem>
+      <GridItem></GridItem>
+      <GridItem></GridItem>
+      </Grid>
+
+ 
+      
      } else {
     if (items.length > 0) {
       storeItems = items.map(item => {
         return (
-          <Item item={item} key={item._id}></Item>
+           <Item item={item} key={item._id}></Item>
+      
         )
       })
     } else {
@@ -86,7 +99,7 @@ export default class Store extends Component {
         <StoreWrap>
      
              <Title> Gifts under $20. </Title>
-             <Title>You're welcome </Title>
+             <Title>You're welcome. </Title>
 
           <SearchForm>
             <InputStyle type="text" onChange={this.handleInputSearch}/>
@@ -96,9 +109,9 @@ export default class Store extends Component {
             </div>
           </SearchForm>
   
-        <section>
+        <Grid>
           {storeItems}
-        </section>
+        </Grid>
         </StoreWrap>
     )
   }

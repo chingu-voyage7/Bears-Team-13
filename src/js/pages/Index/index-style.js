@@ -95,7 +95,8 @@ grid-gap: 15px;
 const GridItem = styled.div`
   height:100px;
   width:100px;
-  border:1px gray solid;
+  border-radius:5px;
+  border:1px #45c132 solid;
   &:hover{
       cursor:pointer;
   }

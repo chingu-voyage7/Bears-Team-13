@@ -1,6 +1,6 @@
 import styled from 'styled-components';
 
-const Nav = styled.nav`
+const Nav = styled.nav `
 border-bottom:2px #45c132 dashed;
 width:90%;
 margin:0 auto;
@@ -13,7 +13,7 @@ background-color:white;
 padding:5px;
 `
 
-const AppName = styled.h2`
+const AppName = styled.h2 `
 padding-left:30px;
 color:#13491C;
 letter-spacing:1px;
@@ -21,7 +21,7 @@ text-transform:uppercase;
 font-size:18px;
 `
 
-const LinksContainer = styled.div`
+const LinksContainer = styled.div `
 display:flex;
 width:140px;
 justify-content:space-between;
@@ -30,26 +30,30 @@ padding-right:30px;
 `
 
 
-const LinksContainerLoggedIn = styled.div`
+const LinksContainerLoggedIn = styled.div `
 display:flex;
 width:300px;
-justify-content:space-between;
+justify-content:space-between; 
 /* border:1px blue solid; */
 padding-right:30px;
+
 `
 
-const LinkStyle = styled.div`
+const LinkStyle = styled.div `
 /* color:rgb(234, 93, 93); */
 font-weight:500;
 color:#13491C;
-`
-const LinkStyleShop = styled.div`
-/* color:rgb(234, 93, 93); */
-font-weight:500;
-color:#d10a0a;
+
 `
 
 
 
-export {Nav, AppName, LinksContainer, LinkStyle, LinksContainerLoggedIn, LinkStyleShop };
 
+export {
+    Nav,
+    AppName,
+    LinksContainer,
+    LinkStyle,
+    LinksContainerLoggedIn,
+
+};

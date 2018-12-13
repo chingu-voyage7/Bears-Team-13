@@ -1,6 +1,7 @@
 import React, {Component} from 'react';
-import {Link, Redirect} from 'react-router-dom';
-import {Nav, AppName, LinksContainer, LinkStyle, LinksContainerLoggedIn, LinkStyleShop} from './nav-style'
+import {NavLink, Link, Redirect} from 'react-router-dom';
+import {Nav, AppName, LinksContainer, LinkStyle, LinksContainerLoggedIn} from './nav-style'
+import "./active.css"
 import axios from 'axios';
 
 
@@ -34,15 +35,16 @@ export default class Navbar extends Component {
 
     return (
       <Nav>
-       <Link to="/" style={{ textDecoration: 'none' }}>  <AppName>Secret Santa</AppName></Link>
+       <NavLink to="/" style={{ textDecoration: 'none' }}>  <AppName>Secret Santa</AppName></NavLink>
 
         {this.props.globals.user.username?(
 
           <LinksContainerLoggedIn>
-            <Link style={{ textDecoration: 'none' }} to="/store"><LinkStyleShop>shop </LinkStyleShop></Link>
-            <Link style={{ textDecoration: 'none' }} to="/dashboard"><LinkStyle>my events </LinkStyle></Link>
-            <Link style={{ textDecoration: 'none' }} to="/myaccount"><LinkStyle>settings</LinkStyle></Link>
-            <Link style={{ textDecoration: 'none', marginRight: '10px' }} to="#" onClick={this.logout.bind(this)}><LinkStyle>logout</LinkStyle></Link>
+            <NavLink
+            activeClassName="active" style={{ textDecoration: 'none' }} to="/store"><LinkStyle>shop </LinkStyle></NavLink>
+            <NavLink activeClassName="active"   style={{ textDecoration: 'none' }} to="/dashboard"><LinkStyle>my events </LinkStyle></NavLink>
+            <NavLink activeClassName="active"  style={{ textDecoration: 'none' }} to="/myaccount"><LinkStyle>settings</LinkStyle></NavLink>
+            <NavLink activeClassName="active"  style={{ textDecoration: 'none', marginRight: '10px' }} to="#" onClick={this.logout.bind(this)}><LinkStyle>logout</LinkStyle></NavLink>
          </LinksContainerLoggedIn>
         ):(
           <LinksContainer>

@@ -1,6 +1,8 @@
-import React, { Component } from 'react'
-import axios from 'axios'
-import {StoreWrap} from "./store-style.js"
+import React, { Component } from 'react';
+import axios from 'axios';
+import {StoreWrap, SearchForm, Title} from "./store-style.js";
+import {InputStyle} from '../Signup/signup-style.js';
+import {Button} from '../MyAccount/myAccount-style.js';
 
 const Item = ({item}) => {
   return (
@@ -62,8 +64,7 @@ export default class Store extends Component {
 
   render() {
     const { items, loader } = this.state
-    let storeItems
-     console.log(items.length);
+    let storeItems;
 
      if(!this.state.searchPerformed){
       storeItems = "";
@@ -83,13 +84,17 @@ export default class Store extends Component {
     return (
   
         <StoreWrap>
-          <form>
-            <input type="text" onChange={this.handleInputSearch}/>
+     
+             <Title> Gifts under $20. </Title>
+             <Title>You're welcome </Title>
+
+          <SearchForm>
+            <InputStyle type="text" onChange={this.handleInputSearch}/>
             <div style={{ display: 'inline-block' }}>
-              <button>Price Dropdown</button>
-              <button type="submit" onClick={this.handleSearch}>Search</button>
+              {/* <button>Price Dropdown</button> */}
+              <Button type="submit" onClick={this.handleSearch}>Search</Button>
             </div>
-          </form>
+          </SearchForm>
   
         <section>
           {storeItems}

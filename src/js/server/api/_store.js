@@ -4,6 +4,16 @@ const schema = require('../utils/schema.js');
 const User = schema.User;
 const Item = schema.Item;
 
+router.get('/items', (req, res) => {
+  Item.find({}, (err, docs) => {
+    if (err) { return res.sendStatus(500) }
+    if (!docs) { return res.sendStatus(400) }
+
+    console.log("Items...");
+    console.log(JSON.stringify(docs));
+    res.json(docs)
+  }).skip(req.query.page * 10).limit(10)
+})
 
 router.get("/finditem", (req, res) => {
   if (!req.query) { return res.sendStatus(400); }

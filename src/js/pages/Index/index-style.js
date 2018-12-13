@@ -89,18 +89,36 @@ padding:10px;
 const Grid = styled.div`
 margin-top:30px;
 display:grid;
-grid-template-columns: repeat(auto-fill, minmax(100px, 1fr));
+grid-template-columns: repeat(auto-fill, minmax(182px, 1fr));
 grid-gap: 15px;
+
 `
 const GridItem = styled.div`
-  height:100px;
-  width:100px;
+  height:182px;
+  width:182px;
   border-radius:5px;
   border:1px #45c132 solid;
+  text-align:center;
+  position: relative;
   &:hover{
       cursor:pointer;
   }
 
 `
 
-export {IndexContainer, TitleIndex, AboutContainer,SantaImage, AboutTextContainer, ButtonContainer, AboutText,StartExchange, Button, TitleGift, Grid, GridItem};
+const ItemName = styled.p`
+color:#D10A0A;
+font-weight:bold;
+`
+
+const ItemPrice = styled.p`
+position: absolute;
+background-color:#45c132;
+color:white;
+bottom:0;
+padding:10px;
+margin:0;
+width:80px;
+`
+
+export {IndexContainer, TitleIndex, AboutContainer,SantaImage, AboutTextContainer, ButtonContainer, AboutText,StartExchange, Button, TitleGift, Grid, GridItem, ItemName, ItemPrice};

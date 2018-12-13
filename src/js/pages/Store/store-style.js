@@ -32,9 +32,7 @@ justify-content:space-between;
 
 `
 
-const ItemName = styled.p`
-color:#D10A0A;
-`
 
 
-export {StoreWrap, SearchForm, Title, ItemWrap}
+
+export {StoreWrap, SearchForm, Title, ItemWrap,}

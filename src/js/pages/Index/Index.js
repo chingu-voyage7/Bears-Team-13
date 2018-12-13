@@ -1,11 +1,64 @@
 import React, {Component} from 'react';
-import {IndexContainer, TitleIndex, AboutContainer, SantaImage, AboutTextContainer, ButtonContainer, AboutText, StartExchange,Button, TitleGift, Grid, GridItem} from './index-style'
+import axios from 'axios';
+
+import {IndexContainer, TitleIndex, AboutContainer, SantaImage, AboutTextContainer, ButtonContainer, AboutText, StartExchange,Button, TitleGift, Grid, GridItem, ItemName, ItemPrice} from './index-style'
 import {Link} from 'react-router-dom';
+
+const Item = ({item}) => {
+  return (
+
+    <GridItem>
+      <ItemName>{item.name}</ItemName>
+      <img src="" alt="img "/>
+
+        <ItemPrice>{item.usd}</ItemPrice>
+
+    </GridItem>
+
+  )
+}
 
 
 
 export default class Index extends Component {
+  constructor(props) {
+    super(props);
+
+    this.state = {
+      items: [],
+      query: '',
+      loader: false,
+      searchPerformed: false
+    }
+  }
+
+  componentDidMount() {
+    console.log('mounted')
+
+    axios.get('/api/items')
+      .then(res => {
+        this.setState({
+          items: res.data,
+        })
+        console.log(res.data)
+      })
+      .catch(err => console.log(err.response))
+  }
+ 
+ 
+ 
   render () {
+    const { items, loader } = this.state
+    let storeItems;
+
+
+      storeItems = items.map(item => {
+        return (
+           <Item item={item} key={item._id}></Item>)
+          })
+    
+
+    
     return (
      <IndexContainer>
        <TitleIndex> SECRET SANTA MADE EASY</TitleIndex>
@@ -24,19 +77,7 @@ export default class Index extends Component {
 
        <TitleGift> GIFTS UNDER $20</TitleGift>
        <Grid>
-         <GridItem></GridItem>
-         <GridItem></GridItem>
-         <GridItem></GridItem>
-         <GridItem></GridItem>
-         <GridItem></GridItem>
-         <GridItem></GridItem>
-         <GridItem></GridItem>
-         <GridItem></GridItem>
-         <GridItem></GridItem>
-         <GridItem></GridItem>
-         <GridItem></GridItem>
-         <GridItem></GridItem>
-
+       {storeItems}
        </Grid>
 
      </IndexContainer>

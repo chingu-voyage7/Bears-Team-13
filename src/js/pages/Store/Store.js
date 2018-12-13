@@ -1,19 +1,19 @@
 import React, { Component } from 'react';
 import axios from 'axios';
-import {StoreWrap, SearchForm, Title} from "./store-style.js";
+import {StoreWrap, SearchForm, Title,} from "./store-style.js";
 import {InputStyle} from '../Signup/signup-style.js';
 import {Button} from '../MyAccount/myAccount-style.js';
-import {Grid, GridItem} from '../Index/index-style.js';
+import {Grid, GridItem, ItemName, ItemPrice} from '../Index/index-style.js';
 
 const Item = ({item}) => {
   return (
 
     <GridItem>
-      <h3>{item.name}</h3>
+      <ItemName>{item.name}</ItemName>
       <img src="" alt="img "/>
-      <div>
-        <span>{item.usd}</span>
-      </div>
+
+        <ItemPrice>{item.usd}</ItemPrice>
+
     </GridItem>
 
   )
@@ -35,6 +35,9 @@ export default class Store extends Component {
 
     axios.get('/api/items')
       .then(res => {
+        this.setState({
+          items: res.data,
+        })
         console.log(res.data)
       })
       .catch(err => console.log(err.response))
@@ -80,13 +83,12 @@ export default class Store extends Component {
     let storeItems;
 
      if(!this.state.searchPerformed){
-      storeItems = 
-      <Grid>
-      <GridItem></GridItem>
-      <GridItem></GridItem>
-      <GridItem></GridItem>
-      <GridItem></GridItem>
-      </Grid>
+      storeItems = items.map(item => {
+        return (
+           <Item item={item} key={item._id}></Item>
+      
+        )
+      })
 
  
       

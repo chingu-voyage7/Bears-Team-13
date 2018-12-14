@@ -42,6 +42,10 @@ width:200px;
 border-radius:10px;
 /* border-style:solid; */
 border:1px #45c132  solid;
+&:focus {
+ outline:0;
+ border:3px #45c132  solid;
+}
 `
 
 const GraphicContainer = styled.div`

@@ -1,15 +1,21 @@
-import React, { Component } from 'react'
-import axios from 'axios'
+import React, { Component } from 'react';
+import axios from 'axios';
+import {StoreWrap, SearchForm, Title,} from "./store-style.js";
+import {InputStyle} from '../Signup/signup-style.js';
+import {Button} from '../MyAccount/myAccount-style.js';
+import {Grid, GridItem, ItemName, ItemPrice} from '../Index/index-style.js';
 
 const Item = ({item}) => {
   return (
-    <article>
-      <h3>{item.name}</h3>
+
+    <GridItem>
+      <ItemName>{item.name}</ItemName>
       <img src="" alt="img "/>
-      <div>
-        <span>{item.usd}</span>
-      </div>
-    </article>
+
+        <ItemPrice>{item.usd}</ItemPrice>
+
+    </GridItem>
+
   )
 }
 export default class Store extends Component {
@@ -20,6 +26,7 @@ export default class Store extends Component {
       items: [],
       query: '',
       loader: false,
+      searchPerformed: false
     }
   }
 
@@ -28,6 +35,9 @@ export default class Store extends Component {
 
     axios.get('/api/items')
       .then(res => {
+        this.setState({
+          items: res.data,
+        })
         console.log(res.data)
       })
       .catch(err => console.log(err.response))
@@ -57,6 +67,7 @@ export default class Store extends Component {
         this.setState({
           items: res.data,
           loader: false,
+          searchPerformed:true
         })
       })
       .catch(err => {
@@ -69,33 +80,51 @@ export default class Store extends Component {
 
   render() {
     const { items, loader } = this.state
-    let storeItems
+    let storeItems;
 
+     if(!this.state.searchPerformed){
+      storeItems = items.slice(0, 8).map(item => {
+        return (
+           <Item item={item} key={item._id}></Item>
+      
+        )
+      })
+
+ 
+      
+     } else {
     if (items.length > 0) {
       storeItems = items.map(item => {
         return (
-          <Item item={item} key={item._id}></Item>
+           <Item item={item} key={item._id}></Item>
+      
         )
       })
     } else {
-      storeItems = "Items not found";
+      storeItems = "item not found";
+
     }
+  }
 
     return (
-      <>
-        <section>
-          <form>
-            <input type="text" onChange={this.handleInputSearch}/>
+  
+        <StoreWrap>
+     
+             <Title> Gifts under $20. </Title>
+             <Title>You're welcome. </Title>
+
+          <SearchForm>
+            <InputStyle type="text" onChange={this.handleInputSearch}/>
             <div style={{ display: 'inline-block' }}>
-              <button>Price Dropdown</button>
-              <button type="submit" onClick={this.handleSearch}>Search</button>
+              {/* <button>Price Dropdown</button> */}
+              <Button type="submit" onClick={this.handleSearch}>Search</Button>
             </div>
-          </form>
-        </section>
-        <section>
+          </SearchForm>
+  
+        <Grid>
           {storeItems}
-        </section>
-      </>
+        </Grid>
+        </StoreWrap>
     )
   }
 }

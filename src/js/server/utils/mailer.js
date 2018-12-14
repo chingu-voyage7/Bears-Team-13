@@ -8,9 +8,9 @@ module.exports = {
     sgMail.send({
       to: email,
       from: 'inna@secretsanta.io',
-      subject: firstName + " invited you to his Secret Santa event.",
+      subject: firstName + " invited you to their Secret Santa event.",
       html: 
-        '<body>' + firstName + ' invited you to his Secret Santa Event.' +
+        '<body>' + firstName + ' invited you to their Secret Santa Event.' +
           '<a href="' + config.HOST_NAME + '/dashboard/invites">Click here to join</a>!' + 
         '</body>'
     });

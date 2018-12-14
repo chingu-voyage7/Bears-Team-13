@@ -54,6 +54,39 @@ router.get("/getevents", (req, res) => {
   }).skip(req.query.page * 10).limit(10);
 });
 
+function getMembers(res, ids, projection) {
+  User.find({_id: {$in: ids}}, projection, (err, docs) => {
+    if (err) { return res.sendStatus(500); }
+    if (!docs) { return res.sendStatus(404); }
+    return res.json(docs);
+  })
+}
+
+// Returns a list of members from an event
+router.get("/eventmembers", (req, res) => {
+  if (!req.query || !req.query.event_id) {
+    return res.sendStatus(400);
+  }
+
+  Event.findOne({_id: req.query.event_id}, {public: 1, author: 1, members: 1}, (err, event) => {
+    if (err) { return res.sendStatus(500); }
+    if (!event) { return res.sendStatus(404); }
+
+    const members = event.members;
+    members.push(event.author[0]);
+    console.log("MEMBERS: " + JSON.stringify(members));
+
+    if (!event.public) {
+      if (event.author[0] === req.user._id || event.members.indexOf({_id: new ObjectID(req.user._id), role: "admin"})) { 
+        return getMembers(res, members, {username: 1});
+      } 
+      return res.sendStatus(401);
+    } else {
+      return getMembers(res, members, {username: 1});
+    }
+  });
+});
+
 // POSTS an event to our db
 router.post('/addevent', isAuth, (req, res) => {
   var event = req.body;
@@ -75,16 +108,16 @@ router.post('/addevent', isAuth, (req, res) => {
 
 // Edits an event
 router.put('/editevent', isAuth, (req, res) => {
-  Event.findOne({_id: ObjectID(req.body._id)}, (err, findDoc) => {
+  Event.findOne({_id: new ObjectID(req.body._id)}, (err, event) => {
     if (err) { return res.sendStatus(500); }
-    if (!findDoc) { return res.sendStatus(400); }
+    if (!event) { return res.sendStatus(404); }
 
     // Authorized to edit?
-    if (findDoc.members.indexOf({_id: ObjectID(req.user._id), role: "admin"})) {
+    if (event.members.indexOf({_id: ObjectID(req.user._id), role: "admin"})) {
       Event.updateOne({_id: ObjectID(req.body._id)}, req.body.updates, (err, doc) => {
         if (err) { return res.sendStatus(500); }
         if (!doc) { return res.sendStatus(400); }
-        console.log("Updated event " + findDoc.name + ".");
+        console.log("Updated event " + event.name + ".");
         console.log(doc);
         res.send(doc);
       });
@@ -94,19 +127,19 @@ router.put('/editevent', isAuth, (req, res) => {
 
 // Deletes an event
 router.delete('/deleteevent', isAuth, (req, res) => {
-  Event.findOne({_id: req.body._id}, (err, findDoc) => {
+  Event.findOne({_id: req.body._id}, (err, event) => {
     if (err) { return res.sendStatus(500); }
-    if (!findDoc) { return res.sendStatus(400); }
+    if (!event) { return res.sendStatus(400); }
 
-    console.log(JSON.stringify(findDoc.members));
+    console.log(JSON.stringify(event.members));
     console.log(req.user.username);
 
     // Authorized to delete?
-    if (findDoc.author._id === req.user._id) {
+    if (event.author._id === req.user._id) {
       Event.updateOne({_id: ObjectID(req.body._id)}, (err, doc) => {
         if (err) { return res.sendStatus(500); }
         if (!doc) { return res.sendStatus(400); }
-        console.log("Deleted event " + findDoc.name + ".");
+        console.log("Deleted event " + event.name + ".");
         console.log(doc);
         res.send(doc);
       });

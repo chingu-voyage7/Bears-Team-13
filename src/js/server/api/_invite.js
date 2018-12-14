@@ -5,7 +5,6 @@ const ObjectID = require('mongodb').ObjectID;
 const schema = require('../utils/schema.js');
 const Event = schema.Event;
 const User = schema.User;
-const TempUser = schema.TempUser;
 const mailer = require('../utils/mailer.js');
 
 // Sends Email Invite
@@ -49,19 +48,46 @@ router.post('/invite', isAuth, (req, res) => {
 
 // Accept Email Invite
 router.post('/acceptinvite', isAuth, (req, res) => {
-  /* 
-    1) Remove event_id from user.invites []
-    2) Add event_id to user.events []
-    3) Add user_id to event.members []
-  */
-  res.sendStatus(500);
+  if (!req.body || !req.body.event_id) {
+    return res.sendStatus(404).send("Event ID required.");
+  }
+
+  console.log(req.user.username + " accepting invite...");
+  console.log("event_id = " + req.body.event_id);
+  User.findOne({_id: new ObjectID(req.user._id), invites: req.body.event_id}, {_id: 1}, (err, user) => {
+    if (err) { return res.sendStatus(500); }
+    if (!user) { return res.status(404).send("User or Invite not found."); }
+    
+    User.updateOne({invites: req.body.event_id}, {
+        $pull: {invites: req.body.event_id},
+        $addToSet: {events: req.body.event_id}
+      }, (err, user) => {
+        if (err) { return res.sendStatus(500); }
+        if (!user) { return res.sendStatus(404).send("User not found."); }
+        console.log("User's events & invites updated.");
+
+        Event.updateOne({_id: req.body.event_id}, { 
+          $addToSet: {members: req.user._id}
+        }, (err, event) => {
+          if (err) { return res.sendStatus(500); }
+          if (!event) { return res.sendStatus(404).send("Event not found"); }
+          console.log("Event members updated.");
+          console.log("SUCCESS! User joined the event.");
+          return res.sendStatus(200);
+        });
+      });
+  });
+
 });
 
 router.delete('/rejectinvite', isAuth, (req, res) => {
-  /*
-    1) Remove event_id from invites []
-  */
-  res.sendStatus(500);
+  console.log("Rejecting invite...");
+  User.updateOne({_id: new ObjectID(req.user._id)}, {$pull: {invites: req.body.event_id}}, (err, result) => {
+    if (err) { return res.sendStatus(500); }
+    if (!result) { return res.sendStatus(404); }
+    console.log(result);
+    res.sendStatus(200);
+  })
 });
 
 // Returns a list of events the user is invited to

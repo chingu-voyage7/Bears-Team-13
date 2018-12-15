@@ -44,7 +44,7 @@ export default class Signup extends Component {
           this.setState({redirect: true});
         } else {
           this.props.setGlobal({user: res.data}, () => {
-            this.setState({redirectTo: "/dashboard", redirect: true});
+            this.setState({redirectTo: "/myevents", redirect: true});
           });
         }
       })
@@ -54,7 +54,7 @@ export default class Signup extends Component {
           this.setState({redirect: true});
         } else {
           this.props.setGlobal({user: res.data}, () => {
-            this.setState({redirectTo: "/dashboard", redirect: true});
+            this.setState({redirectTo: "/myevents", redirect: true});
           });        }
       });
     })

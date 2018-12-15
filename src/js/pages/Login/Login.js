@@ -9,11 +9,10 @@ export default class Login extends Component {
 
     this.state = {
       usernameOrEmail: String,
-      password: String,
-      redirect: false
+      password: String
     }
   }
-
+  
   handleChange(e) {
     this.setState({[e.target.name]: e.target.value});
   }
@@ -26,20 +25,17 @@ export default class Login extends Component {
       password: this.state.password
     })
     .then((res) => {
-      // alert("USER set:\n" + JSON.stringify(res.data));
-      this.props.setGlobal({user: res.data});
-      this.setState({redirect: true});
+      this.props.setGlobal({user: res.data}, () => {
+        const history = this.props.history;
+        history.push("/myevents");
+      });
     })
     .catch((err) => {
-      // alert(JSON.stringify(err.response));
+      alert(JSON.stringify(err.response));
     });
   }
 
   render() {
-    if (this.state.redirect) {
-      this.setState({redirect: false});
-      return <Redirect to="/"/>
-    }
 
     return(
       <LoginContainer>

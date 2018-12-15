@@ -35,9 +35,9 @@ export default class Dashboard extends Component {
   }
 
   handleEventClick(eventId) {
-    const { history } = this.props
+    const { history } = this.props;
 
-    history.push(`/dashboard/${eventId}`)
+    history.push(`/event/${eventId}`);
   }
 
   componentDidMount() {

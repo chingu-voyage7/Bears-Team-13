@@ -19,15 +19,15 @@ const ROUTES = [{
   component: require('../../pages/Login/Login.js').default,
   exact: true
 }, {
-  path: '/dashboard',
+  path: '/myevents',
   component: require('../../pages/Dashboard/Dashboard.js').default,
   exact: true
 }, {
-  path: '/dashboard/invites',
+  path: '/myevents/invites',
   component: require('../../pages/Invites/Invites.js').default,
   exact: true
 }, {
-  path: '/dashboard/create',
+  path: '/myevents/create',
   component: require('../../pages/CreateEvent/CreateEvent.js').default,
   exact: true
 }, {

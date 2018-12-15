@@ -29,7 +29,8 @@ export default class Dashboard extends Component {
 
     this.state = {
       events: [],
-      loader: false
+      loader: false,
+      createEventClicked: false
     }
   }
 
@@ -54,6 +55,20 @@ export default class Dashboard extends Component {
       .catch(err => console.log(err.response))
   }
 
+  openEventPopUp = (e) => {
+    const { history } = this.props
+
+    history.push(`/dashboard/create`);
+    console.log("create event clicked");
+    if(this.state.passwordPopUpShown === false){
+      this.setState({
+          createEventClicked: true
+      })
+     } 
+  }
+
+
+
   render() {
     const { events, loader } = this.state
     const { user } = this.props.globals
@@ -77,7 +92,7 @@ export default class Dashboard extends Component {
       <DashboardWrap>
           <Greeting> <Name>{user.firstName}</Name>'s events</Greeting>
           <ButtonWrap>
-            <Button>Create Event</Button>
+            <Button onClick={this.openEventPopUp}>Create Event</Button>
           </ButtonWrap>
 
 

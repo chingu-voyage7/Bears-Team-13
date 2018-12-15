@@ -126,6 +126,7 @@ margin-bottom:10px;
 const Span = styled.span`
 font-weight:bold;
 color:#13491c;
+letter-spacing:.5px;
 `
 
 const Image = styled.div`

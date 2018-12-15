@@ -1,5 +1,9 @@
 import React, { Component } from 'react';
 import axios from 'axios';
+import { Input, CloseButton} from '../../components/PopUp/popup-style'
+// import {Label} from '../Login/login-style';
+import {Submit, MakeEventWrap, PublicWrap, PublicLabel, CheckBox, Form, Label} from './createEvent-style';
+
 
 export default class CreateEvent extends Component {
   constructor(props) {
@@ -34,18 +38,35 @@ export default class CreateEvent extends Component {
     });
   }
 
+  closeEventPopUp = (e) => {
+    const { history } = this.props
+
+    history.push(`/dashboard/`);
+    console.log("close event clicked");
+
+  }
+
 
   render () {
     return (
-    <form onSubmit={this.handleSubmit.bind(this)}>
-      <label>Event Name</label><br/>
-      <input name="name" required onChange={this.handleChange.bind(this)}/><br/>
-      <label>Start Date</label><br/>
-      <small>Start date of your 2-week gift exchange. New members will not be able to join after this date.</small>
-      <br/><input name="startDate" type="date" onChange={this.handleChange.bind(this)}/><br/>
-      <label>Public?</label>
-      <input name="public" type="checkbox" onChange={this.handleChange.bind(this)}/><br/>
-      <input type="submit"/>
-    </form>);
+      <MakeEventWrap>
+      
+        <Form onSubmit={this.handleSubmit.bind(this)}>
+       
+          <CloseButton onClick={this.closeEventPopUp}> x </CloseButton>
+          <h2> Create Event </h2>
+          <Label>Event Name</Label><br/>
+          <Input name="name" required onChange={this.handleChange.bind(this)}/><br/>
+          <Label>Start Date</Label><br/>
+          <small>Start date of your 2-week gift exchange. New members will not be able to join after this date.</small>
+          <br/><Input name="startDate" type="date" onChange={this.handleChange.bind(this)}/><br/>
+          <PublicWrap>
+             <PublicLabel>Public?</PublicLabel>
+             <CheckBox name="public" type="checkbox" onChange={this.handleChange.bind(this)}/><br/>
+          </PublicWrap>
+          <Submit type="submit" />
+        </Form>
+    </MakeEventWrap>
+    );
   }
 }

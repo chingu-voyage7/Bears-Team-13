@@ -1,7 +1,7 @@
 import React, {Component} from 'react';
 import { Redirect } from 'react-router-dom';
 import queryString from 'query-string';
-import axios from 'axios';
+import axios from 'axios'; 
 import {InputStyle, FormContainer, SignupContainer, TextSignup, GraphicContainer, LabelSignUp, InputSubmit} from "./signup-style";
 
 export default class Signup extends Component {
@@ -21,7 +21,6 @@ export default class Signup extends Component {
   }
 
   componentDidMount() {
-    alert(this.props.location.search);
     this.setState({redirectTo: queryString.parse(this.props.location.search).redirect});
   }
 
@@ -35,7 +34,29 @@ export default class Signup extends Component {
     e.preventDefault();
     axios.post('/api/adduser', this.state.user)
     .then((res) => {
-      this.setState({redirect: true});
+      axios.post('/api/login', {
+        username: this.state.user.username,
+        password: this.state.user.password
+      })
+      .then((res) => {
+        alert("Login success?");
+        if (this.state.redirectTo && this.state.redirectTo.length > 0) {
+          this.setState({redirect: true});
+        } else {
+          this.props.setGlobal({user: res.data}, () => {
+            this.setState({redirectTo: "/dashboard", redirect: true});
+          });
+        }
+      })
+      .catch((err) => {
+        alert("Login bad!");
+        if (this.state.redirectTo && this.state.redirectTo.length > 0) {
+          this.setState({redirect: true});
+        } else {
+          this.props.setGlobal({user: res.data}, () => {
+            this.setState({redirectTo: "/dashboard", redirect: true});
+          });        }
+      });
     })
     .catch((err) => {
     })
@@ -43,7 +64,6 @@ export default class Signup extends Component {
 
   render() {
     if (this.state.redirect && this.state.redirectTo && this.state.redirectTo.length > 0) {
-      this.setState({redirect: false});
       return <Redirect to={this.state.redirectTo}/>;
     }
 

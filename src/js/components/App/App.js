@@ -21,7 +21,7 @@ const ROUTES = [{
 }, {
   path: '/dashboard',
   component: require('../../pages/Dashboard/Dashboard.js').default,
-  exacr: true
+  exact: true
 }, {
   path: '/dashboard/invites',
   component: require('../../pages/Invites/Invites.js').default,

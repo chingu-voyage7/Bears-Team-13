@@ -39,15 +39,15 @@ router.post('/adduser', function (req, res) {
     return res.sendStatus(400).send("Email, Username, Password required");
   }
 
-  User.findOne({$or: [{username: req.body.username}, {email: req.body.email}]}, { id: 1}, (err, existing) => {
+  User.findOne({$or: [{username: req.body.username}, {email: req.body.email}]}, {username: 1, password: 1}, (err, user) => {
     if (err) { return res.sendStatus(500); }
 
-    if (!existing) {
+    if (!user || (!user.username && !user.password)) {
       req.body.password = user.generateHash(req.body.password);
-      User.create(req.body, (err, doc) => {
+      User.updateOne({_id: new ObjectID(user._id)}, req.body, {upsert: true}, (err, doc) => {
         if (err) { return res.sendStatus(500); }
         if (!doc) { return res.sendStatus(404); }
-        console.log("User " + doc.username + " was added.");
+        console.log("User " + req.body.username + " was added.");
         passport.authenticate('local');
         res.sendStatus(200);
       });
@@ -68,6 +68,9 @@ function validUpdates(updates, callback) {
   updates.vendor?delete updates.vendor:"";
 
   if (updates.password) {
+    if (updates.password.length < 6) {
+      return callback(400);
+    }
     updates.password = user.generateHash(updates.password);
   }
 

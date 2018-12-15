@@ -9,23 +9,18 @@ router.get('/items', (req, res) => {
     if (err) { return res.sendStatus(500) }
     if (!docs) { return res.sendStatus(400) }
 
-    console.log("Items...");
-    console.log(JSON.stringify(docs));
     res.json(docs)
   }).skip(req.query.page * 10).limit(10)
 })
 
 router.get("/finditem", (req, res) => {
-  if (!req.query) { return res.sendStatus(400); }
-  // console.log(query);
+  if (!req.query) { return res.sendStatus(400); } 
   Item.find({$text: {
     $search: req.query.keywords,
     $caseSensitive: false,
   } }, (err, docs) => {
     if (err) { return res.sendStatus(500);}
     if (!docs) { return res.sendStatus(400); }
-    console.log("Found items...");
-    console.log(JSON.stringify(docs));
     res.send(docs);
   }).skip(req.query.page * 10).limit(10);
 });

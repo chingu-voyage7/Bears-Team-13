@@ -32,7 +32,7 @@ export default class Login extends Component {
     })
     .catch((err) => {
       // alert(JSON.stringify(err.response));
-    })
+    });
   }
 
   render() {

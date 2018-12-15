@@ -47,9 +47,7 @@ router.get("/getevents", (req, res) => {
     if (err) { return res.sendStatus(500); }
     if (!docs) { return res.sendStatus(404); } // 404 proper code?
     // event.public || event.members.indexOf(req.user._id) !== -1? OK : BAD AUTH
-    console.log("Events found...");
-    console.log(JSON.stringify(docs));
-
+    
     res.json(docs);
   }).skip(req.query.page * 10).limit(10);
 });

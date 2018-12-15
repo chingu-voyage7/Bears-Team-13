@@ -1,18 +1,25 @@
 import React, { Component } from 'react'
-import axios from 'axios'
+import moment from "moment";
+
+import axios from 'axios';
+
+import {Name, Greeting, Button, } from "../MyAccount/myAccount-style";
+import {DashboardWrap, EventsWrap, ButtonWrap,EventName, OneEventWrap,Span, P, AuthorSpan} from './dashboard-style';
+
+
 
 const Event = ({event, handleEventClick}) => {
   return (
-    <article
+    <OneEventWrap
       onClick={handleEventClick}>
-      <h3>{event.name}</h3>
-      <div>
-        <div>
-          Event start at <span>{event.startDate}</span>
-        </div>
-        <span>author</span>
-      </div>
-    </article>
+      <EventName>{event.name}</EventName>
+    
+    
+          <P>starts on: <Span> {moment(event.startDate).format("dddd, MM/DD/YY")}</Span></P>
+
+        <P>author:  <AuthorSpan> {event.author[1]}</AuthorSpan></P>
+      
+    </OneEventWrap>
   )
 }
 
@@ -22,7 +29,8 @@ export default class Dashboard extends Component {
 
     this.state = {
       events: [],
-      loader: false
+      loader: false,
+      createEventClicked: false
     }
   }
 
@@ -47,8 +55,23 @@ export default class Dashboard extends Component {
       .catch(err => console.log(err.response))
   }
 
+  openEventPopUp = (e) => {
+    const { history } = this.props
+
+    history.push(`/dashboard/create`);
+    console.log("create event clicked");
+    if(this.state.passwordPopUpShown === false){
+      this.setState({
+          createEventClicked: true
+      })
+     } 
+  }
+
+
+
   render() {
     const { events, loader } = this.state
+    const { user } = this.props.globals
     let userEvents
 
     if (events.length > 0) {
@@ -66,25 +89,24 @@ export default class Dashboard extends Component {
     }
 
     return (
-      <main>
-        <section>
-          <article>
-            <img src="" alt="bg-img"/>
-            <div>
-              <button>Create</button>
-              <button>Shop</button>
-            </div>
-          </article>
-        </section>
-        <section>
-          <h2>Events</h2>
+      <DashboardWrap>
+          <Greeting> <Name>{user.firstName}</Name>'s events</Greeting>
+          <ButtonWrap>
+            <Button onClick={this.openEventPopUp}>Create Event</Button>
+          </ButtonWrap>
+
+
+          <EventsWrap>
+            {/* <img src="" alt="bg-img"/> */}
+              
           {
             loader
               ? 'Loading...'
               : userEvents
           }
-        </section>
-      </main>
+          </EventsWrap>
+  
+      </DashboardWrap>
     )
   }
 }

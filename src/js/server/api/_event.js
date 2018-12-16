@@ -109,6 +109,9 @@ function validEdits(edits) {
   if (!edits || edits.creationDate || edits.author || edits.members) {
     return false;
   }
+  if (edits.startDate) {
+    console.log("ALERT: Do NOT allow startDate IF old StartDate > new StartDate")
+  }
   return true;
 }
 

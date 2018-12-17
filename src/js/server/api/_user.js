@@ -125,13 +125,10 @@ router.get('/myevents', isAuth, function(req, res) {
     const eventIDs = userDoc.events;
     if (err) { return res.sendStatus(500); }
     if (!eventIDs) { return res.sendStatus(404); }
-    console.log("User Events found...");
-    console.log(JSON.stringify(eventIDs));
 
     Event.find({_id: { $in: eventIDs}}, req.query, (err, events) => {
       if (err) { return res.sendStatus(500); }
       if (!events) { return res.sendStatus(404); }
-      console.log(JSON.stringify(events));
       res.json(events);
     }).skip(page * 10).limit(10);
 

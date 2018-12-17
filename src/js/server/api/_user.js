@@ -117,22 +117,4 @@ router.delete('/deleteuser', isAuth, function (req, res) {
   });
 });
 
-// Returns a list of user's events
-router.get('/myevents', isAuth, function(req, res) {
-  var page = req.query.page;
-  delete req.query.page;
-  User.findOne({_id: new ObjectID(req.user._id)}, {events: 1}, (err, userDoc) => {
-    const eventIDs = userDoc.events;
-    if (err) { return res.sendStatus(500); }
-    if (!eventIDs) { return res.sendStatus(404); }
-
-    Event.find({_id: { $in: eventIDs}}, req.query, (err, events) => {
-      if (err) { return res.sendStatus(500); }
-      if (!events) { return res.sendStatus(404); }
-      res.json(events);
-    }).skip(page * 10).limit(10);
-
-  });
-});
-
 module.exports = router;

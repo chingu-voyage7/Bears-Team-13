@@ -5,6 +5,44 @@ const ObjectID = require('mongodb').ObjectID;
 const schema = require('../utils/schema.js');
 const Event = schema.Event;
 const User = schema.User;
+const helpers = require('../utils/helpers.js');
+
+// Returns a list of members given [_id, _id...] and {projection}
+function getMembers(res, ids, projection) {
+  User.find({_id: {$in: ids}}, projection, (err, docs) => {
+    if (err) { return res.sendStatus(500); }
+    if (!docs) { return res.sendStatus(404); }
+    return res.json(docs);
+  });
+}
+
+// Returns true if we accept the given USER edits.
+function validEdits(edits) {
+  if (!edits || edits.creationDate || edits.author || edits.members) {
+    return false;
+  }
+  if (edits.startDate) {
+    console.log("ALERT: Do NOT allow startDate IF old StartDate > new StartDate")
+  }
+  return true;
+}
+
+// Function for /event
+function handleGetEventResponse(req, res, event) {
+  if (!event.public) {
+    if (req.user) {
+
+      if (ObjectID.toString(event.author[0]) === ObjectID.toString(req.user._id)) {
+        return res.json(event);
+      }
+      if (event.members.indexOf(req.user._id) !== -1) {
+        return res.json(event);
+      }
+    }
+    return res.sendStatus(401);
+  }
+  return res.json(doc);  
+}
 
 // Returns an event given event_id
 router.get('/event', (req, res) => {
@@ -12,21 +50,26 @@ router.get('/event', (req, res) => {
     if (err) { return res.sendStatus(500); }
     if (!event) { return res.sendStatus(404); }
 
-    if (!event.public) {
-      if (req.user) {
+    // Check date & assign SS, IF not assigned yet.
+    if ((!event.ssList && event.startDate) || event.ssList.length === 0) {
+      if(helpers.afterStartDate(event)) {
+        const ssList = helpers.generateSS(event);
 
-        if (ObjectID.toString(event.author[0]) === ObjectID.toString(req.user._id)) {
-          return res.json(event);
-        }
-        if (event.members.indexOf(req.user._id) !== -1) {
-          return res.json(event);
-        }
+        Event.updateOne({_id: new ObjectID(req.query.event_id)}, {ssList: ssList}, (err, result) => {
+          if (err) { return res.sendStatus(500); }
+          if (!result) { return res.sendStatus(404); }
+          handleGetEventResponse(req, res, event);
+        });
+
+      } else {
+        handleGetEventResponse(req, res, event);
       }
-      return res.sendStatus(401);
+    } else {
+      handleGetEventResponse(req, res, event);
     }
 
-    return res.json(doc);
-  })
+
+  });
 })
 
 // Returns a list of events
@@ -49,14 +92,6 @@ router.get("/getevents", (req, res) => {
     res.json(docs);
   }).skip(req.query.page * 10).limit(10);
 });
-
-function getMembers(res, ids, projection) {
-  User.find({_id: {$in: ids}}, projection, (err, docs) => {
-    if (err) { return res.sendStatus(500); }
-    if (!docs) { return res.sendStatus(404); }
-    return res.json(docs);
-  });
-}
 
 // Returns a list of members from an event
 router.get("/eventmembers", (req, res) => {
@@ -86,6 +121,24 @@ router.get("/eventmembers", (req, res) => {
   });
 });
 
+// Returns a list of user's events
+router.get('/myevents', isAuth, function(req, res) {
+  var page = req.query.page;
+  delete req.query.page;
+  User.findOne({_id: new ObjectID(req.user._id)}, {events: 1}, (err, userDoc) => {
+    const eventIDs = userDoc.events;
+    if (err) { return res.sendStatus(500); }
+    if (!eventIDs) { return res.sendStatus(404); }
+
+    Event.find({_id: { $in: eventIDs}}, req.query, (err, events) => {
+      if (err) { return res.sendStatus(500); }
+      if (!events) { return res.sendStatus(404); }
+      res.json(events);
+    }).skip(page * 10).limit(10);
+
+  });
+});
+
 // POSTS an event to our db
 router.post('/addevent', isAuth, (req, res) => {
   var event = req.body;
@@ -104,16 +157,6 @@ router.post('/addevent', isAuth, (req, res) => {
 
   });
 });
-
-function validEdits(edits) {
-  if (!edits || edits.creationDate || edits.author || edits.members) {
-    return false;
-  }
-  if (edits.startDate) {
-    console.log("ALERT: Do NOT allow startDate IF old StartDate > new StartDate")
-  }
-  return true;
-}
 
 // Edits an event
 router.put('/editevent', isAuth, (req, res) => {
@@ -167,6 +210,8 @@ router.delete('/deleteevent', isAuth, (req, res) => {
     }
   });
 });
+
+
 
 
 

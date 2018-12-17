@@ -8,8 +8,6 @@ const User = schema.User;
 
 // Returns an event given event_id
 router.get('/event', (req, res) => {
-  console.log(JSON.stringify(req.query));
-
   Event.findOne({_id: new ObjectID(req.query.event_id)}, (err, event) => {
     if (err) { return res.sendStatus(500); }
     if (!event) { return res.sendStatus(404); }
@@ -57,7 +55,7 @@ function getMembers(res, ids, projection) {
     if (err) { return res.sendStatus(500); }
     if (!docs) { return res.sendStatus(404); }
     return res.json(docs);
-  })
+  });
 }
 
 // Returns a list of members from an event
@@ -66,21 +64,24 @@ router.get("/eventmembers", (req, res) => {
     return res.sendStatus(400);
   }
 
-  Event.findOne({_id: req.query.event_id}, {public: 1, author: 1, members: 1}, (err, event) => {
+  let projection = req.query;
+
+  Event.findOne({_id: new ObjectID(projection.event_id)}, {public: 1, author: 1, members: 1}, (err, event) => {
     if (err) { return res.sendStatus(500); }
     if (!event) { return res.sendStatus(404); }
 
     const members = event.members;
     members.push(event.author[0]);
-    console.log("MEMBERS: " + JSON.stringify(members));
+    delete projection.page;
+    delete projection.event_id;
 
     if (!event.public) {
       if (event.author[0] === req.user._id || event.members.indexOf({_id: new ObjectID(req.user._id), role: "admin"})) { 
-        return getMembers(res, members, {username: 1});
+        return getMembers(res, members, projection);
       } 
       return res.sendStatus(401);
     } else {
-      return getMembers(res, members, {username: 1});
+      return getMembers(res, members, projection);
     }
   });
 });
@@ -104,20 +105,40 @@ router.post('/addevent', isAuth, (req, res) => {
   });
 });
 
+function validEdits(edits) {
+  if (!edits || edits.creationDate || edits.author || edits.members) {
+    return false;
+  }
+  if (edits.startDate) {
+    console.log("ALERT: Do NOT allow startDate IF old StartDate > new StartDate")
+  }
+  return true;
+}
+
 // Edits an event
 router.put('/editevent', isAuth, (req, res) => {
-  Event.findOne({_id: new ObjectID(req.body._id)}, (err, event) => {
+  console.log("Editing event...");
+  console.log(req.body);
+  const event_id = req.body.event_id;
+  if (!event_id || !validEdits(req.body)) {
+    console.log("BAD");
+    return res.sendStatus(400);
+  }
+
+  Event.findOne({_id: new ObjectID(event_id)}, (err, event) => {
     if (err) { return res.sendStatus(500); }
     if (!event) { return res.sendStatus(404); }
 
     // Authorized to edit?
-    if (event.members.indexOf({_id: ObjectID(req.user._id), role: "admin"})) {
-      Event.updateOne({_id: ObjectID(req.body._id)}, req.body.updates, (err, doc) => {
+    if (event.members.indexOf({_id: ObjectID(req.user._id), role: "admin"}) || event.author[0] === req.user._id) {
+      var updates = req.body;
+      delete updates.event_id;
+
+      Event.updateOne({_id: new ObjectID(event_id)}, updates, (err, result) => {
         if (err) { return res.sendStatus(500); }
-        if (!doc) { return res.sendStatus(400); }
+        if (!result) { return res.sendStatus(400); }
         console.log("Updated event " + event.name + ".");
-        console.log(doc);
-        res.send(doc);
+        res.sendStatus(200);
       });
     }
   });

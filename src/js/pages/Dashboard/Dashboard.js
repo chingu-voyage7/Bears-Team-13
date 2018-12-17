@@ -1,4 +1,5 @@
-import React, { Component } from 'react'
+import React, { Component } from 'react';
+import {Link} from 'react-router-dom';
 import moment from "moment";
 
 import axios from 'axios';
@@ -93,6 +94,7 @@ export default class Dashboard extends Component {
           <Greeting> <Name>{user.firstName}</Name>'s events</Greeting>
           <ButtonWrap>
             <Button onClick={this.openEventPopUp}>Create Event</Button>
+            <Link to="/myevents/invites">My Invites</Link>
           </ButtonWrap>
 
 

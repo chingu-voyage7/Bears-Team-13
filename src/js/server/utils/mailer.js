@@ -11,7 +11,7 @@ module.exports = {
       subject: firstName + " invited you to their Secret Santa event.",
       html: 
         '<body>' + firstName + ' invited you to their Secret Santa Event.' +
-          '<a href="' + config.HOST_NAME + '/dashboard/invites">Click here to join</a>!' + 
+          '<a href="' + config.HOST_NAME + '/myevents/invites">Click here to join</a>!' + 
         '</body>'
     });
   }

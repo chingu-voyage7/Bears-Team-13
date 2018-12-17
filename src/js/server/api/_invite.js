@@ -22,27 +22,20 @@ router.post('/invite', isAuth, (req, res) => {
     if (err) { return res.sendStatus(500); }
     if (!event) { return res.sendStatus(404).send("Event not found"); }
 
-    console.log("Sender is Author or Member?");
-    console.log(event);
-
     const member = req.user._id !== event.author[0] || event.members.indexOf(req.user._id) !== -1;
 
     if (member) {
-      console.log("Verified member");
-
-      User.updateOne({email: email}, {$addToSet: {invites: req.body.event_id}}, {upsert: true}, (err, result) => {
+      User.updateOne({email: email}, {$addToSet: {invites: req.body.event_id}}, {upsert: true}, (err, user) => {
         if (err) { return res.sendStatus(500); }
-        if (!result) { return res.sendStatus(500); }
-    
+        if (!user) { return res.sendStatus(500); }
+
         mailer.invite(email, req.user.username);
-        return res.sendStatus(200);
+        return res.sendStatus(200);  
       });
-  
     } else {
       return res.sendStatus(401);
     }
 
-  
   });
 });
 
@@ -82,9 +75,11 @@ router.post('/acceptinvite', isAuth, (req, res) => {
 
 router.delete('/rejectinvite', isAuth, (req, res) => {
   console.log("Rejecting invite...");
+  console.log(JSON.stringify(req.body));
   User.updateOne({_id: new ObjectID(req.user._id)}, {$pull: {invites: req.body.event_id}}, (err, result) => {
     if (err) { return res.sendStatus(500); }
     if (!result) { return res.sendStatus(404); }
+    console.log("Invite rejected.");
     res.sendStatus(200);
   })
 });
@@ -101,12 +96,9 @@ router.get('/myinvites', isAuth, function(req, res) {
     const invites = user.invites.map((id) => {
       return new ObjectID(id);
     });
-    console.log(user);
     Event.find({_id: {$in: invites}}, req.query, (err, docs) => {
-      console.log(err);
       if (err) { return res.sendStatus(500); }
       if (!docs) { return res.sendStatus(404).send("Invites not found"); }
-      console.log(docs);
       return res.json(docs);
     }).skip(page * 10).limit(10);
   

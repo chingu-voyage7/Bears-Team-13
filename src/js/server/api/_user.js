@@ -6,7 +6,7 @@ const ObjectID = require('mongodb').ObjectID;
 const schema = require('../utils/schema.js');
 const User = schema.User;
 const Event = schema.Event;
-var user = new User();
+var userUtil = new User();
 
 // Returns User's PUBLIC info
 // (Everything less {email, password})
@@ -43,7 +43,7 @@ router.post('/adduser', function (req, res) {
     if (err) { return res.sendStatus(500); }
 
     if (!user || (!user.username && !user.password)) {
-      req.body.password = user.generateHash(req.body.password);
+      req.body.password = userUtil.generateHash(req.body.password);
       User.updateOne({_id: new ObjectID(user._id)}, req.body, {upsert: true}, (err, doc) => {
         if (err) { return res.sendStatus(500); }
         if (!doc) { return res.sendStatus(404); }
@@ -71,7 +71,7 @@ function validUpdates(updates, callback) {
     if (updates.password.length < 6) {
       return callback(400);
     }
-    updates.password = user.generateHash(updates.password);
+    updates.password = userUtil.generateHash(updates.password);
   }
 
   if (updates.username || updates.email) {

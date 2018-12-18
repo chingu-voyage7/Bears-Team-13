@@ -35,15 +35,27 @@ router.get('/myuser', isAuth, function (req, res) {
 
 // Adds user to the DB
 router.post('/adduser', function (req, res) {
+  console.log("Adding user...");
   if (!req.body.email || !req.body.username || !req.body.password) {
     return res.sendStatus(400).send("Email, Username, Password required");
   }
 
   User.findOne({$or: [{username: req.body.username}, {email: req.body.email}]}, {username: 1, password: 1}, (err, user) => {
     if (err) { return res.sendStatus(500); }
+    req.body.password = userUtil.generateHash(req.body.password);
 
-    if (!user || (!user.username && !user.password)) {
-      req.body.password = userUtil.generateHash(req.body.password);
+    // Create new user
+    if (!user) {
+      User.create(req.body, (err, doc) => {
+        if (err) { return res.sendStatus(500); }
+        if (!doc) { return res.sendStatus(500); }
+        console.log(doc);
+        return res.sendStatus(200);
+      });
+
+      // Update exisiting user (ONLY if user has NOT signed up. This occurs when a user is invited (doc created w/ their email))
+    } else if (!user.username && !user.password) {
+      if (user && user._id)
       User.updateOne({_id: new ObjectID(user._id)}, req.body, {upsert: true}, (err, doc) => {
         if (err) { return res.sendStatus(500); }
         if (!doc) { return res.sendStatus(404); }
@@ -51,6 +63,8 @@ router.post('/adduser', function (req, res) {
         passport.authenticate('local');
         res.sendStatus(200);
       });
+
+      // User exists
     } else {
       console.log("ERR: username or email already exists.");
       return res.json({error: "username or email already exists."}).status(400);

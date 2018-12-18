@@ -4,7 +4,7 @@ import moment from "moment";
 
 import axios from 'axios';
 
-import {Name, Greeting, Button, } from "../MyAccount/myAccount-style";
+import {Name, Greeting, Button,} from "../MyAccount/myAccount-style";
 import {DashboardWrap, EventsWrap, ButtonWrap,EventName, OneEventWrap,Span, P, AuthorSpan} from './dashboard-style';
 
 
@@ -31,7 +31,9 @@ export default class Dashboard extends Component {
     this.state = {
       events: [],
       loader: false,
-      createEventClicked: false
+      createEventClicked: false,
+      invites: [],
+
     }
   }
 
@@ -42,12 +44,14 @@ export default class Dashboard extends Component {
   }
 
   componentDidMount() {
+    this.getInvites();
+
     this.setState({
       loader: true
     })
     axios.get('/api/myevents')
       .then(res => {
-        console.log(res.data)
+        // console.log(res.data)
         this.setState({
           events: res.data,
           loader: false
@@ -68,6 +72,25 @@ export default class Dashboard extends Component {
      } 
   }
 
+  getInvites(cb) {
+    axios.get('/api/myinvites')
+    .then((res) => {
+      if (res.data.length === 0) {
+        this.setState({invites: []});
+      }
+      this.setState({invites: res.data});
+      console.log(this.state.invites)
+    })
+    .catch((err) => {
+      if (err.response) {
+        if (err.response.status === 404) {
+          this.setState({message: "You do not have any invites."});
+        } else {
+          this.setState({message: "Error \"" + err.response.status + ": " + err.response.statusText + "\". Please reload the page."});
+        }  
+      }
+    })
+  }
 
 
   render() {
@@ -94,7 +117,7 @@ export default class Dashboard extends Component {
           <Greeting> <Name>{user.firstName}</Name>'s events</Greeting>
           <ButtonWrap>
             <Button onClick={this.openEventPopUp}>Create Event</Button>
-            <Link to="/myevents/invites">My Invites</Link>
+            <Link to="/myevents/invites"> <Button>My Invites ({this.state.invites.length})</Button></Link> 
           </ButtonWrap>
 
 

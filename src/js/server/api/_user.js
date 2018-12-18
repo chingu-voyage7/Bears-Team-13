@@ -53,7 +53,7 @@ router.post('/adduser', function (req, res) {
         return res.sendStatus(200);
       });
 
-      // Update exisiting user (ONLY if user has NOT signed up. This occurs when a user is invited (doc created w/ their email))
+      // Update existing user (ONLY if user has NOT signed up. This occurs when a user is invited (doc created w/ their email))
     } else if (!user.username && !user.password) {
       if (user && user._id)
       User.updateOne({_id: new ObjectID(user._id)}, req.body, {upsert: true}, (err, doc) => {

@@ -25,7 +25,7 @@ router.get('/event', (req, res) => {
       return res.sendStatus(401);
     }
 
-    return res.json(doc);
+    return res.json(event);
   })
 })
 

@@ -119,6 +119,7 @@ export default class Event extends Component {
     <div>
       {this.state.message}<br/>
       <h1>{this.state.event?this.state.event.name:""}</h1>
+      <h2>{this.state.event?JSON.stringify(this.state.event.startDate):""}</h2>
       <p>Your SS (as sender) gift in middle of screen here/ your SS?</p>
       <h2>Members:</h2>
       {this.membersToJSX()}

@@ -12,6 +12,7 @@ var eventSchema = new Schema({
   creationDate: Date,
   startDate: Date, // Date Exchange Starts. No one can join after this date.
   members: Array, // [{_id: ObjectID, role: "member"}, {_id: ObjectID, role: "admin"}]
+  ssList: Array
 }, { collection: "events"} );
 
 // ITEM

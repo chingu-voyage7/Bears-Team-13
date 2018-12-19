@@ -1,5 +1,6 @@
 import React, { Component } from 'react';
 import axios from 'axios';
+import {OneEventWrap} from './event-style';
 
 export default class Event extends Component {
   constructor(props) {
@@ -116,7 +117,7 @@ export default class Event extends Component {
 
   render() {
     return (
-    <div>
+    <OneEventWrap>
       {this.state.message}<br/>
       <h1>{this.state.event?this.state.event.name:""}</h1>
       <p>Your SS (as sender) gift in middle of screen here/ your SS?</p>
@@ -141,6 +142,6 @@ export default class Event extends Component {
           <input type="submit"/>
         </form>
       ):""}
-    </div>);
+    </OneEventWrap>);
   }
 }

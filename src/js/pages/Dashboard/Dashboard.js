@@ -63,7 +63,7 @@ export default class Dashboard extends Component {
   openEventPopUp = (e) => {
     const { history } = this.props
 
-    history.push(`/dashboard/create`);
+    history.push(`/myevents/create`);
     console.log("create event clicked");
     if(this.state.passwordPopUpShown === false){
       this.setState({

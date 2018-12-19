@@ -67,8 +67,6 @@ router.get('/event', (req, res) => {
     } else {
       handleGetEventResponse(req, res, event);
     }
-
-
   });
 })
 

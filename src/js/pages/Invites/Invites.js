@@ -1,5 +1,8 @@
 import React, { Component } from 'react';
 import axios from 'axios';
+import {InvitesContainer, Text, EventName, ButtonWrap, OneInviteWrap, AcceptButton} from './invites-style.js'
+import {Button} from "../MyAccount/myAccount-style";
+
 
 export default class Invites extends Component {
   constructor(props) {
@@ -23,11 +26,14 @@ export default class Invites extends Component {
     return <div>{this.state.invites.map((invite, i) => {
       console.log(JSON.stringify(invite));
       return (
-        <div key={"i-"+ i}>
-          <h1>{invite.name}</h1>
-          <button onClick={() => {this.acceptInvite(invite._id); }}>Accept</button>
-          <button onClick={() => {this.rejectInvite(invite._id); }}>Reject</button>
-        </div>
+        <OneInviteWrap key={"i-"+ i}>
+          <EventName>{invite.name}</EventName>
+          <ButtonWrap>
+            <AcceptButton onClick={() => {this.acceptInvite(invite._id); }}>Accept</AcceptButton>
+            <Button onClick={() => {this.rejectInvite(invite._id); }}>Reject</Button>
+          </ButtonWrap>
+  
+        </OneInviteWrap>
       );
     })}</div>;
   }
@@ -75,10 +81,10 @@ export default class Invites extends Component {
 
   render() {
     return (
-      <div>
-        {this.state.message}
+      <InvitesContainer>
+        <Text>{this.state.message}</Text>
         {this.invitesToJSX()}
-      </div>
+      </InvitesContainer>
     );
   }
 }

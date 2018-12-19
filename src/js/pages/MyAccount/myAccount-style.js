@@ -35,6 +35,7 @@ height:30px;
 border-radius:5px;
 border:1px #D10A0A solid;
 color:#D10A0A;
+font-size:15px;
 /* box-shadow:1px 1px 1px rgba(0,0,0,0.5); */
 transition:.2s all linear;
 

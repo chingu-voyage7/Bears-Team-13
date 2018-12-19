@@ -41,7 +41,7 @@ export default class CreateEvent extends Component {
   closeEventPopUp = (e) => {
     const { history } = this.props
 
-    history.push(`/dashboard/`);
+    history.push(`/myevents/`);
     console.log("close event clicked");
 
   }

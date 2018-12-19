@@ -22,6 +22,9 @@ padding:30px;
 `
 const ButtonWrap = styled.div`
 margin-top:-10px;
+width:230px;
+display:flex;
+justify-content:space-between;
 `
 
 const EventName = styled.p`
@@ -64,5 +67,7 @@ const AuthorSpan = styled.span`
 font-weight:bold;
 text-transform:capitalize;
 `
+
+
 
 export {DashboardWrap, EventsWrap, ButtonWrap, EventName, OneEventWrap, Span, P, AuthorSpan}

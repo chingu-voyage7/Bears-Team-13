@@ -42,6 +42,10 @@ const ROUTES = [{
   path: '/store',
   component: require('../../pages/Store/Store.js').default,
   exact: true
+}, {
+  path: '/item/:item_id',
+  component: require('../../pages/Item/Item.js').default,
+  exact: true
 }];
 
 class App extends Component {

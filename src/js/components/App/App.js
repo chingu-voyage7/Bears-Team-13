@@ -42,6 +42,10 @@ const ROUTES = [{
   path: '/store',
   component: require('../../pages/Store/Store.js').default,
   exact: true
+}, {
+  path: '/cart',
+  component: require('../../pages/Cart/Cart.js').default,
+  exact: true
 }];
 
 class App extends Component {

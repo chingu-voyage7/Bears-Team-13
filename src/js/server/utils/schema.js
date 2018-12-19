@@ -30,12 +30,14 @@ itemSchema.index({
 // USER
 var userSchema = new Schema({
   firstName: String,
+  lastName: String,
   email: String,
   username: String,
   password: String,
   events: Array, // [event_id, event_id...]
-  purchases: Array, // {item_id, recipient_id}
   invites: Array, // [event_id, event_id...]
+  cart: Array, // [item_id, item_id]
+  purchases: Array, // [[item_id, recipient_id]]
   verified: false,
   vendor: false
 }, { 

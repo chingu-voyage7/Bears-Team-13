@@ -78,8 +78,14 @@ function validUpdates(updates, callback) {
     return callback(400);
   }
 
-  // Not Authorized to update your own vendor status
-  updates.vendor?delete updates.vendor:"";
+  // Whitelist fields users can update. Everything else is restricted.
+  const keys = Object.keys(updates);
+  const whitelist = ["firstName", "lastName", "email", "username", "password"]
+  keys.map((key) => {
+    if (whitelist.indexOf(key) === -1) {
+      delete updates[key];
+    }
+  });
 
   if (updates.password) {
     if (updates.password.length < 6) {

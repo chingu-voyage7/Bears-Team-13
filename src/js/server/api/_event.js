@@ -110,7 +110,8 @@ function validEdits(edits) {
     return false;
   }
   if (edits.startDate) {
-    console.log("ALERT: Do NOT allow startDate IF old StartDate > new StartDate")
+    const date = new Date();
+    return date.getTime() < startDate.getTime();
   }
   return true;
 }
@@ -155,7 +156,9 @@ router.delete('/deleteevent', isAuth, (req, res) => {
 
     // Authorized to delete?
     if (event.author._id === req.user._id) {
-      Event.updateOne({_id: ObjectID(req.body._id)}, (err, doc) => {
+
+      // Delete event
+      Event.deleteOne({_id: new ObjectID(req.body._id)}, (err, doc) => {
         if (err) { return res.sendStatus(500); }
         if (!doc) { return res.sendStatus(400); }
         console.log("Deleted event " + event.name + ".");

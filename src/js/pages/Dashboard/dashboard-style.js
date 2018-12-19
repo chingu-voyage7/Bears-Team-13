@@ -8,9 +8,6 @@ margin:0 auto;
 `
 
 const EventsWrap = styled.div`
-/* border:1px dashed #45c132; */
-/* border-radius:5px;
-padding:20px; */
 background-color:white;
 background-image:url(${myImage});
 background-size:cover;

@@ -1,6 +1,8 @@
 import React, { Component } from 'react';
 import axios from 'axios';
-import {OneEventWrap} from './event-style';
+import {OneEventWrap, EventTitle, Time} from './event-style';
+import moment from "moment";
+
 
 export default class Event extends Component {
   constructor(props) {
@@ -119,9 +121,9 @@ export default class Event extends Component {
     return (
     <OneEventWrap>
       {this.state.message}<br/>
-      <h1>{this.state.event?this.state.event.name:""}</h1>
-      <h2>{this.state.event?JSON.stringify(this.state.event.startDate):""}</h2>
-      <p>Your SS (as sender) gift in middle of screen here/ your SS?</p>
+      <EventTitle>{this.state.event?this.state.event.name:""}</EventTitle>
+      <Time> Starts on : {this.state.event?moment(this.state.event.startDate).format("dddd, MM/DD/YY"):""}</Time>
+      <p> After the start date the name of your Secret Santa  recepient will be here </p>
       <h2>Members:</h2>
       {this.membersToJSX()}
       <h2>Invite a friend to this event</h2>

@@ -41,7 +41,7 @@ function handleGetEventResponse(req, res, event) {
     }
     return res.sendStatus(401);
   }
-  return res.json(doc);  
+  return res.json(event);  
 }
 
 // Returns an event given event_id

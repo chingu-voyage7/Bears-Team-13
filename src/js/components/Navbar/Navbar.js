@@ -49,8 +49,8 @@ export default class Navbar extends Component {
         ):(
           <LinksContainer>
 
-            <Link to="/signup" style={{ textDecoration: 'none' }}>  <LinkStyle>signup</LinkStyle></Link>
-            <Link to="/login" style={{ textDecoration: 'none' }}>  <LinkStyle> login </LinkStyle></Link>
+            <NavLink activeClassName="active" to="/signup" style={{ textDecoration: 'none' }}>  <LinkStyle>signup</LinkStyle></NavLink>
+            <NavLink activeClassName="active" to="/login" style={{ textDecoration: 'none' }}>  <LinkStyle> login </LinkStyle></NavLink>
 
           </LinksContainer>
         )}

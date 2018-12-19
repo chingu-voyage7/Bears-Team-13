@@ -32,6 +32,8 @@ transition:.2s all linear;
 const MakeEventWrap = styled.div`
 margin:0 auto;
 width:380px;
+height:500px;
+z-index:1;
 `
 const PublicWrap = styled.div`
 display:flex;
@@ -70,10 +72,6 @@ const Form = styled.form`
     display:flex;
     flex-direction:column;
     align-items:center;
-    /* justify-content: space-around; */
-    /* align-items:center; */
-    /* display:none; */
-    position:fixed;
     top : 100px;
     margin:0 auto;
     padding:20px;

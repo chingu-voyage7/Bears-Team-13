@@ -22,9 +22,22 @@ const Time = styled.p`
 font-size:16px;
 color:#13491c;
 margin-top:-15px;
-font-weight:bold;
 margin-bottom:40px;
 padding-bottom:20px;
 border-bottom:1px dashed #45c132;
 `
-export {OneEventWrap, EventTitle, Time}
+
+const TimeSpan = styled.span`
+font-weight:bold;
+`
+
+const RecipientName = styled.h3`
+color:#D10A0A;
+text-align:center;
+padding-bottom:60px;
+border-bottom:1px dashed #45c132;
+
+`
+
+
+export {OneEventWrap, EventTitle, Time, TimeSpan, RecipientName}

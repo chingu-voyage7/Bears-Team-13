@@ -33,6 +33,11 @@ router.get('/myuser', isAuth, function (req, res) {
   res.json(user);
 });
 
+// Returns a list of your secret santa { users }
+router.get("/myrecipients", isAuth, function (req, res) {
+  return res.sendStatus(500);
+});
+
 // Adds user to the DB
 router.post('/adduser', function (req, res) {
   console.log("Adding user...");

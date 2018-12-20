@@ -10,8 +10,9 @@ var eventSchema = new Schema({
   author: Array,
   public: false,
   creationDate: Date,
-  startDate: Date, // Date Exchange Starts. No one can join after this date.
-  members: Array, // [{_id: ObjectID, role: "member"}, {_id: ObjectID, role: "admin"}]
+  startDate: Date, // Secret Santa assignment date! 401 cannot join after this date.
+  endDate: Date,   // Gift Exchange date!
+  members: Array,  // [{_id: ObjectID, role: "member"}, {_id: ObjectID, role: "admin"}]
   ssList: Array
 }, { collection: "events"} );
 
@@ -37,8 +38,8 @@ var userSchema = new Schema({
   password: String,
   events: Array, // [event_id, event_id...]
   invites: Array, // [event_id, event_id...]
-  cart: Array, // [item_id, item_id]
-  purchases: Array, // [[item_id, recipient_id]]
+  cart: Object, // {item_id: recipient_id...}
+  purchases: Object, // {item_id: recipient_id...}
   verified: false,
   vendor: false
 }, { 

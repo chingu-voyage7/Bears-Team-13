@@ -62,6 +62,11 @@ router.post('/additem', isAuth, (req, res) => {
 
 });
 
+
+//
+// Cart CRUD
+//
+
 // Returns session user's cart.
 router.get('/mycart', isAuth, (req, res) => {
   if (!req.user || !req.user._id) {
@@ -74,18 +79,22 @@ router.get('/mycart', isAuth, (req, res) => {
     if (!user) { return res.status(404).send("User not found."); }
 
     console.log(user);
+    const items = Object.keys(user.cart);
 
     // Get item docs in cart
-    Item.find({_id: {$in: user.cart}}, (err, items) => {
+    Item.find({_id: {$in: items}}, (err, items) => {
       if (err) { return res.sendStatus(500); }
       if (!items) { return res.status(400).send("Items not found"); }
       
+      // Get recipients in cart
       return res.json(items);
     });
   });
 });
 
 // Adds item to session user's cart given {item_id, recipient}
+// To add ONLY an item (no recipient), make recipient=="";
+// Note: a recipient MUST be added later.
 router.post("/mycart/add", isAuth, (req, res) => {
   if (!req.body || !req.body.item_id || !req.body.recipient_id) {
     return res.sendStatus(400);
@@ -95,14 +104,23 @@ router.post("/mycart/add", isAuth, (req, res) => {
   Item.findOne({_id: new ObjectID(req.body.item_id)}, {_id: 1}, (err, item) => {
     if (err) { return res.sendStatus(500); }
     if (!item) { return res.sendStatus(404); }
-    
-    // Add item to cart
-    User.updateOne({_id: new ObjectID(req.user._id)}, {$addToSet: {cart: [[req.body.item_id, req.body.recipient_id]]}}, (err, result) => {
-      if (err) { return res.sendStatus(500); }
-      if (!result) { return res.sendStatus(500); }
 
-      console.log("nModified= " + result.nModified);
-      return res.sendStatus(200);
+    // User exists?
+    User.findOne({_id: new ObjectID(req.body.recipient_id)}, {_id: 1}, (err, user) => {
+      if (err) { return res.sendStatus(500); }
+      if (!user) { return res.sendStatus(404); }
+      
+      const cartDotItem = "cart." + req.body.item_id; 
+      console.log(cartDotItem);
+  
+      // Add item to cart
+      User.updateOne({_id: new ObjectID(req.user._id)}, {$set: {[cartDotItem]: req.body.recipient_id}}, (err, result) => {
+        if (err) { return res.sendStatus(500); }
+        if (!result) { return res.sendStatus(500); }
+  
+        console.log("nModified= " + result.nModified);
+        return res.sendStatus(200);
+      });
     });
   });
 });
@@ -113,7 +131,9 @@ router.delete("/mycart/delete", isAuth, (req, res) => {
     return res.sendStatus(400);
   }
 
-  User.updateOne({_id: new ObjectID(req.user._id)}, {$pull: {cart: req.body.item_id}}, (err, result) => {
+  const cartDotItem = "cart." + req.body.item_id;
+
+  User.updateOne({_id: new ObjectID(req.user._id)}, {$unset: {[cartDotItem]: 1}}, (err, result) => {
     if (err) { return res.sendStatus(500); }
     if (!result) { return res.sendStatus(500); }
     console.log("nmodified= " + result.nModified);
@@ -141,12 +161,11 @@ router.post('/mycart/purchase', isAuth, (req, res) => {
     if (!user) { return res.sendStatus(404); }
 
     // Purchase ALL items in cart
-    // cart [[item_id, recipient]...] ---> purchases [[item_id, recipient]...]
     // In a real application, this is where you would handle
     // processing a credit card/other payment method(s)
     //
     User.updateOne({_id: new ObjectID(req.user._id)}, {
-      cart: [], purchases: cart}, (err, result) => {
+      cart: {}, purchases: user.cart}, (err, result) => {
       if (err) { return res.sendStatus(500); }
       if (!result) { return res.sendStatus(500); }
       

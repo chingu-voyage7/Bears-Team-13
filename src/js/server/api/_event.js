@@ -41,7 +41,7 @@ function handleGetEventResponse(req, res, event) {
     }
     return res.sendStatus(401);
   }
-  return res.json(doc);  
+  return res.json(event);  
 }
 
 // Returns an event given event_id
@@ -152,11 +152,9 @@ router.post('/addevent', isAuth, (req, res) => {
       console.log("Event added to " + req.user.username + "'s list.");
       res.json(result);
     });
-
   });
 });
 
-<<<<<<< HEAD
 function validEdits(edits) {
   if (!edits || edits.creationDate || edits.author || edits.members) {
     return false;
@@ -168,8 +166,6 @@ function validEdits(edits) {
   return true;
 }
 
-=======
->>>>>>> 34a413f528d7d173d6e9d8b5c585728fc9b4fd4f
 // Edits an event
 router.put('/editevent', isAuth, (req, res) => {
   console.log("Editing event...");

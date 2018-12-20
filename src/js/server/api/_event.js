@@ -16,13 +16,14 @@ function getMembers(res, ids, projection) {
   });
 }
 
-// Returns true if we accept the given USER edits.
+// Returns true if valid EVENT edits
 function validEdits(edits) {
   if (!edits || edits.creationDate || edits.author || edits.members) {
     return false;
   }
   if (edits.startDate) {
-    console.log("ALERT: Do NOT allow startDate IF old StartDate > new StartDate")
+    const date = new Date();
+    return date.getTime() < startDate.getTime();
   }
   return true;
 }
@@ -155,17 +156,6 @@ router.post('/addevent', isAuth, (req, res) => {
   });
 });
 
-function validEdits(edits) {
-  if (!edits || edits.creationDate || edits.author || edits.members) {
-    return false;
-  }
-  if (edits.startDate) {
-    const date = new Date();
-    return date.getTime() < startDate.getTime();
-  }
-  return true;
-}
-
 // Edits an event
 router.put('/editevent', isAuth, (req, res) => {
   console.log("Editing event...");
@@ -181,7 +171,7 @@ router.put('/editevent', isAuth, (req, res) => {
     if (!event) { return res.sendStatus(404); }
 
     // Authorized to edit?
-    if (event.members.indexOf({_id: ObjectID(req.user._id), role: "admin"}) || event.author[0] === req.user._id) {
+    if (event.author[0] === req.user._id) {
       var updates = req.body;
       delete updates.event_id;
 
@@ -220,9 +210,5 @@ router.delete('/deleteevent', isAuth, (req, res) => {
     }
   });
 });
-
-
-
-
 
 module.exports = router;

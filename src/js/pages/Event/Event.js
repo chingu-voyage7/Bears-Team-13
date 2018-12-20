@@ -2,6 +2,7 @@ import React, { Component } from 'react';
 import axios from 'axios';
 import {OneEventWrap, EventTitle, Time, TimeSpan, RecipientName, ButtonWrap} from './event-style';
 import {Button} from '../MyAccount/myAccount-style';
+import InvitePopUp from '../../components/InvitePopUp/InvitePopUp'
 
 import moment from "moment";
 import "./members.css"
@@ -17,7 +18,8 @@ export default class Event extends Component {
       event: {},
       members: [],
       inviteBody: {},
-      editEvent: {}
+      editEvent: {},
+      inviteClicked:false
     }
   }
 
@@ -108,9 +110,10 @@ export default class Event extends Component {
 
   membersToJSX() {
     if (this.state.members) {
+      console.log(this.state.members)
       return this.state.members.map((member, i) => {
         return (
-          <div className="dropdown-content" key={"m-"+i}>
+          <div  key={"m-"+i}>
             <p>{member.firstName  + "@" +  member.username}</p>
           </div>
         );
@@ -121,8 +124,21 @@ export default class Event extends Component {
   }
 
 
+handleInviteClick = () => {
+ if(!this.state.inviteClicked){
+   this.setState({
+     inviteClicked: true
+   })
+  }
+ }
 
-
+ closePopUp = ()  => {
+  if(this.state.inviteClicked === true){
+      this.setState({
+          inviteClicked: false,
+      })
+  }
+}
 
   render() {
     
@@ -133,22 +149,21 @@ export default class Event extends Component {
       <Time> Exchange Date : <TimeSpan>{this.state.event?moment(this.state.event.startDate).format("dddd, MM/DD/YY"):""}</TimeSpan></Time>
       <RecipientName> recipient's name coming soon </RecipientName>
      
-      {/* <Title>Invite a friend to this event</Title>
-      <form onSubmit={this.sendInvite.bind(this)}>
-        <label>Friend's email</label>
-        <input name="email" type="email" onChange={this.handleChange.bind(this)}/><br/>
-        <input type="submit"/>
-      </form> */}
+      
 
        <ButtonWrap>
          <div className="dropdown">
            <button className="dropbtn">Members</button>
+           <div className="dropdown-content">
            {this.membersToJSX()}
+           </div>
          </div>
 
-        <Button> invite friend </Button>
-      </ButtonWrap>
-      
+        <Button onClick={this.handleInviteClick}> invite friend </Button>
+       </ButtonWrap>
+
+       
+      {this.state.inviteClicked ? <InvitePopUp closePopUp={this.closePopUp} eventId={this.state.event_id}></InvitePopUp> : ""}
       {/* {this.isAuthor()?(
         <form onSubmit={this.editEvent.bind(this)}>
           <label>Event name</label><br/>

@@ -21,7 +21,7 @@ module.exports = {
     }
     const date = new Date();
 
-    if (event.startDate.getTime() <= date.getTime()) {
+    if (date.getTime() <= event.startDate.getTime()) {
       return true;
     }
     console.log("Secret Santa doesn't start yet... (" + event.name + ")");

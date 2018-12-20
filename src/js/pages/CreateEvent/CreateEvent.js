@@ -31,7 +31,7 @@ export default class CreateEvent extends Component {
     
     axios.post('/api/addevent', this.state.event)
     .then((res) => {
-      alert("Success! This is @inna comes in. We could make this page a popup. We also need to redirect to /dashboard/:event_id after success.");
+      alert("Success! ");
     })
     .catch((err) => {
       alert(JSON.stringify(err.response));

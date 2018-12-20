@@ -1,7 +1,10 @@
 import React, { Component } from 'react';
 import axios from 'axios';
-import {OneEventWrap, EventTitle, Time, TimeSpan, RecipientName} from './event-style';
+import {OneEventWrap, EventTitle, Time, TimeSpan, RecipientName, ButtonWrap} from './event-style';
+import {Button} from '../MyAccount/myAccount-style';
+
 import moment from "moment";
+import "./members.css"
 
 
 export default class Event extends Component {
@@ -107,8 +110,8 @@ export default class Event extends Component {
     if (this.state.members) {
       return this.state.members.map((member, i) => {
         return (
-          <div key={"m-"+i}>
-            <p>{member.firstName + "@" + member.username}</p>
+          <div className="dropdown-content" key={"m-"+i}>
+            <p>{member.firstName  + "@" +  member.username}</p>
           </div>
         );
       });
@@ -117,24 +120,36 @@ export default class Event extends Component {
     }
   }
 
+
+
+
+
   render() {
+    
     return (
     <OneEventWrap>
       {this.state.message}<br/>
       <EventTitle>{this.state.event?this.state.event.name:""}</EventTitle>
       <Time> Exchange Date : <TimeSpan>{this.state.event?moment(this.state.event.startDate).format("dddd, MM/DD/YY"):""}</TimeSpan></Time>
-      <RecipientName> recipient name coming soon </RecipientName>
-      <h2>Members:</h2>
-      {this.membersToJSX()}
-      <h2>Invite a friend to this event</h2>
+      <RecipientName> recipient's name coming soon </RecipientName>
+     
+      {/* <Title>Invite a friend to this event</Title>
       <form onSubmit={this.sendInvite.bind(this)}>
         <label>Friend's email</label>
         <input name="email" type="email" onChange={this.handleChange.bind(this)}/><br/>
         <input type="submit"/>
-      </form>
-      <h2>Author-only Edit form (Make this a pop-up?)</h2>
-      <p>If time: If Author, users have a trash icon. He can remove people.</p>
-      {this.isAuthor()?(
+      </form> */}
+
+       <ButtonWrap>
+         <div className="dropdown">
+           <button className="dropbtn">Members</button>
+           {this.membersToJSX()}
+         </div>
+
+        <Button> invite friend </Button>
+      </ButtonWrap>
+      
+      {/* {this.isAuthor()?(
         <form onSubmit={this.editEvent.bind(this)}>
           <label>Event name</label><br/>
           <input name="name" type="text" placeholder={this.state.event.name} value={this.state.editEvent.name} onChange={this.handleEdit.bind(this)}/><br/>
@@ -144,7 +159,7 @@ export default class Event extends Component {
           <input name="public" type="checkbox" checked={this.state.editEvent.public} onChange={this.handleEdit.bind(this)}/><br/>
           <input type="submit"/>
         </form>
-      ):""}
+      ):""} */}
     </OneEventWrap>);
   }
 }

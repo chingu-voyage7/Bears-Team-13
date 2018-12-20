@@ -16,12 +16,13 @@ padding:10px 30px;
 const EventTitle = styled.h1`
 color:#D10A0A;
 text-transform:capitalize;
+font-size:26px;
 `
 
 const Time = styled.p`
 font-size:16px;
 color:#13491c;
-margin-top:-15px;
+margin-top:-10px;
 margin-bottom:40px;
 padding-bottom:20px;
 border-bottom:1px dashed #45c132;
@@ -36,8 +37,18 @@ color:#D10A0A;
 text-align:center;
 padding-bottom:60px;
 border-bottom:1px dashed #45c132;
-
+letter-spacing:1px;
+`
+const Title = styled.p`
+color:#D10A0A;
+font-size:16px;
+font-weight:bold;
+text-align:center;
+`
+const ButtonWrap = styled.div`
+width:100%;
+display:flex;
+justify-content:space-between;
 `
 
-
-export {OneEventWrap, EventTitle, Time, TimeSpan, RecipientName}
+export {OneEventWrap, EventTitle, Time, TimeSpan, RecipientName, Title, ButtonWrap}

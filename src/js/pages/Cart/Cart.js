@@ -1,12 +1,25 @@
 import React, { Component } from 'react'
+import axios from 'axios'
 
 export default class Cart extends Component {
   constructor() {
     super()
 
     this.state = {
-
+      cartItems: [],
     }
+  }
+
+  fetchCartItems() {
+    axios.get('/api/mycart')
+      .then( res => {
+        console.log(res.data)
+      })
+      .catch(err => console.log(err.response))
+  }
+
+  componentDidMount() {
+    this.fetchCartItems()
   }
 
   render() {

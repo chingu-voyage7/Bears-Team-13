@@ -31,7 +31,7 @@ router.get('/items', (req, res) => {
 
 // Text Query for items (Currently, very strict.)
 router.get("/finditem", (req, res) => {
-  if (!req.query) { return res.sendStatus(400); } 
+  if (!req.query) { return res.sendStatus(400); }
   Item.find({$text: {
     $search: req.query.keywords,
     $caseSensitive: false,
@@ -79,13 +79,14 @@ router.get('/mycart', isAuth, (req, res) => {
     if (!user) { return res.status(404).send("User not found."); }
 
     console.log(user);
-    const items = Object.keys(user.cart);
+    // const items = Object.keys(user.cart);
+    const cartItems = user.cart;
 
     // Get item docs in cart
-    Item.find({_id: {$in: items}}, (err, items) => {
+    Item.find({ _id: { $in: ["5c081976fb6fc038cbb3e2b2", "5c15735bfd9eaec0d134f5ba"]}}, (err, items) => {
       if (err) { return res.sendStatus(500); }
       if (!items) { return res.status(400).send("Items not found"); }
-      
+
       // Get recipients in cart
       return res.json(items);
     });
@@ -99,7 +100,7 @@ router.post("/mycart/add", isAuth, (req, res) => {
   if (!req.body || !req.body.item_id || !req.body.recipient_id) {
     return res.sendStatus(400);
   }
-  
+
   // Item exists?
   Item.findOne({_id: new ObjectID(req.body.item_id)}, {_id: 1}, (err, item) => {
     if (err) { return res.sendStatus(500); }
@@ -109,15 +110,15 @@ router.post("/mycart/add", isAuth, (req, res) => {
     User.findOne({_id: new ObjectID(req.body.recipient_id)}, {_id: 1}, (err, user) => {
       if (err) { return res.sendStatus(500); }
       if (!user) { return res.sendStatus(404); }
-      
-      const cartDotItem = "cart." + req.body.item_id; 
+
+      const cartDotItem = "cart." + req.body.item_id;
       console.log(cartDotItem);
-  
+
       // Add item to cart
       User.updateOne({_id: new ObjectID(req.user._id)}, {$set: {[cartDotItem]: req.body.recipient_id}}, (err, result) => {
         if (err) { return res.sendStatus(500); }
         if (!result) { return res.sendStatus(500); }
-  
+
         console.log("nModified= " + result.nModified);
         return res.sendStatus(200);
       });
@@ -168,7 +169,7 @@ router.post('/mycart/purchase', isAuth, (req, res) => {
       cart: {}, purchases: user.cart}, (err, result) => {
       if (err) { return res.sendStatus(500); }
       if (!result) { return res.sendStatus(500); }
-      
+
       console.log("nModified= " + result.nModified);
       return res.sendStatus(200);
     });

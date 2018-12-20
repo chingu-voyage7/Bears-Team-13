@@ -1,3 +1,6 @@
+const ObjectID = require('mongodb').ObjectID;
+const schema = require('./schema.js');
+const User = schema.User;
 
 // Returns a random integer between min (inclusive) and max (exclusive)
 function getRandom(min, max) {
@@ -18,11 +21,12 @@ module.exports = {
     }
     const date = new Date();
 
-    if (event.startDate.getTime() >= date.getTime()) {
+    if (date.getTime() <= event.startDate.getTime()) {
       return true;
     }
     console.log("Secret Santa doesn't start yet... (" + event.name + ")");
   },
+  // Generates a Secret Santa list for a given event
   generateSS: function(event) {
     var members = event.members;
     members.push(event.author[0]);

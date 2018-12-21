@@ -119,6 +119,7 @@ export default class Event extends Component {
     return (
     <OneEventWrap>
       {this.state.message}<br/>
+      <h2>{this.state.event?this.state.event.closed?"Reveal gift exchange! This event closed. :)":"":""}</h2>
       <h1>{this.state.event?this.state.event.name:""}</h1>
       <h2>{this.state.event?JSON.stringify(this.state.event.startDate):""}</h2>
       <p>Your SS (as sender) gift in middle of screen here/ your SS?</p>
@@ -136,8 +137,6 @@ export default class Event extends Component {
         <form onSubmit={this.editEvent.bind(this)}>
           <label>Event name</label><br/>
           <input name="name" type="text" placeholder={this.state.event.name} value={this.state.editEvent.name} onChange={this.handleEdit.bind(this)}/><br/>
-          <label>Start Date</label><br/>
-          <input name="startDate" type="date" placeholder={this.state.event.startDate} value={this.state.editEvent.startDate} onChange={this.handleEdit.bind(this)}/><br/>
           <label>Public</label><br/>
           <input name="public" type="checkbox" checked={this.state.editEvent.public} onChange={this.handleEdit.bind(this)}/><br/>
           <input type="submit"/>

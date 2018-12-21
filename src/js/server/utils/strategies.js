@@ -7,7 +7,7 @@ const config = require('../../../config.js');
 
 passport.use(new LocalStrategy(
   function (usernameOrEmail, password, done) {
-    User.findOne({$or:[{email: usernameOrEmail},{username: usernameOrEmail}]}, {events: 0, purchases: 0, invites: 0}, (err, user) => {
+    User.findOne({$or:[{email: usernameOrEmail},{username: usernameOrEmail}]}, {username: 1, email: 1, password: 1}, (err, user) => {
       console.log("User " + usernameOrEmail + " attempted to log in.");
       if (err) { return done(err); }
       if (!user) {  return done(null, false); }

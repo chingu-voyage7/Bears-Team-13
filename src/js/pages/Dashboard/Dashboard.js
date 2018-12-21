@@ -114,7 +114,7 @@ export default class Dashboard extends Component {
 
     return (
       <DashboardWrap>
-          <Greeting> <Name>{user.firstName}</Name>'s events</Greeting>
+          <Greeting> <Name>{user.username}</Name>'s events</Greeting>
           <ButtonWrap>
             <Button onClick={this.openEventPopUp}>Create Event</Button>
             <Link to="/myevents/invites"> <Button>My Invites ({this.state.invites.length})</Button></Link> 

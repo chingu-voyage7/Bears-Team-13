@@ -57,9 +57,12 @@ export default class CreateEvent extends Component {
           <h2> Create Event </h2>
           <Label>Event Name</Label><br/>
           <Input name="name" required onChange={this.handleChange.bind(this)}/><br/>
-          <Label>Start Date</Label><br/>
-          <small>Start date of your 2-week gift exchange. New members will not be able to join after this date.</small>
-          <br/><Input name="startDate" type="date" onChange={this.handleChange.bind(this)}/><br/>
+          <Label>Draw Date</Label><br/>
+          <small>Date that members are assigned a Secret Santa. <b>New members will NOT be able to join after this date.</b></small><br/>
+          <Input name="startDate" type="date" onChange={this.handleChange.bind(this)}/>
+          <Label>Gift Exchange Date</Label><br/>
+          <small>We recommend scheduling your Gift Exchange 2 to 4 weeks after the Draw Date.</small><br/>
+          <Input name="endDate" type="date" onChange={this.handleChange.bind(this)}/>
           <PublicWrap>
              <PublicLabel>Public?</PublicLabel>
              <CheckBox name="public" type="checkbox" onChange={this.handleChange.bind(this)}/><br/>

@@ -1,14 +1,11 @@
 import React, { Component } from 'react'
 import axios from 'axios'
-
 export default class Item extends Component {
   constructor() {
     super();
-
     this.state = {
       item: []
     }
-
   }
 
   fetchItem() {
@@ -26,6 +23,7 @@ export default class Item extends Component {
       .catch(err => console.log(err.response));
   }
 
+
   componentDidMount() {
     this.fetchItem()
   }
@@ -42,8 +40,16 @@ export default class Item extends Component {
           <div>
             <img src="" alt="Item"/>
           </div>
-          <button>Add to cart</button>
         </article>
+
+        <form>
+          <select>
+            <option value="john">john</option>
+            <option value="root">sally</option>
+            <option value="inna">inna</option>
+          </select>
+          <input type="submit">Add to cart</input>
+        </form>
       </section>
     )
   }

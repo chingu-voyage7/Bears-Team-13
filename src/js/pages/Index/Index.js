@@ -4,21 +4,19 @@ import axios from 'axios';
 import {IndexContainer, TitleIndex, AboutContainer, SantaImage, AboutTextContainer, ButtonContainer, AboutText, StartExchange,Button, TitleGift, Grid, GridItem, ItemName, ItemPrice} from './index-style'
 import {Link} from 'react-router-dom';
 
-const Item = ({item}) => {
+const Item = ({ item, handleItemClick }) => {
   return (
 
-    <GridItem>
+    <GridItem onClick={handleItemClick}>
       <ItemName>{item.name}</ItemName>
-      <img src="" alt="img "/>
+      <img src="" alt="img " />
 
-        <ItemPrice>{item.usd}</ItemPrice>
+      <ItemPrice>{item.usd}</ItemPrice>
 
     </GridItem>
 
   )
 }
-
-
 
 export default class Index extends Component {
   constructor(props) {
@@ -44,9 +42,14 @@ export default class Index extends Component {
       })
       .catch(err => console.log(err.response))
   }
- 
- 
- 
+
+  handleItemClick(itemId) {
+    const { history } = this.props
+
+    history.push(`/store/item/${itemId}`)
+  }
+
+
   render () {
     const { items, loader } = this.state
     let storeItems;
@@ -54,11 +57,16 @@ export default class Index extends Component {
 
       storeItems = items.slice(0, 8).map(item => {
         return (
-           <Item item={item} key={item._id}></Item>)
-          })
-    
+          <Item
+            item={item}
+            key={item._id}
+            handleItemClick={() => this.handleItemClick(item._id)}>
+          </Item>
+        )
+      })
 
-    
+
+
     return (
      <IndexContainer>
        <TitleIndex> SECRET SANTA MADE EASY</TitleIndex>
@@ -68,7 +76,7 @@ export default class Index extends Component {
            <AboutText>Lorem ipsum dolor sit amet, consectetur adipiscing elit. Quisque bibendum odio ligula, vel ultricies sapien maximus non. Praesent ullamcorper lorem at consequat accumsan. Integer feugiat scelerisque commodo.</AboutText>
            <StartExchange> start your exchange </StartExchange>
              <ButtonContainer>
-                 <Link to="/signup" styles={{textDecoration:'none'}}><Button> sign up </Button></Link> 
+                 <Link to="/signup" styles={{textDecoration:'none'}}><Button> sign up </Button></Link>
                   <Link to="/login" style={{ textDecoration: 'none' }}> <Button> log in </Button></Link>
               </ButtonContainer>
          </AboutTextContainer>

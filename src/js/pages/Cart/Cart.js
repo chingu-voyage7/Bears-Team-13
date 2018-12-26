@@ -7,6 +7,8 @@ export default class Cart extends Component {
 
     this.state = {
       cartItems: [],
+      recipients: [],
+      selectedRecipient: ""
     }
   }
 
@@ -19,12 +21,38 @@ export default class Cart extends Component {
       .catch(err => console.log(err.response))
   }
 
+  fetchRecipients() {
+    axios.get('/api/myrecipients')
+      .then(res => {
+        const recipients = res.data.filter(recipient => recipient !== null)
+        this.setState({
+          recipients
+        })
+        console.log(recipients)
+      })
+      .catch(err => console.log(err.response))
+  }
+
+  onDelete = (e, itemId) => {
+    e.preventDefault()
+
+    axios.delete('/api/mycart/delete', {itemId})
+      .then(res => console.log(res.data))
+      .catch(err => console.log(err.response))
+    console.log(itemId)
+  }
+
   componentDidMount() {
     this.fetchCartItems()
+    this.fetchRecipients()
   }
 
   render() {
-    const { cartItems } = this.state
+    const {
+      cartItems,
+      recipients,
+      selectedRecipient
+    } = this.state
 
     return (
       <section>
@@ -44,7 +72,7 @@ export default class Cart extends Component {
             cartItems.map( cartItem => {
               return (
                 <article key={cartItem._id}>
-                  <img src="" alt="item image" />
+                  <img src="" alt="item" />
                   <div>
                     <h3>{cartItem.name}</h3>
                     <span>${cartItem.usd}</span>
@@ -56,12 +84,28 @@ export default class Cart extends Component {
                       <option value="5">5</option>
                       <option value="6">6</option>
                     </select>
+
+                    {/* Recipients  */}
+                    <select
+                      value={this.selectedRecipient}
+                      onChange={(e) => this.setState({selectedRecipient: e.target.value})}>
+                      <option>Select recipient</option>
+                      {
+                        recipients.map(recipient => {
+                          return (
+                            <option value={recipient._id} key={recipient._id}>john</option>
+                          )
+                        })
+                      }
+                    </select>
                   </div>
+                  <button onClick={(e) => this.onDelete(e, cartItem._id)}>Delete</button>
                 </article>
               )
             })
           }
         </div>
+        <button>Proceed to checkout</button>
       </section>
     )
   }

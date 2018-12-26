@@ -3,7 +3,7 @@ const LocalStrategy = require('passport-local');
 const mailer = require('./mailer.js');
 const schema = require('./schema.js');
 const User = schema.User;
-const config = require('../../../config.js');
+
 
 passport.use(new LocalStrategy(
   function (usernameOrEmail, password, done) {

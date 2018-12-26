@@ -12,7 +12,8 @@ var eventSchema = new Schema({
   startDate: {type:Date, required: true}, // Secret Santa assignment date! 401 cannot join after this date.
   endDate: {type:Date, required: true},   // Gift Exchange date!
   members: Array,  // [{_id: ObjectID, role: "member"}, {_id: ObjectID, role: "admin"}]
-  ssList: Array
+  ssList: Array,
+  closed: Boolean
 }, { collection: "events"} );
 
 // ITEM

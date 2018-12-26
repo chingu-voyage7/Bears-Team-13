@@ -1,48 +1,49 @@
-const config = require('./src/config.js');
-let keys = Object.keys(config);
-keys.map((key) => {
-  if (!process.env[key]) {
-    process.env[key] = config[key];
-  } else {
-    console.log("process.env." + key + " already defined.");
-  }
-});
+// Production Server file
 const express = require('express');
-const path = require('path');
 const app = express();
 const bodyParser = require('body-parser');
-const mongoUtil = require('./src/js/server/utils/mongoUtil.js');
-const api = require('./src/js/server/api.js');
+const passportUtil = require('./utils/passportUtil.js');
+const mongoUtil = require('./utils/mongoUtil.js');
 
 const PORT = process.env.PORT || 80;
 
-// Parse body
+// Allow JSON and urlencoded
 app.use(bodyParser.urlencoded({extended: true}));
 app.use(bodyParser.json());
 
-// Use Static files
+// Setup/Configure passport
+passportUtil.setupPassport(app);
+
+// Allow static files
 app.use(express.static(path.join(__dirname, 'build')));
 
 
-// Initialize App
+// Connect to DB before opening routes
 mongoUtil.connectToServer((err, connection) => {
   if (err) throw err;
 
-  // RESTful API
-  app.use('/api', api);
+  console.log("DB connection success.");
 
-  // Allow ReactJS to handle routing
-  app.get('*', function(req, res) {
-    console.log("Handling route...");
+  // Setup API routes
+  app.use('/api/', require('./api/_login.js'));
+  app.use('/api/', require('./api/_user.js'));
+  app.use('/api/', require("./api/_store.js"));
+  app.use('/api/', require('./api/_event.js'));
+  app.use('/api/', require('./api/_invite.js'));
+  app.use('/api/', require('./api/_cron.js'));
+
+  // Setup VIEW routes (Allow react-router-dom to handle view routing)
+  app.use('*', (req ,res) => {
     res.sendFile(path.join(__dirname, 'build', 'index.html'));
   });
 
-  app.listen(PORT, () => {
-    console.log("DB connection success.");
+
+  // Initialize App
+  app.listen(PORT, (app) =>
     console.log("App listening on port " + PORT + "...")
-  });
+  );
 });
 
-
+module.exports = app;
 
 

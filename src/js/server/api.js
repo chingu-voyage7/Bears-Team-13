@@ -1,16 +1,37 @@
-const router = require('express').Router();
+require('dotenv').config();
+const express = require('express');
+const app = express();
+const bodyParser = require('body-parser');
 const passportUtil = require('./utils/passportUtil.js');
+const mongoUtil = require('./utils/mongoUtil.js');
 
-passportUtil.setupPassport(router);
+const PORT = process.env.PORT || 80;
 
-router.use('/', require('./api/_login.js'));
+// Allow JSON and urlencoded
+app.use(bodyParser.urlencoded({extended: true}));
+app.use(bodyParser.json());
 
-router.use('/', require('./api/_user.js'));
+// Setup/Configure passport
+passportUtil.setupPassport(app);
 
-router.use('/', require("./api/_store.js"));
+// Connect to DB before opening routes
+mongoUtil.connectToServer((err, connection) => {
+  if (err) throw err;
 
-router.use('/', require('./api/_event.js'));
+  console.log("DB connection success.");
 
-router.use('/', require('./api/_invite.js'));
+  // Setup API routes
+  app.use('/api/', require('./api/_login.js'));
+  app.use('/api/', require('./api/_user.js'));
+  app.use('/api/', require("./api/_store.js"));
+  app.use('/api/', require('./api/_event.js'));
+  app.use('/api/', require('./api/_invite.js'));
+  app.use('/api/', require('./api/_cron.js'));
 
-module.exports = router;
+  // Initialize App
+  app.listen(PORT, (app) =>
+    console.log("App listening on port " + PORT + "...")
+  );
+});
+
+module.exports = app;

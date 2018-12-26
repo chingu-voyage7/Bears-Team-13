@@ -131,11 +131,9 @@ router.get('/myevents', isAuth, function(req, res) {
 // POSTS an event to our db
 router.post('/addevent', isAuth, validEdits(["name", "public", "startDate", "endDate"]), (req, res) => {
   console.log("Creating event...");
+  console.log("BUG: Must restrict start, end dates to the future.");
   var event = req.body;
-  event.author = [req.user._id, req.user.username];
-
-  // Check if startDate and endDate are valid.
-  
+  event.author = [req.user._id, req.user.username];  
 
   // Create the Event
   Event.create(event, (err, result) => {

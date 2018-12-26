@@ -1,6 +1,6 @@
 /* These routes will be called by cron-jobs.com daily */
 const router = require('express').Router();
-const passport = require('../utils/passportUtil').getPassport();
+const isAuth = require('../utils/passportUtil').isAuth;
 const ObjectID = require('mongodb').ObjectID;
 const schema = require('../utils/schema.js');
 const Event = schema.Event;
@@ -57,19 +57,28 @@ function generateSS(event) {
    2) after endDate?   --> closed = true --> update Event, send email to 
    3) closed = true?   --> 1 week after? --> delete Event 
 */
-function handleDateChecks(tries) {
-  Event.find({}, {startDate: 1, endDate: 1, members: 1, author: 1, ssList: 1}, (err, events) => {
-    if (err && tries < 3) { return handleDateChecks(tries++); }
-    if (!event) { return; }
+function handleDateChecks(user, tries) {
+  Event.find({}, {startDate: 1, endDate: 1, members: 1, author: 1, ssList: 1, closed: 1}, (err, events) => {
+    if (err && tries < 3) { return handleDateChecks(user, tries++); }
+    if (!events) { return; }
 
     // Check each event start/end dates
     events.map((event) => {
 
-      if (afterDate(event.endDate) && !event.closed) {
-        Event.updateOne({_id: new ObjectID(event._id)}, {closed: true});
-
-      } else if (afterDate(event.startDate) && !event.ssList) {
-        Event.updateOne({_id: new ObjectID(event._id)}, {ssList: generateSS(event)});
+      if (!event.closed) {
+        if (afterDate(event.endDate)) {
+          Event.updateOne({_id: new ObjectID(event._id)}, {closed: true}, (err) => {
+            if (err) { return console.log("ERR!"); }
+            mailer.endDate(user, event);
+          });
+  
+        } else if (afterDate(event.startDate) && (!event.ssList || event.ssList.length === 0)) {
+          Event.updateOne({_id: new ObjectID(event._id)}, {ssList: generateSS(event)}, (err) => {
+            if (err) { return console.log("ERR!"); }
+            mailer.startDate(user, event);
+          });
+        }
+  
       }
 
     });
@@ -77,8 +86,9 @@ function handleDateChecks(tries) {
 }
 
 /* Executes a daily task. Allows only Specific user. */
-router.post('/daily', (req, res) => {
-  handleDateChecks(0);
+router.post('/daily', isAuth, (req, res) => {
+  console.log("Checking ALL event dates...");
+  handleDateChecks(req.user, 0);
   return res.sendStatus(200);
 });
 

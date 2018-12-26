@@ -1,9 +1,11 @@
-#! /app/bin/node
+/* These routes will be called by cron-jobs.com daily */
+const router = require('express').Router();
+const passport = require('../utils/passportUtil').getPassport();
 const ObjectID = require('mongodb').ObjectID;
-const schema = require('./utils/schema.js');
+const schema = require('../utils/schema.js');
 const Event = schema.Event;
 const User = schema.User;
-const mailer = require('./utils/mailer.js');
+const mailer = require('../utils/mailer.js');
 const date = new Date();
 
 
@@ -50,14 +52,14 @@ function generateSS(event) {
   return ssList;
 }
 
-/* Handles daily start, end checks. Performs these tasks:
+/* Handles CRON job of checking dates
    1) after startDate? --> generateSS(); --> update Event, send email to MEMBERS
    2) after endDate?   --> closed = true --> update Event, send email to 
    3) closed = true?   --> 1 week after? --> delete Event 
 */
-function handleDailyChecks(tries) {
+function handleDateChecks(tries) {
   Event.find({}, {startDate: 1, endDate: 1, members: 1, author: 1, ssList: 1}, (err, events) => {
-    if (err && tries < 3) { return handleDailyChecks(tries++); }
+    if (err && tries < 3) { return handleDateChecks(tries++); }
     if (!event) { return; }
 
     // Check each event start/end dates
@@ -74,4 +76,11 @@ function handleDailyChecks(tries) {
   });
 }
 
-handleDailyChecks(0);
+/* Executes a daily task. Allows only Specific user. */
+router.post('/daily', (req, res) => {
+  handleDateChecks(0);
+  return res.sendStatus(200);
+});
+
+module.exports = router;
+

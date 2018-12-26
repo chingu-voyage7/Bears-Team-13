@@ -1,4 +1,5 @@
 import React, { Component } from 'react';
+import { history } from 'react-router-dom';
 import axios from 'axios';
 import { Input, CloseButton} from '../../components/PopUp/popup-style'
 // import {Label} from '../Login/login-style';
@@ -26,15 +27,14 @@ export default class CreateEvent extends Component {
 
   handleSubmit(e) {
     e.preventDefault();
-
-    alert(JSON.stringify(this.state.event));
     
     axios.post('/api/addevent', this.state.event)
     .then((res) => {
-      alert("Success! ");
+      const history = this.props.history;
+      history.push("/myevents");
     })
     .catch((err) => {
-      alert(JSON.stringify(err.response));
+      alert("Error. Please try again. Be sure your dates are in the future and the Exchange date is AFTER your Draw Date. :)");
     });
   }
 

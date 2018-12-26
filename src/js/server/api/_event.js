@@ -5,7 +5,6 @@ const ObjectID = require('mongodb').ObjectID;
 const schema = require('../utils/schema.js');
 const Event = schema.Event;
 const User = schema.User;
-const helpers = require('../utils/helpers.js');
 
 // Returns a list of members given [_id, _id...] and {projection}
 function getMembers(res, ids, projection) {
@@ -16,33 +15,27 @@ function getMembers(res, ids, projection) {
   });
 }
 
-// Returns true if valid EVENT edits
-function validEdits(edits) {
-  if (!edits || edits.creationDate || edits.author || edits.members) {
-    return false;
+// Returns middleware that allows ONLY whitelisted req.body keys.
+function validEdits(whitelist) {
+  if (!whitelist) {
+    whitelist = [];
   }
-  if (edits.startDate) {
-    const date = new Date();
-    return date.getTime() < startDate.getTime();
-  }
-  return true;
-}
 
-// Function for /event
-function handleGetEventResponse(req, res, event) {
-  if (!event.public) {
-    if (req.user) {
-
-      if (ObjectID.toString(event.author[0]) === ObjectID.toString(req.user._id)) {
-        return res.json(event);
-      }
-      if (event.members.indexOf(req.user._id) !== -1) {
-        return res.json(event);
+  return function(req, res, next) {
+    const edits = Object.keys(req.body);
+  
+    if (!edits || edits.length > whitelist.length) {
+      return res.sendStatus(400);
+    }
+  
+    for (let i = 0; i < edits.length; i++) {
+      if (whitelist.indexOf(edits[i]) === -1) {
+        return res.sendStatus(400);
       }
     }
-    return res.sendStatus(401);
+  
+    return next();
   }
-  return res.json(event);  
 }
 
 // Returns an event given event_id
@@ -51,23 +44,20 @@ router.get('/event', (req, res) => {
     if (err) { return res.sendStatus(500); }
     if (!event) { return res.sendStatus(404); }
 
-    // Check date & assign SS, IF not assigned yet.
-    if ((!event.ssList && event.startDate) || event.ssList.length === 0) {
-      if(helpers.afterStartDate(event)) {
-        const ssList = helpers.generateSS(event);
-
-        Event.updateOne({_id: new ObjectID(req.query.event_id)}, {ssList: ssList}, (err, result) => {
-          if (err) { return res.sendStatus(500); }
-          if (!result) { return res.sendStatus(404); }
-          handleGetEventResponse(req, res, event);
-        });
-
-      } else {
-        handleGetEventResponse(req, res, event);
+    if (!event.public) {
+      if (req.user) {
+  
+        if (ObjectID.toString(event.author[0]) === ObjectID.toString(req.user._id)) {
+          return res.json(event);
+        }
+        if (event.members.indexOf(req.user._id) !== -1) {
+          return res.json(event);
+        }
       }
-    } else {
-      handleGetEventResponse(req, res, event);
+      return res.sendStatus(401);
     }
+    return res.json(event);  
+  
   });
 })
 
@@ -139,10 +129,13 @@ router.get('/myevents', isAuth, function(req, res) {
 });
 
 // POSTS an event to our db
-router.post('/addevent', isAuth, (req, res) => {
+router.post('/addevent', isAuth, validEdits(["name", "public", "startDate", "endDate"]), (req, res) => {
+  console.log("Creating event...");
+  console.log("BUG: Must restrict start, end dates to the future.");
   var event = req.body;
-  event.author = [req.user._id, req.user.username];
-  event.creationDate = Date.now();
+  event.author = [req.user._id, req.user.username];  
+
+  // Create the Event
   Event.create(event, (err, result) => {
     if (err) { return res.sendStatus(500); }
     if (!result) { return res.sendStatus(404); }
@@ -157,14 +150,10 @@ router.post('/addevent', isAuth, (req, res) => {
 });
 
 // Edits an event
-router.put('/editevent', isAuth, (req, res) => {
+router.put('/editevent', isAuth, validEdits(["name", "public"]), (req, res) => {
   console.log("Editing event...");
   console.log(req.body);
   const event_id = req.body.event_id;
-  if (!event_id || !validEdits(req.body)) {
-    console.log("BAD");
-    return res.sendStatus(400);
-  }
 
   Event.findOne({_id: new ObjectID(event_id)}, (err, event) => {
     if (err) { return res.sendStatus(500); }

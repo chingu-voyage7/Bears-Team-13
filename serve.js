@@ -1,4 +1,4 @@
-require('dotenv').config();
+// Production Server file
 const express = require('express');
 const app = express();
 const bodyParser = require('body-parser');
@@ -14,6 +14,10 @@ app.use(bodyParser.json());
 // Setup/Configure passport
 passportUtil.setupPassport(app);
 
+// Allow static files
+app.use(express.static(path.join(__dirname, 'build')));
+
+
 // Connect to DB before opening routes
 mongoUtil.connectToServer((err, connection) => {
   if (err) throw err;
@@ -28,6 +32,12 @@ mongoUtil.connectToServer((err, connection) => {
   app.use('/api/', require('./api/_invite.js'));
   app.use('/api/', require('./api/_cron.js'));
 
+  // Setup VIEW routes (Allow react-router-dom to handle view routing)
+  app.use('*', (req ,res) => {
+    res.sendFile(path.join(__dirname, 'build', 'index.html'));
+  });
+
+
   // Initialize App
   app.listen(PORT, (app) =>
     console.log("App listening on port " + PORT + "...")
@@ -35,3 +45,5 @@ mongoUtil.connectToServer((err, connection) => {
 });
 
 module.exports = app;
+
+

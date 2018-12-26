@@ -44,12 +44,16 @@ router.get("/myrecipients", isAuth, function (req, res) {
     console.log("EVENTS: " + user.events.length);
 
     // Get ssList for each event
-    Event.find({_id: {$in: user.events}}, {ssList: 1}, (err, events) => {
+    Event.find({_id: {$in: user.events}}, {ssList: 1, closed: 1}, (err, events) => {
       if (err) { return res.sendStatus(500); }
       if (!events) { return res.sendStatus(404); }
 
       // Find my [user_id, recipient_id] pair(s) in the list
       const recipients = events.map((event) => {
+        if (event.closed) {
+          return null;
+        }
+
         for (let i = 0; i < event.ssList.length; i++) {
           if (ObjectID.toString(event.ssList[i][0]) === ObjectID.toString(req.user._id)) {
             if (event.ssList[i][1]) {

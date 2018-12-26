@@ -145,6 +145,7 @@ handleInviteClick = () => {
     return (
     <OneEventWrap>
       {this.state.message}<br/>
+
       <EventTitle>{this.state.event?this.state.event.name:""}</EventTitle>
       <Time> Exchange Date : <TimeSpan>{this.state.event?moment(this.state.event.startDate).format("dddd, MM/DD/YY"):""}</TimeSpan></Time>
       <RecipientName> recipient's name coming soon </RecipientName>
@@ -168,8 +169,6 @@ handleInviteClick = () => {
         <form onSubmit={this.editEvent.bind(this)}>
           <label>Event name</label><br/>
           <input name="name" type="text" placeholder={this.state.event.name} value={this.state.editEvent.name} onChange={this.handleEdit.bind(this)}/><br/>
-          <label>Start Date</label><br/>
-          <input name="startDate" type="date" placeholder={this.state.event.startDate} value={this.state.editEvent.startDate} onChange={this.handleEdit.bind(this)}/><br/>
           <label>Public</label><br/>
           <input name="public" type="checkbox" checked={this.state.editEvent.public} onChange={this.handleEdit.bind(this)}/><br/>
           <input type="submit"/>

@@ -26,12 +26,12 @@ mongoUtil.connectToServer((err, connection) => {
   console.log("DB connection success.");
 
   // Setup API routes
-  app.use('/api/', require('./src/server/api/_login.js'));
-  app.use('/api/', require('./src/server/api/_user.js'));
-  app.use('/api/', require("./src/server/api/_store.js"));
-  app.use('/api/', require('./src/server/api/_event.js'));
-  app.use('/api/', require('./src/server/api/_invite.js'));
-  app.use('/api/', require('./src/server/api/_cron.js'));
+  app.use('/api/', require('./src/js/server/api/_login.js'));
+  app.use('/api/', require('./src/js/server/api/_user.js'));
+  app.use('/api/', require("./src/js/server/api/_store.js"));
+  app.use('/api/', require('./src/js/server/api/_event.js'));
+  app.use('/api/', require('./src/js/server/api/_invite.js'));
+  app.use('/api/', require('./src/js/server/api/_cron.js'));
 
   // Setup VIEW routes (Allow react-router-dom to handle view routing)
   app.use('*', (req ,res) => {

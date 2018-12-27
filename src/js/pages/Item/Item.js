@@ -31,7 +31,8 @@ export default class Item extends Component {
         const recipients = res.data.filter( recipient => recipient !== null )
         this.setState({
           recipients
-        })
+        });
+        alert(res.data);
       })
       .catch(err => console.log(err.response))
   }

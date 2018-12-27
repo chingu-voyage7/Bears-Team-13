@@ -104,7 +104,7 @@ function handleDateChecks(user, tries) {
 }
 
 /* Executes a daily task. Allows only Specific user. */
-router.post('/daily', isAuth, (req, res) => {
+router.post('/daily', (req, res) => {
   console.log("Checking ALL event dates...");
   handleDateChecks(req.user, 0);
   return res.sendStatus(200);

@@ -65,17 +65,35 @@ function handleDateChecks(user, tries) {
     // Check each event start/end dates
     events.map((event) => {
 
+      event.members.push(event.author[0]);
+
       if (!event.closed) {
         if (afterDate(event.endDate)) {
           Event.updateOne({_id: new ObjectID(event._id)}, {closed: true}, (err) => {
             if (err) { return console.log("ERR!"); }
-            mailer.endDate(user, event);
+            
+            User.find({_id: {$in : event.members}}, {email: 1, username: 1, firstName: 1}, (err, users) => {
+              if (err) { return console.log("Err emailing."); }
+              if (!users) { return console.log("404 no users"); }
+
+              users.map((user) => {
+                mailer.endDate(user, event);
+              });
+            });
           });
   
         } else if (afterDate(event.startDate) && (!event.ssList || event.ssList.length === 0)) {
           Event.updateOne({_id: new ObjectID(event._id)}, {ssList: generateSS(event)}, (err) => {
             if (err) { return console.log("ERR!"); }
-            mailer.startDate(user, event);
+
+            User.find({_id: {$in : event.members}}, {email: 1, username: 1, firstName: 1}, (err, users) => {
+              if (err) { return console.log("Err emailing."); }
+              if (!users) { return console.log("404 no users"); }
+
+              users.map((user) => {
+                mailer.startDate(user, event);
+              });
+            });
           });
         }
   

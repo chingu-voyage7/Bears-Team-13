@@ -31,7 +31,7 @@ router.get('/items', (req, res) => {
 
 // Text Query for items (Currently, very strict.)
 router.get("/finditem", (req, res) => {
-  if (!req.query) { return res.sendStatus(400); } 
+  if (!req.query) { return res.sendStatus(400); }
   Item.find({$text: {
     $search: req.query.keywords,
     $caseSensitive: false,
@@ -79,15 +79,17 @@ router.get('/mycart', isAuth, (req, res) => {
     if (!user) { return res.status(404).send("User not found."); }
 
     console.log(user);
-    const items = Object.keys(user.cart);
-
+    
     // Get item docs in cart
-    Item.find({_id: {$in: items}}, (err, items) => {
+    Item.find({ _id: { $in: Object.keys(user.cart)}}, (err, items) => {
       if (err) { return res.sendStatus(500); }
       if (!items) { return res.status(400).send("Items not found"); }
-      
+
+      const cart = items.map((item, i) => {
+        return [item, user.cart[item._id]];
+      });
       // Get recipients in cart
-      return res.json(items);
+      return res.json(cart);
     });
   });
 });
@@ -99,7 +101,7 @@ router.post("/mycart/add", isAuth, (req, res) => {
   if (!req.body || !req.body.item_id || !req.body.recipient_id) {
     return res.sendStatus(400);
   }
-  
+
   // Item exists?
   Item.findOne({_id: new ObjectID(req.body.item_id)}, {_id: 1}, (err, item) => {
     if (err) { return res.sendStatus(500); }
@@ -109,15 +111,15 @@ router.post("/mycart/add", isAuth, (req, res) => {
     User.findOne({_id: new ObjectID(req.body.recipient_id)}, {_id: 1}, (err, user) => {
       if (err) { return res.sendStatus(500); }
       if (!user) { return res.sendStatus(404); }
-      
-      const cartDotItem = "cart." + req.body.item_id; 
+
+      const cartDotItem = "cart." + req.body.item_id;
       console.log(cartDotItem);
-  
+
       // Add item to cart
       User.updateOne({_id: new ObjectID(req.user._id)}, {$set: {[cartDotItem]: req.body.recipient_id}}, (err, result) => {
         if (err) { return res.sendStatus(500); }
         if (!result) { return res.sendStatus(500); }
-  
+
         console.log("nModified= " + result.nModified);
         return res.sendStatus(200);
       });
@@ -132,6 +134,8 @@ router.delete("/mycart/delete", isAuth, (req, res) => {
   }
 
   const cartDotItem = "cart." + req.body.item_id;
+  console.log("Removing key, value from cart...");
+  console.log(cartDotItem);
 
   User.updateOne({_id: new ObjectID(req.user._id)}, {$unset: {[cartDotItem]: 1}}, (err, result) => {
     if (err) { return res.sendStatus(500); }
@@ -168,7 +172,7 @@ router.post('/mycart/purchase', isAuth, (req, res) => {
       cart: {}, purchases: user.cart}, (err, result) => {
       if (err) { return res.sendStatus(500); }
       if (!result) { return res.sendStatus(500); }
-      
+
       console.log("nModified= " + result.nModified);
       return res.sendStatus(200);
     });

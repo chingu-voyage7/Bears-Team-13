@@ -79,16 +79,17 @@ router.get('/mycart', isAuth, (req, res) => {
     if (!user) { return res.status(404).send("User not found."); }
 
     console.log(user);
-    // const items = Object.keys(user.cart);
-    const cartItems = user.cart;
-
+    
     // Get item docs in cart
-    Item.find({ _id: { $in: ["5c081976fb6fc038cbb3e2b2", "5c15735bfd9eaec0d134f5ba"]}}, (err, items) => {
+    Item.find({ _id: { $in: Object.keys(user.cart)}}, (err, items) => {
       if (err) { return res.sendStatus(500); }
       if (!items) { return res.status(400).send("Items not found"); }
 
+      const cart = items.map((item, i) => {
+        return [item, user.cart[item._id]];
+      });
       // Get recipients in cart
-      return res.json(items);
+      return res.json(cart);
     });
   });
 });
@@ -133,6 +134,8 @@ router.delete("/mycart/delete", isAuth, (req, res) => {
   }
 
   const cartDotItem = "cart." + req.body.item_id;
+  console.log("Removing key, value from cart...");
+  console.log(cartDotItem);
 
   User.updateOne({_id: new ObjectID(req.user._id)}, {$unset: {[cartDotItem]: 1}}, (err, result) => {
     if (err) { return res.sendStatus(500); }

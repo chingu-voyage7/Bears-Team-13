@@ -15,36 +15,26 @@ export default class Cart extends Component {
   fetchCartItems() {
     axios.get('/api/mycart')
       .then( res => {
-        this.setState({cartItems: res.data})
-        console.log(res.data)
+        alert(res.data);
+        this.setState({cartItems: res.data});
+        this.setState({recipients: res.data.map((itemRecipient => {
+          return itemRecipient[1];
+        }))});
       })
       .catch(err => console.log(err.response))
   }
 
-  fetchRecipients() {
-    axios.get('/api/myrecipients')
-      .then(res => {
-        const recipients = res.data.filter(recipient => recipient !== null)
-        this.setState({
-          recipients
-        })
-        console.log(recipients)
-      })
-      .catch(err => console.log(err.response))
-  }
-
-  onDelete = (e, itemId) => {
+  onDelete = (e, item_id) => {
     e.preventDefault()
 
-    axios.delete('/api/mycart/delete', {itemId})
+    axios.delete('/api/mycart/delete', {data: {item_id}})
       .then(res => console.log(res.data))
       .catch(err => console.log(err.response))
-    console.log(itemId)
+    console.log(item_id)
   }
 
   componentDidMount() {
-    this.fetchCartItems()
-    this.fetchRecipients()
+    this.fetchCartItems();
   }
 
   render() {
@@ -52,38 +42,27 @@ export default class Cart extends Component {
       cartItems,
       recipients,
       selectedRecipient
-    } = this.state
+    } = this.state;
 
     return (
       <section>
-        <h1>Carrito</h1>
+        <h1>My Cart</h1>
         { /*Headers*/ }
         <div>
           <div>
             Price
           </div>
-          <div>
-            Quantity
-          </div>
         </div>
         { /* List items */}
         <div>
           {
-            cartItems.map( cartItem => {
+            cartItems.map( itemRecipient => {
               return (
-                <article key={cartItem._id}>
+                <article key={itemRecipient[0]._id}>
                   <img src="" alt="item" />
                   <div>
-                    <h3>{cartItem.name}</h3>
-                    <span>${cartItem.usd}</span>
-                    <select>
-                      <option value="1">1</option>
-                      <option value="2">2</option>
-                      <option value="3">3</option>
-                      <option value="4">4</option>
-                      <option value="5">5</option>
-                      <option value="6">6</option>
-                    </select>
+                    <h3>{itemRecipient[0].name}</h3>
+                    <span>${itemRecipient[0].usd}</span>
 
                     {/* Recipients  */}
                     <select
@@ -99,7 +78,7 @@ export default class Cart extends Component {
                       }
                     </select>
                   </div>
-                  <button onClick={(e) => this.onDelete(e, cartItem._id)}>Delete</button>
+                  <button onClick={(e) => this.onDelete(e, itemRecipient[0]._id)}>Delete</button>
                 </article>
               )
             })

@@ -62,33 +62,38 @@ router.post('/additem', isAuth, (req, res) => {
 
 });
 
+const config = require('config.js');
+Object.keys(config).map((key) => {
+  process.env[key] = config[key];
+});
 
 //
 // Cart CRUD
 //
 
-// Returns session user's cart.
+// Returns [[ { item }, "recipient_id"], ...]
 router.get('/mycart', isAuth, (req, res) => {
   if (!req.user || !req.user._id) {
     return res.sendStatus(500);
   }
 
-  // Get list of item ids
+  // Get cart
   User.findOne({_id: new ObjectID(req.user._id)}, {cart: 1}, (err, user) => {
     if (err) { return res.sendStatus(500); }
     if (!user) { return res.status(404).send("User not found."); }
 
     console.log(user);
+    const item_ids = Object.keys(user.cart);
     
-    // Get item docs in cart
-    Item.find({ _id: { $in: Object.keys(user.cart)}}, (err, items) => {
+    // Get Items
+    Item.find({ _id: { $in: item_ids}}, (err, items) => {
       if (err) { return res.sendStatus(500); }
       if (!items) { return res.status(400).send("Items not found"); }
 
-      const cart = items.map((item, i) => {
+      const cart = items.map((item) => {
         return [item, user.cart[item._id]];
       });
-      // Get recipients in cart
+
       return res.json(cart);
     });
   });

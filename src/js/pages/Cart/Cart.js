@@ -12,16 +12,26 @@ export default class Cart extends Component {
     }
   }
 
+  componentDidMount() {
+    this.fetchCartItems();
+    this.fetchRecipients();
+  }
+
   fetchCartItems() {
     axios.get('/api/mycart')
       .then( res => {
-        alert(res.data);
+        alert(JSON.stringify(res.data));
         this.setState({cartItems: res.data});
-        this.setState({recipients: res.data.map((itemRecipient => {
-          return itemRecipient[1];
-        }))});
       })
       .catch(err => console.log(err.response))
+  }
+
+  fetchRecipients() {
+    axios.get('/api/myrecipients')
+      .then( res => {
+        this.setState({recipients: res.data});
+      })
+      .catch(err => console.log(err.response));
   }
 
   onDelete = (e, item_id) => {
@@ -31,10 +41,6 @@ export default class Cart extends Component {
       .then(res => console.log(res.data))
       .catch(err => console.log(err.response))
     console.log(item_id)
-  }
-
-  componentDidMount() {
-    this.fetchCartItems();
   }
 
   render() {
@@ -72,7 +78,7 @@ export default class Cart extends Component {
                       {
                         recipients.map(recipient => {
                           return (
-                            <option value={recipient._id} key={recipient._id}>john</option>
+                            <option value={recipient._id} key={recipient._id}>{recipient.username}</option>
                           )
                         })
                       }

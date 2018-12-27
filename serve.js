@@ -2,8 +2,8 @@
 const express = require('express');
 const app = express();
 const bodyParser = require('body-parser');
-const passportUtil = require('./src/server/utils/passportUtil.js');
-const mongoUtil = require('./src/server/utils/mongoUtil.js');
+const passportUtil = require('./src/js/server/utils/passportUtil.js');
+const mongoUtil = require('./src/js/server/utils/mongoUtil.js');
 
 const PORT = process.env.PORT || 80;
 

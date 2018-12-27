@@ -62,6 +62,10 @@ router.post('/additem', isAuth, (req, res) => {
 
 });
 
+const config = require('config.js');
+Object.keys(config).map((key) => {
+  process.env[key] = config[key];
+});
 
 //
 // Cart CRUD

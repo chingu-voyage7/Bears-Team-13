@@ -5,10 +5,10 @@ import {InputStyle} from '../Signup/signup-style.js';
 import {Button} from '../MyAccount/myAccount-style.js';
 import {Grid, GridItem, ItemName, ItemPrice} from '../Index/index-style.js';
 
-const Item = ({item}) => {
+const Item = ({item, handleItemClick}) => {
   return (
 
-    <GridItem>
+    <GridItem onClick={handleItemClick}>
       <ItemName>{item.name}</ItemName>
       <img src="" alt="img "/>
 
@@ -78,6 +78,12 @@ export default class Store extends Component {
       })
   }
 
+  handleItemClick(itemId) {
+    const { history } = this.props
+
+    history.push(`/store/item/${itemId}`)
+  }
+
   render() {
     const { items, loader } = this.state
     let storeItems;
@@ -85,19 +91,24 @@ export default class Store extends Component {
      if(!this.state.searchPerformed){
       storeItems = items.slice(0, 8).map(item => {
         return (
-           <Item item={item} key={item._id}></Item>
-      
+          <Item
+            item={item}
+            key={item._id}
+            handleItemClick={() => this.handleItemClick(item._id)}>
+          </Item>
         )
       })
 
- 
-      
      } else {
     if (items.length > 0) {
       storeItems = items.map(item => {
         return (
-           <Item item={item} key={item._id}></Item>
-      
+          <Item
+            item={item}
+            key={item._id}
+            handleItemClick={ () => this.handleItemClick(item._id) }>
+          </Item>
+
         )
       })
     } else {
@@ -107,9 +118,9 @@ export default class Store extends Component {
   }
 
     return (
-  
+
         <StoreWrap>
-     
+
              <Title> Gifts under $20. </Title>
              <Title>You're welcome. </Title>
 
@@ -120,7 +131,7 @@ export default class Store extends Component {
               <Button type="submit" onClick={this.handleSearch}>Search</Button>
             </div>
           </SearchForm>
-  
+
         <Grid>
           {storeItems}
         </Grid>

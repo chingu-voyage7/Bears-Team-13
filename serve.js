@@ -1,6 +1,7 @@
 // Production Server file
 const express = require('express');
 const app = express();
+const path = require('path');
 const bodyParser = require('body-parser');
 const passportUtil = require('./src/js/server/utils/passportUtil.js');
 const mongoUtil = require('./src/js/server/utils/mongoUtil.js');

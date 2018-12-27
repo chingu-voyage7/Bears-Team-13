@@ -23,9 +23,9 @@
     "styled-components": "^4.1.1"
   },
   "scripts": {
-    "beast": "start cmd /k \"nodemon --watch src/js/server src/js/server/server.js\" && set PORT=3000 && react-scripts start",
+    "beast": "start cmd /k \"nodemon --watch src/js/server src/js/server/api.js\" && set PORT=3000 && react-scripts start",
     "start": "react-scripts start",
-    "api": "nodemon --watch src/js/server src/js/server/server.js",
+    "api": "nodemon --watch src/js/server src/js/server/api.js",
     "build": "react-scripts build",
     "test": "react-scripts test",
     "eject": "react-scripts eject"
@@ -41,6 +41,7 @@
     "not op_mini all"
   ],
   "devDependencies": {
+    "dotenv": "^6.2.0",
     "nodemon": "^1.18.6"
   }
 }

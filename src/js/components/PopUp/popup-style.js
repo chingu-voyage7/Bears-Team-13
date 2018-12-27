@@ -18,8 +18,9 @@ const Form = styled.form`
 `
 
 const Input = styled.input`
-height:30px;
+height:30px !important;
 width:200px;
+padding: 15px 0; /* Temporary */
 border-radius:10px;
 /* border-style:solid; */
 border:1px #45c132  solid;

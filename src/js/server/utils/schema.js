@@ -9,11 +9,11 @@ var eventSchema = new Schema({
   name: String,
   author: Array,
   public: false,
-  creationDate: Date,
-  startDate: Date, // Secret Santa assignment date! 401 cannot join after this date.
-  endDate: Date,   // Gift Exchange date!
+  startDate: {type:Date, required: true}, // Secret Santa assignment date! 401 cannot join after this date.
+  endDate: {type:Date, required: true},   // Gift Exchange date!
   members: Array,  // [{_id: ObjectID, role: "member"}, {_id: ObjectID, role: "admin"}]
-  ssList: Array
+  ssList: Array,
+  closed: Boolean
 }, { collection: "events"} );
 
 // ITEM
@@ -25,6 +25,7 @@ var itemSchema = new Schema({
   collection: "store"
 });
 
+// Allow text queries
 itemSchema.index({
   name: 'text'
 });
@@ -33,7 +34,8 @@ itemSchema.index({
 var userSchema = new Schema({
   firstName: String,
   lastName: String,
-  email: String,
+  address: String,
+  email: {type: String, required: true},
   username: String,
   password: String,
   events: Array, // [event_id, event_id...]

@@ -1,5 +1,4 @@
 import React, {Component} from 'react';
-import { Redirect} from 'react-router-dom';
 import axios from 'axios';
 import {LoginContainer, Form, Input, Submit, Label } from './login-style'
 
@@ -31,7 +30,7 @@ export default class Login extends Component {
       });
     })
     .catch((err) => {
-      alert(JSON.stringify(err.response));
+      alert(err.response.status);
     });
   }
 

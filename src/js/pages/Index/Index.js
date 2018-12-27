@@ -31,14 +31,12 @@ export default class Index extends Component {
   }
 
   componentDidMount() {
-    console.log('mounted')
 
     axios.get('/api/items')
       .then(res => {
         this.setState({
           items: res.data,
         })
-        console.log(res.data)
       })
       .catch(err => console.log(err.response))
   }
@@ -51,10 +49,10 @@ export default class Index extends Component {
 
 
   render () {
-    const { items, loader } = this.state
-    let storeItems;
+    const { items, loader } = this.state;
+    let storeItems = [];
 
-
+    if (items && items.length > 0) {
       storeItems = items.slice(0, 8).map(item => {
         return (
           <Item

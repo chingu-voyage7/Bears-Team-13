@@ -20,10 +20,10 @@ app.use(express.static(path.join(__dirname, 'build')));
 
 
 // Connect to DB before opening routes
-mongoUtil.connectToServer((err, connection) => {
+mongoUtil.connectToServers((err, connection) => {
   if (err) throw err;
 
-  console.log("DB connection success.");
+  console.log("DB connections success.");
 
   // Setup API routes
   app.use('/api/', require('./src/js/server/api/_login.js'));

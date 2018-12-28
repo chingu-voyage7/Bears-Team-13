@@ -9,7 +9,9 @@
     "body-parser": "^1.18.3",
     "connect-mongo": "^2.0.2",
     "express": "^4.16.4",
+    "express-fileupload": "^1.1.1-alpha.1",
     "express-session": "^1.15.6",
+    "file-upload-react": "^0.1.2",
     "moment": "^2.23.0",
     "mongodb": "^3.1.10",
     "mongoose": "^5.3.13",
@@ -18,8 +20,8 @@
     "query-string": "^6.2.0",
     "react": "^16.6.3",
     "react-dom": "^16.6.3",
-    "react-scripts": "2.1.1",
     "react-router-dom": "^4.3.1",
+    "react-scripts": "2.1.1",
     "styled-components": "^4.1.1"
   },
   "scripts": {

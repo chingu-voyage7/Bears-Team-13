@@ -1,8 +1,8 @@
 import React, {Component} from 'react';
 import {NavLink, Link, Redirect} from 'react-router-dom';
 import {Nav, AppName, LinksContainer, LinkStyle, LinksContainerLoggedIn, MainNavWrap} from './nav-style'
-import "./active.css"
-import "./mobileNav.css"
+import "./active.css";
+//import "./mobileNav.css";
 import axios from 'axios';
 import { throws } from 'assert';
 import { runInThisContext } from 'vm';

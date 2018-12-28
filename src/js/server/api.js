@@ -1,4 +1,7 @@
-
+const config = require('../../config.js');
+Object.keys(config).map((key) => {
+process.env[key] = config[key];
+});
 require('dotenv').config();
 const express = require('express');
 const app = express();

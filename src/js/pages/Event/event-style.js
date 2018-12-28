@@ -20,9 +20,9 @@ font-size:26px;
 `
 
 const Time = styled.p`
-font-size:16px;
+font-size:15px;
 color:#13491c;
-margin-top:-10px;
+margin-top:-5px;
 margin-bottom:40px;
 padding-bottom:20px;
 border-bottom:1px dashed #45c132;
@@ -51,4 +51,8 @@ display:flex;
 justify-content:space-between;
 `
 
-export {OneEventWrap, EventTitle, Time, TimeSpan, RecipientName, Title, ButtonWrap}
+const ExchangDate = styled.div`
+margin-top:5px;
+font-size:15px;
+`
+export {OneEventWrap, EventTitle, Time, TimeSpan, RecipientName, Title, ButtonWrap, ExchangDate}

@@ -16,7 +16,8 @@ const Event = ({event, handleEventClick}) => {
       <EventName>{event.name}</EventName>
     
     
-          <P>starts on: <Span> {moment(event.startDate).format("dddd, MM/DD/YY")}</Span></P>
+          <P>draw date: <Span> {moment(event.startDate).format("dddd, MM/DD/YY")}</Span></P>
+          <P>exchange date: <Span> {moment(event.endDate).format("dddd, MM/DD/YY")}</Span></P>
 
         <P>author:  <AuthorSpan> {event.author[1]}</AuthorSpan></P>
       

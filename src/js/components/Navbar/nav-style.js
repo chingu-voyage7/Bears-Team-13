@@ -32,11 +32,17 @@ padding-right:30px;
 
 const LinksContainerLoggedIn = styled.div `
 display:flex;
-width:300px;
+width:380px;
 justify-content:space-between; 
 /* border:1px blue solid; */
 padding-right:30px;
-
+@media only screen and (max-width:600px){
+flex-direction:column;
+border:1px red solid;
+align-items:flex-end;
+margin-right:20px;
+display:none;
+}
 `
 
 const LinkStyle = styled.div `
@@ -45,7 +51,6 @@ font-weight:500;
 color:#13491C;
 
 `
-
 
 
 

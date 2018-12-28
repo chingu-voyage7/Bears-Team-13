@@ -4,6 +4,7 @@ import Navbar from '../Navbar/Navbar.js';
 import {MainContainer, SpaceBottom, SpaceTop} from './app-style';
 import Footer from '../Footer/Footer.js';
 import './app.css';
+import './normalize.css';
 import axios from 'axios';
 
 const ROUTES = [{

@@ -2,6 +2,7 @@ import React, {Component} from 'react';
 import {NavLink, Link, Redirect} from 'react-router-dom';
 import {Nav, AppName, LinksContainer, LinkStyle, LinksContainerLoggedIn} from './nav-style'
 import "./active.css"
+import "./mobileNav.css"
 import axios from 'axios';
 
 
@@ -39,14 +40,18 @@ export default class Navbar extends Component {
 
         {this.props.globals.user.username?(
 
+          <div>
+        <div style={{ textDecoration: 'none' }} to="#"><i className="fa fa-bars mobile-nav"></i></div>
           <LinksContainerLoggedIn>
+           
             <NavLink
             activeClassName="active" style={{ textDecoration: 'none' }} to="/store"><LinkStyle>shop </LinkStyle></NavLink>
             <NavLink activeClassName="active"   style={{ textDecoration: 'none' }} to="/myevents"><LinkStyle>my events </LinkStyle></NavLink>
             <NavLink activeClassName="active"  style={{ textDecoration: 'none' }} to="/myaccount"><LinkStyle>settings</LinkStyle></NavLink>
             <NavLink activeClassName="active"  style={{ textDecoration: 'none' }} to="/cart"><LinkStyle>cart</LinkStyle></NavLink>
-            <NavLink activeClassName="active"  style={{ textDecoration: 'none', marginRight: '10px' }} to="#" onClick={this.logout.bind(this)}><LinkStyle>logout</LinkStyle></NavLink>
+            <NavLink activeClassName="active"  style={{ textDecoration: 'none'}} to="#" onClick={this.logout.bind(this)}><LinkStyle>logout</LinkStyle></NavLink>
          </LinksContainerLoggedIn>
+         </div>
         ):(
           <LinksContainer>
 

@@ -6,32 +6,54 @@ export default class Cart extends Component {
     super()
 
     this.state = {
-      cartItems: [],
+      cart: [],
       recipients: [],
-      selectedRecipient: ""
     }
   }
 
-  componentDidMount() {
-    this.fetchCartItems();
-    this.fetchRecipients();
+  componentDidMount() { 
+    this.fetchRecipients(() => {
+      this.fetchCart();
+    });
   }
 
-  fetchCartItems() {
+  fetchCart() {
     axios.get('/api/mycart')
       .then( res => {
-        alert(JSON.stringify(res.data));
-        this.setState({cartItems: res.data});
+        if (Object.keys(res.data).length > 0) {
+          this.setState({cart: res.data});
+        }
       })
       .catch(err => console.log(err.response))
   }
 
-  fetchRecipients() {
+  fetchRecipients(cb) {
     axios.get('/api/myrecipients')
       .then( res => {
-        this.setState({recipients: res.data});
+        this.setState({recipients: res.data}, cb);
       })
       .catch(err => console.log(err.response));
+  }
+
+  getUsername(recipient_id) {
+    let username = null;
+    this.state.recipients.forEach((recipient) => {
+      if (recipient._id === recipient_id) {
+        username = recipient.username;
+        return;
+      }
+    });
+    return username;
+  }
+
+  onChangeRecipient(item, old_id, new_id) {
+    const cart = this.state.cart;
+    cart.map((itemRecipientPair, i ) => {
+      if (itemRecipientPair[0]._id === item._id) {
+        cart[i][1][cart[i][1].indexOf(old_id)] = new_id;
+      }
+    });
+    this.setState({cart: cart});
   }
 
   onDelete = (e, item_id) => {
@@ -45,9 +67,8 @@ export default class Cart extends Component {
 
   render() {
     const {
-      cartItems,
-      recipients,
-      selectedRecipient
+      cart,
+      recipients
     } = this.state;
 
     return (
@@ -62,31 +83,35 @@ export default class Cart extends Component {
         { /* List items */}
         <div>
           {
-            cartItems.map( itemRecipient => {
-              return (
-                <article key={itemRecipient[0]._id}>
-                  <img src="" alt="item" />
-                  <div>
-                    <h3>{itemRecipient[0].name}</h3>
-                    <span>${itemRecipient[0].usd}</span>
+            cart.map((item, i) => {
+              return item[1].map((recipient_id) => {
+                return (
+                  <article key={item[0]._id}>
+                    <img src="" alt="item" />
+                    <div>
+                      <h3>{item[0].name}</h3>
+                      <span>${item[0].usd}</span>
+                      <p></p>
+  
+                      {/* Recipients  */}
+                      <select
+                        value={recipient_id}
+                        onChange={(e) => this.onChangeRecipient(item[0], recipient_id, e.target.value)}>
+                        <option>Select Recipient</option>
+                        {
+                          recipients.map(recipient => {
+                            return (
+                              <option value={recipient._id} key={recipient._id}>{recipient.username}</option>
+                            )
+                          })
+                        }
+                      </select>
+                    </div>
+                    <button onClick={(e) => this.onDelete(e, item[0]._id)}>Delete</button>
+                  </article>
+                );
+              });
 
-                    {/* Recipients  */}
-                    <select
-                      value={this.selectedRecipient}
-                      onChange={(e) => this.setState({selectedRecipient: e.target.value})}>
-                      <option>Select recipient</option>
-                      {
-                        recipients.map(recipient => {
-                          return (
-                            <option value={recipient._id} key={recipient._id}>{recipient.username}</option>
-                          )
-                        })
-                      }
-                    </select>
-                  </div>
-                  <button onClick={(e) => this.onDelete(e, itemRecipient[0]._id)}>Delete</button>
-                </article>
-              )
             })
           }
         </div>

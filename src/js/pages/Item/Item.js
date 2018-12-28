@@ -32,7 +32,6 @@ export default class Item extends Component {
         this.setState({
           recipients
         });
-        alert(res.data);
       })
       .catch(err => console.log(err.response))
   }
@@ -45,7 +44,7 @@ export default class Item extends Component {
   addToCart = (e) => {
     e.preventDefault()
     const { item_id } = this.props.match.params
-    const { selectedRecipient: recipient_id } = this.state
+    const { selectedRecipient: recipient_id } = this.state;
 
     axios.post('/api/mycart/add', { item_id, recipient_id })
       .then( res => console.log(res.data) )
@@ -86,7 +85,7 @@ export default class Item extends Component {
                   <option
                     value={recipient._id}
                     key={recipient._id}>
-                    john
+                    {recipient.username}
                   </option>
                 )
               })

@@ -1,5 +1,7 @@
-import React, { Component } from 'react'
-import axios from 'axios'
+import React, { Component } from 'react';
+import axios from 'axios';
+import {ItemWrap, ImageWrap, H2, Form, Price, Submit, Select} from "./item-style";
+
 export default class Item extends Component {
   constructor() {
     super();
@@ -63,19 +65,16 @@ export default class Item extends Component {
       selectedRecipient
     } = this.state
 
-    return <section>
-        <article>
-          <div>
-            <h2>{item.name}</h2>
-            <span>${item.usd}</span>
-          </div>
-          <div>
-            <img src="" alt="Item" />
-          </div>
-        </article>
+    return <ItemWrap>
+             <H2>{item.name}</H2>
+             <ImageWrap>
+              <img src="" alt="Item" />
+             </ImageWrap>
+             <Price>${item.usd}</Price>
 
-        <form onSubmit={this.addToCart}>
-          <select value={selectedRecipient} onChange={this.handleChange}>
+
+        <Form onSubmit={this.addToCart}>
+          <Select value={selectedRecipient} onChange={this.handleChange}>
             <option>
               Select a recipient
             </option>
@@ -90,9 +89,9 @@ export default class Item extends Component {
                 )
               })
             }
-          </select>
-          <input type="submit" value="Add to cart" />
-        </form>
-      </section>;
+          </Select>
+          <Submit type="submit" value="add to cart" />
+        </Form>
+      </ItemWrap>;
   }
 }

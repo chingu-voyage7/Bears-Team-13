@@ -67,7 +67,7 @@ export default class Navbar extends Component {
             activeClassName="active" style={{ textDecoration: 'none' }} to="/store"><LinkStyle>shop </LinkStyle></NavLink>
             <NavLink activeClassName="active"   style={{ textDecoration: 'none' }} to="/myevents"><LinkStyle>my events </LinkStyle></NavLink>
             <NavLink activeClassName="active"  style={{ textDecoration: 'none' }} to="/myaccount"><LinkStyle>settings</LinkStyle></NavLink>
-            <NavLink activeClassName="active"  style={{ textDecoration: 'none' }} to="/cart"><LinkStyle>cart</LinkStyle></NavLink>
+            <NavLink activeClassName="active"  style={{ textDecoration: 'none' }} to="/store/cart"><LinkStyle>cart</LinkStyle></NavLink>
             <NavLink activeClassName="active"  style={{ textDecoration: 'none'}} to="#" onClick={this.logout.bind(this)}><LinkStyle>logout</LinkStyle></NavLink>
          </LinksContainerLoggedIn>
          </MainNavWrap>

@@ -1,4 +1,7 @@
-require('dotenv').config();
+const config = require('../../config.js');
+Object.keys(config).map((key) => {
+process.env[key] = config[key];
+});
 const express = require('express');
 const app = express();
 const bodyParser = require('body-parser');

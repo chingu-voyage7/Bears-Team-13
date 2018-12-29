@@ -34,6 +34,11 @@ border-radius:10px;
 /* border-style:solid; */
 border:1px #45c132  solid;
 margin:0 auto;
+&:focus{
+  outline:0;
+  border:2px #45c132  solid;
+
+}
 `
 const Submit = styled.input`
 width:100px;

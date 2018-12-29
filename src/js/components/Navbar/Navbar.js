@@ -1,8 +1,11 @@
 import React, {Component} from 'react';
 import {NavLink, Link, Redirect} from 'react-router-dom';
-import {Nav, AppName, LinksContainer, LinkStyle, LinksContainerLoggedIn} from './nav-style'
-import "./active.css"
+import {Nav, AppName, LinksContainer, LinkStyle, LinksContainerLoggedIn, MainNavWrap} from './nav-style'
+import "./active.css";
+//import "./mobileNav.css";
 import axios from 'axios';
+import { throws } from 'assert';
+import { runInThisContext } from 'vm';
 
 
 
@@ -11,7 +14,8 @@ export default class Navbar extends Component {
     super(props);
 
     this.state = {
-      redirect: false
+      redirect: false,
+      mobileMenuClicked:false
     }
   }
 
@@ -27,11 +31,24 @@ export default class Navbar extends Component {
     });
   }
 
+  handleClick = () =>{
+    if (!this.state.mobileMenuClicked) {
+      this.setState({
+        mobileMenuClicked: true
+      })
+    } else {
+      this.setState({
+        mobileMenuClicked: false
+      })
+    }
+    }
+
   render() {
     if (this.state.redirect) {
       this.setState({redirect: false});
       return (<Redirect to="/"/>)
     }
+    
 
     return (
       <Nav>
@@ -39,14 +56,22 @@ export default class Navbar extends Component {
 
         {this.props.globals.user.username?(
 
-          <LinksContainerLoggedIn>
+          <MainNavWrap>
+          
+          <i onClick={this.handleClick} className="fa fa-bars mobile-nav"></i>
+         
+         
+          <LinksContainerLoggedIn mobileClicked={this.state.mobileMenuClicked}>
+           
             <NavLink
             activeClassName="active" style={{ textDecoration: 'none' }} to="/store"><LinkStyle>shop </LinkStyle></NavLink>
             <NavLink activeClassName="active"   style={{ textDecoration: 'none' }} to="/myevents"><LinkStyle>my events </LinkStyle></NavLink>
             <NavLink activeClassName="active"  style={{ textDecoration: 'none' }} to="/myaccount"><LinkStyle>settings</LinkStyle></NavLink>
-            <NavLink activeClassName="active"  style={{ textDecoration: 'none' }} to="/store/cart"><LinkStyle>cart</LinkStyle></NavLink>
-            <NavLink activeClassName="active"  style={{ textDecoration: 'none', marginRight: '10px' }} to="#" onClick={this.logout.bind(this)}><LinkStyle>logout</LinkStyle></NavLink>
+            <NavLink activeClassName="active"  style={{ textDecoration: 'none' }} to="store/cart"><LinkStyle>cart</LinkStyle></NavLink>
+            <NavLink activeClassName="active"  style={{ textDecoration: 'none'}} to="#" onClick={this.logout.bind(this)}><LinkStyle>logout</LinkStyle></NavLink>
+
          </LinksContainerLoggedIn>
+         </MainNavWrap>
         ):(
           <LinksContainer>
 

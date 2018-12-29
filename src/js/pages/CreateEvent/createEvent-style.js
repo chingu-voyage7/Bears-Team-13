@@ -32,7 +32,7 @@ transition:.2s all linear;
 const MakeEventWrap = styled.div`
 margin:0 auto;
 width:380px;
-height:500px;
+height:600px;
 z-index:1;
 `
 const PublicWrap = styled.div`
@@ -51,7 +51,7 @@ margin-right:30px;
 const Label = styled.label`
 color:#D10A0A;
 margin-bottom:-10px;
-margin-top:20px;
+margin-top:40px;
 
 `
 
@@ -66,7 +66,7 @@ box-shadow:none;
 `
 
 const Form = styled.form`
- height:550px;
+ height:700px;
     width:380px;
     border:4px #d10a0a solid;
     display:flex;
@@ -78,6 +78,16 @@ const Form = styled.form`
     background-color:rgba(255,255,255,.95);
 `
 
+const H2 = styled.h2`
+color:#d10a0a;
+margin-bottom:-10px;
+`
+
+const SmallText = styled.div`
+width:200px;
+font-size:12.5px;
+line-height:1.5;
+`
 
 
-export {Submit, MakeEventWrap, PublicWrap, PublicLabel, CheckBox, Form, Label }
+export {Submit, MakeEventWrap, PublicWrap, PublicLabel, CheckBox, Form, Label, H2, SmallText }

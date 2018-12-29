@@ -66,7 +66,7 @@ router.post('/additem', isAuth, (req, res) => {
 // Cart CRUD
 //
 
-// Returns [[ { item }, "recipient_id"], ...]
+// Returns { item: [{ recipients }, ...], ... }
 router.get('/mycart', isAuth, (req, res) => {
   if (!req.user || !req.user._id) {
     return res.sendStatus(500);
@@ -76,6 +76,7 @@ router.get('/mycart', isAuth, (req, res) => {
   User.findOne({_id: new ObjectID(req.user._id)}, {cart: 1}, (err, user) => {
     if (err) { return res.sendStatus(500); }
     if (!user) { return res.status(404).send("User not found."); }
+    if (!user.cart) { return res.json({}); }
 
     console.log(user);
     const item_ids = Object.keys(user.cart);
@@ -116,7 +117,7 @@ router.post("/mycart/add", isAuth, (req, res) => {
       console.log(cartDotItem);
 
       // Add item to cart
-      User.updateOne({_id: new ObjectID(req.user._id)}, {$set: {[cartDotItem]: req.body.recipient_id}}, (err, result) => {
+      User.updateOne({_id: new ObjectID(req.user._id)}, {$push: {[cartDotItem]: user._id}}, (err, result) => {
         if (err) { return res.sendStatus(500); }
         if (!result) { return res.sendStatus(500); }
 

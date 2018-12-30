@@ -94,8 +94,10 @@ router.get('/mycart', isAuth, (req, res) => {
 
       // Set recipient_ids
       const recipient_ids = events.map((event, i) => {
-        events[i].recipient = { _id: event.ssList[user._id] };
-        return event.ssList && !event.closed? event.ssList[user._id] : null;
+        if (!event.closed && event.ssList) {
+          event.recipient = { _id: event.ssList[user._id]};
+          return event.ssList[user._id];
+        }
       });
 
       // Get recipients. Set event.recipient
@@ -105,14 +107,13 @@ router.get('/mycart', isAuth, (req, res) => {
 
         events.forEach((event, i) => {
           recipients.some((recipient) => {
-            if (event.recipient._id === recipient._id) {
+            if (event.recipient._id.equals(recipient._id)) {
+              console.log("Match. Setting recipient to\n" + recipient);
               events[i].recipient = recipient;
               return true;
             }
           });
         });
-
-        console.log("Set recipients\n" + events);
 
         // Get Items
         Item.find({_id: { $in: item_ids}}, (err, items) => {
@@ -120,12 +121,13 @@ router.get('/mycart', isAuth, (req, res) => {
           if (!items) { return res.status(400).send("Items not found"); }
 
           // Finish generating cart
-          const cart = Object.keys(user.cart).map((event_id) => {
-            let _event, _item;
+          const cart = [];
+          Object.keys(user.cart).forEach((event_id) => {
+            let _event, _item = {};
 
             // Set { event, recipient }
             for (let i = 0; i < events.length; i++) {
-              if (events[i]._id === event_id) {
+              if (events[i]._id.equals(event_id)) {
                 _event = events[i];
                 i = events.length;
               }
@@ -134,14 +136,18 @@ router.get('/mycart', isAuth, (req, res) => {
             // Set { item }
             for (let i = 0; i < items.length; i++) {
               // Note: cart = {event_id: item_id}
-              if (items[i]._id === user.cart.event_id) {
+              if (items[i]._id.equals(user.cart[event_id])) {
                 _item = items[i];
                 i = items.length;
               }
             }
 
-            return {event: _event, item: _item};
+            if (_event && _item) {
+              cart.push({event: _event, item: _item});
+            }
           });
+
+          console.log(cart);
 
           return res.json(cart);
         });

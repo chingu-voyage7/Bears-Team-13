@@ -59,15 +59,22 @@ router.get("/myrecipients", isAuth, function (req, res) {
         if (err) { return res.sendStatus(500); }
         if (!recipients) { return res.sendStatus(404); }
 
-        const json = events.map((event) => {
+        const json = [];
+        events.forEach((event) => {
           let index = 0;
-          recipients.some((recipient, i) => {
-            if (recipient._id === event.ssList[user._id]) {
-              index = i;
-              return;
-            }
-          });
-          return {event: {name: event.name, _id: event._id}, recipient: recipients[index]};
+
+          if (!event.closed && event.ssList) {
+            recipients.some((recipient, i) => {
+              console.log(event + "\n");
+              console.log(recipient);
+              if (recipient._id.equals(event.ssList[user._id])) {
+                index = i;
+                return;
+              }
+            });
+          
+            json.push({name: event.name, _id: event._id, recipient: recipients[index]});
+          }
         });
 
         console.log(json);

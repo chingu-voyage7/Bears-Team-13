@@ -135,7 +135,7 @@ export default class Event extends Component {
   startEvent() {
     axios.post('/api/startevent', {event_id: this.state.event_id})
     .then((res) => {
-      alert(res.data);
+      alert("Event Started!");
     })
     .catch((err) => {
       alert(err.response.status);

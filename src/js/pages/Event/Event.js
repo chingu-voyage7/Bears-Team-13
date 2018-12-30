@@ -80,7 +80,6 @@ export default class Event extends Component {
   getEvent() {
     axios.get('/api/event?event_id=' + this.state.event_id)
     .then((res) => {
-      alert(JSON.stringify(res.data));
       this.setState({message: ""}, () => {
         this.setState({event: res.data}, () => {
           this.getMembers(res.data._id);
@@ -126,7 +125,9 @@ export default class Event extends Component {
 
   recipientToJSX() {
     if (this.state.event && this.state.event.recipient) {
-      return this.state.event.recipient.username;
+      let user = this.state.event.recipient.username;
+      user = user[0].toUpperCase() + user.substring(1);
+      return "You are " + user + "'s Secret Santa!";
     }
     return "Recipient coming soon...";
   }
@@ -165,7 +166,7 @@ export default class Event extends Component {
 
       <EventTitle>{this.state.event?this.state.event.name:""}</EventTitle>
       <Time> Exchange Date : <TimeSpan>{this.state.event?moment(this.state.event.startDate).format("dddd, MM/DD/YY"):""}</TimeSpan></Time>
-      <RecipientName> {this.recipientToJSX.bind(this)} </RecipientName>
+      <RecipientName> {this.recipientToJSX()} </RecipientName>
      
       
 

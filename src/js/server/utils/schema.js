@@ -15,7 +15,7 @@ var eventSchema = new Schema({
   members: Array,  // [{_id: ObjectID, role: "member"}, {_id: ObjectID, role: "admin"}]
   ssList: Object,
   closed: Boolean,
-  recipient: String // Temporary
+  recipient: Object // Temporary
 }, { collection: "events"} );
 
 // ITEM

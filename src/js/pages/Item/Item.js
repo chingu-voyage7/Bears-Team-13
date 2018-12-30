@@ -28,10 +28,8 @@ export default class Item extends Component {
   fetchRecipients() {
     axios.get('/api/myrecipients')
       .then(res => {
-        const recipients = res.data.filter( recipient => recipient !== null )
-        this.setState({
-          recipients
-        });
+        alert(JSON.stringify(res.data));
+        this.setState({recipients: res.data});
       })
       .catch(err => console.log(err.response))
   }

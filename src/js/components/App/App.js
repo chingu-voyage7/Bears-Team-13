@@ -44,7 +44,7 @@ const ROUTES = [{
   component: require('../../pages/Store/Store.js').default,
   exact: true
 }, {
-  path: '/store/cart',
+  path: '/cart',
   component: require('../../pages/Cart/Cart.js').default,
 }, {
   path: '/store/item/:item_id',

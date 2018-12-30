@@ -1,6 +1,8 @@
-import React, { Component } from 'react';
+import React, { Component } from 'react'
+import axios from 'axios'
+import {CartWrap, ItemsWrap, Item, ImageWrap, ImagePriceWrap, PriceSelectWrap, ItemName, Price, Delete, Checkout} from './cart-style';
+import {Greeting} from '../MyAccount/myAccount-style'
 import { Link } from 'react-router-dom';
-import axios from 'axios';
 
 export default class Cart extends Component {
   constructor(props) {
@@ -28,24 +30,11 @@ export default class Cart extends Component {
       });
   }
 
-  updateCart(event_id, item_id) {
-    axios.post("/api/mycart/update", {event_id, item_id})
-    .then((res) => {
-      console.log(res.data);
-    })
-    .catch((err) => {
-      console.log(err.response);
-    });
-  }
-
   // Removes {event, item} from cart
-  removeItem(e) {
-
-  }
-
-  // Handles swapping recipients
-  swapRecipientHandler(e) {
-    let selected = this.state.selected;
+  onDelete(e, event_id) {
+    axios.delete('/api/mycart/delete', { data: {event_id} })
+    .then((res) => alert("Untested delete success"))
+    .catch(err => alert("Untested delete failure"));
   }
 
   cartToJSX() {
@@ -67,15 +56,40 @@ export default class Cart extends Component {
   }
 
   render() {
+    const {
+      cart,
+    } = this.state;
 
     return (
-      <section>
-        <h1>My Cart</h1>
-        {this.cartToJSX()}
-        <Link to="/store/payment">Proceed to checkout</Link>
-        <p>OR</p>
-        <Link to="/store">Continue Shopping</Link>
-      </section>
+      <CartWrap>
+        <Greeting>My Cart</Greeting>
+
+        { /* List items */}
+        <ItemsWrap>
+          {
+            cart.map((pair) => {
+              const {event, item} = pair;
+              return (
+                <Item key={item._id}>
+                    <ItemName>{item.name}</ItemName>
+                    <ImagePriceWrap>
+                       <ImageWrap>
+                          <img src={"/api/static/images/item." + item._id} alt="item" />
+                       </ImageWrap>
+                       <PriceSelectWrap>
+                            <Price>${item.usd}</Price>
+                            <p>Gift for {event.recipient.username} @ {event.name}</p>
+                            <Delete onClick={(e) => this.onDelete(e, event._id)}>Delete</Delete>
+                        </PriceSelectWrap>
+                    </ImagePriceWrap>
+
+                </Item>
+              );
+            });
+          }
+        </ItemsWrap>
+        <Checkout>Proceed to checkout</Checkout>
+      </CartWrap>
     )
   }
 }

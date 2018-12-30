@@ -1,5 +1,7 @@
-import React, { Component } from 'react'
-import axios from 'axios'
+import React, { Component } from 'react';
+import axios from 'axios';
+import {ItemWrap, ImageWrap, H2, Form, Price, Submit, Select} from "./item-style";
+
 export default class Item extends Component {
   constructor(props) {
     super(props);
@@ -38,8 +40,6 @@ export default class Item extends Component {
     e.preventDefault()
     const { selected } = this.state;
 
-    console.log("EVENT_ID: " + selected);
-
     axios.post('/api/mycart/update', { item_id: this.state.item_id, event_id: selected })
       .then( res => console.log(res.data) )
       .catch( err => console.log(err.response))
@@ -53,16 +53,12 @@ export default class Item extends Component {
   render() {
     const { item, selected, events } = this.state;
 
-    return <section>
-        <article>
-          <div>
-            <h2>{item.name}</h2>
-            <span>${item.usd}</span>
-          </div>
-          <div>
-            <img src="" alt="Item" />
-          </div>
-        </article>
+    return <ItemWrap>
+             <H2>{item.name}</H2>
+             <ImageWrap>
+              <img src="" alt="Item" />
+             </ImageWrap>
+             <Price>${item.usd}</Price>
 
         <form onSubmit={this.addToCart}>
           <select value={selected} onChange={this.handleChange}>
@@ -82,6 +78,6 @@ export default class Item extends Component {
           </select>
           <input type="submit" value="Add to cart" />
         </form>
-      </section>;
+      </ItemWrap>;
   }
 }

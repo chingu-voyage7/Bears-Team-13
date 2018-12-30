@@ -132,7 +132,7 @@ export default class Event extends Component {
         purchasedItems
       })
     } catch(err) {
-      console.error(err)
+      console.error(err.response)
     }
   }
 

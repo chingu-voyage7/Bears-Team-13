@@ -120,10 +120,10 @@ export default class Event extends Component {
   async getPurchasedItems() {
     try {
       const purchases = await axios.get('/api/mypurchases')
-      const keyValPurchases = Object.entries(purchases.data)
+      const arrayPurchases = Object.entries(purchases.data)
       let purchasedItems = []
 
-      for (const [itemId, recipientId] of keyValPurchases) {
+      for (const [recipientId, itemId] of arrayPurchases) {
         const item = await axios.get(`/api/item?item_id=${itemId}`)
         purchasedItems.push(item.data)
       }

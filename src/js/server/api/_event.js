@@ -5,6 +5,9 @@ const ObjectID = require('mongodb').ObjectID;
 const schema = require('../utils/schema.js');
 const Event = schema.Event;
 const User = schema.User;
+let whitelist = require('../utils/helpers.js').whitelist;
+let required = require('../utils/helpers.js').required;
+let generateSS = require('../utils/helpers.js').generateSS;
 
 // Returns a list of members given [_id, _id...] and {projection}
 function getMembers(res, ids, projection) {
@@ -15,27 +18,20 @@ function getMembers(res, ids, projection) {
   });
 }
 
-// Returns middleware that allows ONLY whitelisted req.body keys.
-function validEdits(whitelist) {
-  if (!whitelist) {
-    whitelist = [];
-  }
+function handlePublic(req, res, event) {
+  if (!event.public) {
+    if (req.user) {
 
-  return function(req, res, next) {
-    const edits = Object.keys(req.body);
-  
-    if (!edits || edits.length > whitelist.length) {
-      return res.sendStatus(400);
-    }
-  
-    for (let i = 0; i < edits.length; i++) {
-      if (whitelist.indexOf(edits[i]) === -1) {
-        return res.sendStatus(400);
+      if (ObjectID.toString(event.author._id) === ObjectID.toString(req.user._id)) {
+        return res.json(event);
+      }
+      if (event.members.indexOf(req.user._id) !== -1) {
+        return res.json(event);
       }
     }
-  
-    return next();
+    return res.sendStatus(401);
   }
+  return res.json(event);  
 }
 
 // Returns an event given event_id
@@ -44,20 +40,16 @@ router.get('/event', (req, res) => {
     if (err) { return res.sendStatus(500); }
     if (!event) { return res.sendStatus(404); }
 
-    if (!event.public) {
-      if (req.user) {
-  
-        if (ObjectID.toString(event.author[0]) === ObjectID.toString(req.user._id)) {
-          return res.json(event);
-        }
-        if (event.members.indexOf(req.user._id) !== -1) {
-          return res.json(event);
-        }
-      }
-      return res.sendStatus(401);
+    if (!event.closed && event.ssList && event.ssList[req.user._id]) {
+      User.findOne({_id: new ObjectID(event.ssList[req.user._id])}, {username: 1}, (err, recipient) => {
+        if (err) { return res.sendStatus(500); }
+        event.recipient = recipient;
+
+        handlePublic(req, res, event);
+      });
+    } else {
+      handlePublic(req, res, event);
     }
-    return res.json(event);  
-  
   });
 })
 
@@ -95,12 +87,12 @@ router.get("/eventmembers", (req, res) => {
     if (!event) { return res.sendStatus(404); }
 
     const members = event.members;
-    members.push(event.author[0]);
+    members.push(event.author._id);
     delete projection.page;
     delete projection.event_id;
 
     if (!event.public) {
-      if (event.author[0] === req.user._id || event.members.indexOf({_id: new ObjectID(req.user._id), role: "admin"})) { 
+      if (event.author._id === req.user._id || event.members.indexOf({_id: new ObjectID(req.user._id), role: "admin"})) { 
         return getMembers(res, members, projection);
       } 
       return res.sendStatus(401);
@@ -129,28 +121,29 @@ router.get('/myevents', isAuth, function(req, res) {
 });
 
 // POSTS an event to our db
-router.post('/addevent', isAuth, validEdits(["name", "public", "startDate", "endDate"]), (req, res) => {
+router.post('/addevent', isAuth, whitelist(["name", "public", "startDate", "endDate"]), (req, res) => {
   console.log("Creating event...");
   console.log("BUG: Must restrict start, end dates to the future.");
   var event = req.body;
-  event.author = [req.user._id, req.user.username];  
+  event.author = {_id: req.user._id, username: req.user.username};  
 
   // Create the Event
-  Event.create(event, (err, result) => {
+  Event.create(event, (err, event) => {
     if (err) { return res.sendStatus(500); }
-    if (!result) { return res.sendStatus(404); }
-      console.log("Event " + event.name + " added.");
-    User.updateOne({_id: new ObjectID(req.user._id)}, {$push: {events: result._id}}, (err, raw) => {
+    if (!event) { return res.sendStatus(404); }
+
+    // Add Event to user doc
+    User.updateOne({_id: new ObjectID(req.user._id)}, {$push: {events: event._id}}, (err, result) => {
       if (err) { return res.sendStatus(500); }
-      if (!raw) { return res.sendStatus(404); }
+      if (!result) { return res.sendStatus(404); }
       console.log("Event added to " + req.user.username + "'s list.");
-      res.json(result);
+      return res.sendStatus(200);
     });
   });
 });
 
 // Edits an event
-router.put('/editevent', isAuth, validEdits(["name", "public"]), (req, res) => {
+router.put('/editevent', isAuth, whitelist(["name", "public"]), (req, res) => {
   console.log("Editing event...");
   console.log(req.body);
   const event_id = req.body.event_id;
@@ -160,7 +153,7 @@ router.put('/editevent', isAuth, validEdits(["name", "public"]), (req, res) => {
     if (!event) { return res.sendStatus(404); }
 
     // Authorized to edit?
-    if (event.author[0] === req.user._id) {
+    if (event.author._id === req.user._id) {
       var updates = req.body;
       delete updates.event_id;
 
@@ -175,8 +168,8 @@ router.put('/editevent', isAuth, validEdits(["name", "public"]), (req, res) => {
 });
 
 // Deletes an event
-router.delete('/deleteevent', isAuth, (req, res) => {
-  Event.findOne({_id: req.body._id}, (err, event) => {
+router.delete('/deleteevent', isAuth, required(["event_id"]), (req, res) => {
+  Event.findOne({_id: req.body.event_id}, (err, event) => {
     if (err) { return res.sendStatus(500); }
     if (!event) { return res.sendStatus(400); }
 
@@ -187,7 +180,7 @@ router.delete('/deleteevent', isAuth, (req, res) => {
     if (event.author._id === req.user._id) {
 
       // Delete event
-      Event.deleteOne({_id: new ObjectID(req.body._id)}, (err, doc) => {
+      Event.deleteOne({_id: new ObjectID(req.body.event_id)}, (err, doc) => {
         if (err) { return res.sendStatus(500); }
         if (!doc) { return res.sendStatus(400); }
         console.log("Deleted event " + event.name + ".");
@@ -198,6 +191,29 @@ router.delete('/deleteevent', isAuth, (req, res) => {
       res.sendStatus(401);
     }
   });
+});
+
+// Starts an event
+router.post("/startevent", isAuth, required(["event_id"]), (req, res) => {
+  Event.findOne({_id: new ObjectID(req.body.event_id)}, {members: 1, author: 1}, (err, event) => {
+    if (err) { return res.sendStatus(500); }
+    if (!event || !event.author) { return res.status(404).send("Event or event author not found"); }
+    
+    // Authorized to edit this event?
+    console.log(event.author._id);
+    console.log(req.user._id);
+    if (ObjectID.toString(event.author._id) === ObjectID.toString(req.user._id)) {
+
+      Event.updateOne({_id: new ObjectID(req.body.event_id)}, {ssList: generateSS(event)}, (err, result) => {
+        if (err) { return res.sendStatus(500); }
+        if (!result) { return res.sendStatus(500); }
+
+        return res.sendStatus(200);
+      });
+    } else {
+      return res.sendStatus(401);
+    }
+  })
 });
 
 module.exports = router;

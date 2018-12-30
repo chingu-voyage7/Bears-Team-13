@@ -36,10 +36,52 @@ router.get('/myuser', isAuth, function (req, res) {
 
 // Returns a list of your secret santa { users }
 router.get("/myrecipients", isAuth, function (req, res) {
-  helpers.getRecipients(req.user, (err, result) => {
-    if (err) { return res.sendStatus(err); }
-    return res.json(result);
-  })
+
+  console.log("fetching recipients...");
+  
+  User.findOne({_id: new ObjectID(req.user._id)}, {events: 1}, (err, user) => {
+    if (err) { return res.sendStatus(500); }
+    if (!user) { return res.sendStatus(404); }
+
+    Event.find({_id: {$in: user.events}}, {ssList: 1, closed: 1, name: 1}, (err, events) => {
+      if (err) { return res.sendStatus(500); }
+      if (!events) { return res.sendStatus(404); }
+      
+      const recipient_ids = [];
+      
+      events.forEach((event) => {
+        if (!event.closed && event.ssList) {
+          recipient_ids.push(event.ssList[user._id]);
+        }
+      });
+
+      User.find({_id: {$in: recipient_ids}}, {username: 1}, (err, recipients) => {
+        if (err) { return res.sendStatus(500); }
+        if (!recipients) { return res.sendStatus(404); }
+
+        const json = [];
+        events.forEach((event) => {
+          let index = 0;
+
+          if (!event.closed && event.ssList) {
+            recipients.some((recipient, i) => {
+              console.log(event + "\n");
+              console.log(recipient);
+              if (recipient._id.equals(event.ssList[user._id])) {
+                index = i;
+                return;
+              }
+            });
+          
+            json.push({name: event.name, _id: event._id, recipient: recipients[index]});
+          }
+        });
+
+        console.log(json);
+        return res.json(json);
+      });
+    })
+  });
 });
 
 // Adds user to the DB

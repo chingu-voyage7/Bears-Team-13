@@ -1,19 +1,21 @@
 const mongoose = require('mongoose');
 var mongoUtil = require('./mongoUtil.js');
 const connection = mongoUtil.getConnection();
+const imageConnection = mongoUtil.getImageConnection();
 const Schema = mongoose.Schema;
 const bcrypt = require('bcrypt-nodejs');
 
 // EVENT
 var eventSchema = new Schema({
   name: String,
-  author: Array,
+  author: Object,
   public: false,
   startDate: {type:Date, required: true}, // Secret Santa assignment date! 401 cannot join after this date.
   endDate: {type:Date, required: true},   // Gift Exchange date!
   members: Array,  // [{_id: ObjectID, role: "member"}, {_id: ObjectID, role: "admin"}]
-  ssList: Array,
-  closed: Boolean
+  ssList: Object,
+  closed: Boolean,
+  recipient: Object // Temporary
 }, { collection: "events"} );
 
 // ITEM
@@ -56,10 +58,17 @@ userSchema.methods.validPassword = function(password) {
   return bcrypt.compareSync(password, this.password);
 }
 
+var imageSchema = new Schema({
+  filename: String,
+  contentType: String,
+  data: Buffer
+}, { collection: "images" });
+
 var schemas = {
   User : connection.model('User', userSchema),
   Event : connection.model('Event', eventSchema),
-  Item : connection.model('Item', itemSchema)
+  Item : connection.model('Item', itemSchema),
+  Image: imageConnection.model('Image', imageSchema)
 };
 
 module.exports = schemas;

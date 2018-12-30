@@ -1,12 +1,10 @@
 const config = require('../../config.js');
 Object.keys(config).map((key) => {
-process.env[key] = config[key];
+  process.env[key] = config[key];
 });
-require('dotenv').config();
 const express = require('express');
 const app = express();
 const bodyParser = require('body-parser');
-const passportUtil = require('./utils/passportUtil.js');
 const mongoUtil = require('./utils/mongoUtil.js');
 
 const PORT = process.env.PORT || 80;
@@ -15,14 +13,14 @@ const PORT = process.env.PORT || 80;
 app.use(bodyParser.urlencoded({extended: true}));
 app.use(bodyParser.json());
 
-// Setup/Configure passport
-passportUtil.setupPassport(app);
-
 // Connect to DB before opening routes
-mongoUtil.connectToServer((err, connection) => {
+mongoUtil.connectToServers((err) => {
   if (err) throw err;
 
-  console.log("DB connection success.");
+  console.log("DB connections success.");
+
+  // Setup/Configure passport
+  require('./utils/passportUtil.js').setupPassport(app);
 
   // Setup API routes
   app.use('/api/', require('./api/_login.js'));
@@ -31,6 +29,7 @@ mongoUtil.connectToServer((err, connection) => {
   app.use('/api/', require('./api/_event.js'));
   app.use('/api/', require('./api/_invite.js'));
   app.use('/api/', require('./api/_cron.js'));
+  app.use('/api/', require('./api/_img.js'));
 
   // Initialize App
   app.listen(PORT, (app) =>

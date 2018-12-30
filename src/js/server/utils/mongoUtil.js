@@ -1,19 +1,25 @@
 var mongoose = require('mongoose');
 
+let connection, imageConnection;
+
 module.exports = {
-  connectToServer: function ( callback ) {
-    mongoose.connect(process.env.DB_URI, { useNewUrlParser: true}).then(() => {
-      return callback();
-    },
-    err => { callback(err); });
+  connectToServers: function ( callback ) {
+    connection = mongoose.createConnection(process.env.DB_URI, { useNewUrlParser: true}, function(err) {
+      if (err) { return callback(err); }
+
+      imageConnection = mongoose.createConnection(process.env.IMAGE_DB_URI, { useNewUrlParser: true}, function(err) {
+        if (err) { return callback(err); }
+        return callback();
+      })
+    });
   },
 
-  getDb: function() {
-    return mongoose.connection.db;
+  getConnection: function() {
+    return connection;
   },
 
-  getConnection: function getConnection() {
-    return mongoose.connection;
-  }
+  getImageConnection: function() {
+    return imageConnection;
+  },
 
 }

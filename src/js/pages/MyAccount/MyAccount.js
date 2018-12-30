@@ -1,6 +1,7 @@
 import React, { Component } from 'react';
 import {Name, MyAccountWrap, NameButtonsWrap, ButtonsWrap, Button, Greeting,  AboutWrap, H2, P, Span, Image, InfoWrap} from "./myAccount-style";
 import PasswordPopUp from "../../components/PopUp/PopUp";
+import axios from 'axios';
 
 export default class MyAccount extends Component {
   constructor(props) {
@@ -8,7 +9,9 @@ export default class MyAccount extends Component {
 
     this.state = {
       passwordPopUpShown:false,
-      whichButtonClicked: "password"
+      whichButtonClicked: "password",
+      selectedFile: null,
+      loaded: 0
     }
   }
 
@@ -20,7 +23,6 @@ export default class MyAccount extends Component {
       })
      } 
   }
-
 
   openInfoPopUp = (e) => {
     if(this.state.passwordPopUpShown === false){
@@ -38,7 +40,37 @@ export default class MyAccount extends Component {
             whichButtonClicked:""
         })
     }
-}
+  }
+
+  setSelectedFile(e) {
+    this.setState({selectedFile: e.target.files[0], loaded: 0});
+  }
+
+  uploadFile(e) {
+    e.preventDefault();
+
+    if (!this.props.globals || !this.props.globals.user || !this.props.globals.user._id) {
+      alert("Error uploading image. Please refresh and try again.");
+    }
+
+    const data = new FormData();
+    const file = this.state.selectedFile;
+    data.append('file', file, "user." + this.props.globals.user._id);
+    data.append('contentType', file.name.split('.').pop())
+
+    axios.post('/api/static/images/', data, {
+      /*onUploadProgress: (e) => {
+        this.setState({loaded: e.loaded / e.total * 100});
+      }*/
+    })
+    .then((res) => {
+      alert(res.status);
+    })
+    .catch((err) => {
+      alert(err.response.status);
+    })
+
+  }
 
   render() {
     const { user } = this.props.globals
@@ -58,6 +90,11 @@ export default class MyAccount extends Component {
           <AboutWrap>
          
                 <H2> your info </H2>
+                <img src={"/api/static/images/user." + this.props.globals.user._id} alt="no pic"/>
+                <form onSubmit={this.uploadFile.bind(this)}>
+                  <input name="" type="file" onChange={this.setSelectedFile.bind(this)}/>
+                  <input type="submit"/>
+                </form>
                 <InfoWrap>
                 <P> <Span>name :</Span> {user.firstName}</P>
                 <P> <Span>email : </Span>{user.email} </P>

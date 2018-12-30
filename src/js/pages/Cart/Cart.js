@@ -1,5 +1,7 @@
 import React, { Component } from 'react'
 import axios from 'axios'
+import {CartWrap} from './cart-style';
+import {Greeting} from '../MyAccount/myAccount-style'
 
 export default class Cart extends Component {
   constructor() {
@@ -72,8 +74,8 @@ export default class Cart extends Component {
     } = this.state;
 
     return (
-      <section>
-        <h1>My Cart</h1>
+      <CartWrap>
+        <Greeting>My Cart</Greeting>
         { /*Headers*/ }
         <div>
           <div>
@@ -116,7 +118,7 @@ export default class Cart extends Component {
           }
         </div>
         <button>Proceed to checkout</button>
-      </section>
+      </CartWrap>
     )
   }
 }

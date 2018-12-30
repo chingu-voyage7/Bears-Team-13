@@ -1,6 +1,6 @@
 import React, { Component } from 'react'
 import axios from 'axios'
-import {CartWrap} from './cart-style';
+import {CartWrap, ItemsWrap, Item, ImageWrap, ImagePriceWrap, PriceSelectWrap, ItemName, Price, Delete, Checkout} from './cart-style';
 import {Greeting} from '../MyAccount/myAccount-style'
 
 export default class Cart extends Component {
@@ -76,48 +76,47 @@ export default class Cart extends Component {
     return (
       <CartWrap>
         <Greeting>My Cart</Greeting>
-        { /*Headers*/ }
-        <div>
-          <div>
-            Price
-          </div>
-        </div>
+
         { /* List items */}
-        <div>
+        <ItemsWrap>
           {
             cart.map((item, i) => {
               return item[1].map((recipient_id) => {
                 return (
-                  <article key={item[0]._id}>
-                    <img src="" alt="item" />
-                    <div>
-                      <h3>{item[0].name}</h3>
-                      <span>${item[0].usd}</span>
-                      <p></p>
-  
-                      {/* Recipients  */}
-                      <select
-                        value={recipient_id}
-                        onChange={(e) => this.onChangeRecipient(item[0], recipient_id, e.target.value)}>
-                        <option>Select Recipient</option>
-                        {
-                          recipients.map(recipient => {
-                            return (
-                              <option value={recipient._id} key={recipient._id}>{recipient.username}</option>
-                            )
-                          })
-                        }
-                      </select>
-                    </div>
-                    <button onClick={(e) => this.onDelete(e, item[0]._id)}>Delete</button>
-                  </article>
+                  <Item key={item[0]._id}>
+                    
+                    
+                      <ItemName>{item[0].name}</ItemName>
+                      <ImagePriceWrap>
+                         <ImageWrap>
+                            <img src="" alt="item" />
+                         </ImageWrap>
+                         <PriceSelectWrap>
+                              <Price>${item[0].usd}</Price>
+                              <select
+                                value={recipient_id}
+                                onChange={(e) => this.onChangeRecipient(item[0], recipient_id, e.target.value)}>
+                                <option>Select Recipient</option>
+                                {
+                                  recipients.map(recipient => {
+                                    return (
+                                      <option value={recipient._id} key={recipient._id}>{recipient.username}</option>
+                                    )
+                                  })
+                                }
+                              </select>
+                              <Delete onClick={(e) => this.onDelete(e, item[0]._id)}>Delete</Delete>
+                          </PriceSelectWrap>
+                      </ImagePriceWrap>
+                   
+                  </Item>
                 );
               });
 
             })
           }
-        </div>
-        <button>Proceed to checkout</button>
+        </ItemsWrap>
+        <Checkout>Proceed to checkout</Checkout>
       </CartWrap>
     )
   }

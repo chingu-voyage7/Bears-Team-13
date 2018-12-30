@@ -52,6 +52,7 @@ box-shadow:2px 2px 2px rgba(0,0,0,0.5);
 border-radius:5px;
 padding:10px;
 font-size:16px;
+transition:.2s all linear;
 &:hover{
   cursor:pointer;
   color:#D10A0A;

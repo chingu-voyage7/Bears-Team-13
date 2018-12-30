@@ -10,7 +10,6 @@ export default class Cart extends Component {
 
     this.state = {
       cart: [], // [{event, item}]
-      recipients: {} // {event_id: new_event_id}
     }
   }
 
@@ -37,28 +36,11 @@ export default class Cart extends Component {
     .catch(err => alert("Untested delete failure"));
   }
 
-  cartToJSX() {
-    console.log(JSON.stringify(this.state.selected));
-    let jsx = this.state.cart.map((pair) => {
-      return (
-        <div>
-          <h2>
-            {pair.item.name}
-          </h2>
-          <img src={"api/static/images/item." + pair.item._id} alt={pair.item.name}/>
-          <p>${pair.item.usd}</p>
-          <b>Gift for {pair.event.recipient.username + "@" + pair.event.name}</b>
-        </div>
-      );
-    });
-
-    return jsx;
-  }
-
   render() {
     const {
       cart,
     } = this.state;
+    const that = this;
 
     return (
       <CartWrap>
@@ -66,28 +48,42 @@ export default class Cart extends Component {
 
         { /* List items */}
         <ItemsWrap>
-          {
-            cart.map((pair) => {
-              const {event, item} = pair;
-              return (
-                <Item key={item._id}>
-                    <ItemName>{item.name}</ItemName>
-                    <ImagePriceWrap>
-                       <ImageWrap>
-                          <img src={"/api/static/images/item." + item._id} alt="item" />
-                       </ImageWrap>
-                       <PriceSelectWrap>
-                            <Price>${item.usd}</Price>
-                            <p>Gift for {event.recipient.username} @ {event.name}</p>
-                            <Delete onClick={(e) => this.onDelete(e, event._id)}>Delete</Delete>
-                        </PriceSelectWrap>
-                    </ImagePriceWrap>
+          {function() {
+            if (!cart || cart.length === 0) {
+              return "No Items in cart.";
+            }
 
+            return cart.map((pair) => {
+              const {event, item} = pair;
+              console.log(JSON.stringify(item));
+
+              return (
+                <Item key={event._id}>
+                  <ItemName>{item.name}</ItemName>
+                  <ImagePriceWrap>
+                      <ImageWrap>
+                        <img src={"/api/static/images/item." + item._id} alt="item" />
+                      </ImageWrap>
+                      <PriceSelectWrap>
+                          <Price>${item.usd}</Price>
+                          <p>Gift for {event.recipient.username} @ {event.name}</p>
+                          <Delete onClick={(e) => that.onDelete(e, event._id)}>Delete</Delete>
+                      </PriceSelectWrap>
+                  </ImagePriceWrap>
                 </Item>
               );
             });
-          }
+          }()}
+          <p>Total: $ { function() {
+            let total = 0;
+            cart.forEach((pair) => {
+              total += pair.item.usd;
+            });
+
+            return total;
+          }() }</p>
         </ItemsWrap>
+        <Link to="/store">Continue Shopping</Link>
         <Checkout>Proceed to checkout</Checkout>
       </CartWrap>
     )

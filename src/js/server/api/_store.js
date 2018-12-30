@@ -84,8 +84,12 @@ router.get('/mycart', isAuth, (req, res) => {
 
     // Set event & item ids
     const event_ids = Object.keys(user.cart);
-    const item_ids = event_ids.map((event_id) => {
-      return user.cart[event_id];
+    const item_ids = [];
+    
+    event_ids.forEach((event_id) => {
+      if (user.cart[event_id]) {
+        item_ids.push(user.cart[event_id]);
+      }
     });
 
     // Get Events
@@ -100,6 +104,7 @@ router.get('/mycart', isAuth, (req, res) => {
           return event.ssList[user._id];
         }
       });
+
 
       // Get recipients. Set event.recipient
       User.find({_id: {$in: recipient_ids}}, {username: 1}, (err, recipients) => {
@@ -120,6 +125,8 @@ router.get('/mycart', isAuth, (req, res) => {
         Item.find({_id: { $in: item_ids}}, (err, items) => {
           if (err) { return res.sendStatus(500); }
           if (!items) { return res.status(400).send("Items not found"); }
+
+          console.log(items);
 
           // Finish generating cart
           const cart = [];
@@ -188,19 +195,16 @@ router.post("/mycart/update", isAuth, required(["event_id", "item_id"]), (req, r
 });
 
 // Removes item from session user's cart
-router.delete("/mycart/delete", isAuth, (req, res) => {
-  if (!req.body || !req.body.item_id || !req.user._id) {
-    return res.sendStatus(400);
-  }
+router.delete("/mycart/delete", isAuth, required(["event_id"]), (req, res) => {
 
-  const cartDotItem = "cart." + req.body.item_id;
+  const cartDotEvent = "cart." + req.body.event_id;
   console.log("Removing key, value from cart...");
-  console.log(cartDotItem);
+  console.log(cartDotEvent);
 
-  User.updateOne({_id: new ObjectID(req.user._id)}, {$unset: {[cartDotItem]: 1}}, (err, result) => {
+  User.updateOne({_id: new ObjectID(req.user._id)}, {$unset: {[cartDotEvent]: 1}}, (err, result) => {
     if (err) { return res.sendStatus(500); }
     if (!result) { return res.sendStatus(500); }
-    console.log("nmodified= " + result.nModified);
+    console.log("nModified= " + result.nModified);
     return res.sendStatus(200);
   });
 });

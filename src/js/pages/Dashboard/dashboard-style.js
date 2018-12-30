@@ -58,6 +58,7 @@ const P =styled.p`
 text-transform:lowercase;
 color:#D10A0A;
 margin:5px;
+font-size:15px;
 `
 
 const AuthorSpan = styled.span`

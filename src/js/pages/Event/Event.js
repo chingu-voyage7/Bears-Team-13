@@ -1,6 +1,6 @@
 import React, { Component } from 'react';
 import axios from 'axios';
-import {OneEventWrap, EventTitle, Time, TimeSpan, RecipientName, ButtonWrap} from './event-style';
+import {OneEventWrap, EventTitle, Time, TimeSpan, RecipientName, ButtonWrap, ExchangDate} from './event-style';
 import {Button} from '../MyAccount/myAccount-style';
 import InvitePopUp from '../../components/InvitePopUp/InvitePopUp'
 
@@ -165,9 +165,9 @@ export default class Event extends Component {
       {this.state.message}<br/>
 
       <EventTitle>{this.state.event?this.state.event.name:""}</EventTitle>
+
       <Time> Exchange Date : <TimeSpan>{this.state.event?moment(this.state.event.startDate).format("dddd, MM/DD/YY"):""}</TimeSpan></Time>
       <RecipientName> {this.recipientToJSX()} </RecipientName>
-     
       
 
        <ButtonWrap>

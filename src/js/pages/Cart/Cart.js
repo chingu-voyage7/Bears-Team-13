@@ -1,20 +1,19 @@
-import React, { Component } from 'react'
-import axios from 'axios'
+import React, { Component } from 'react';
+import { Link } from 'react-router-dom';
+import axios from 'axios';
 
 export default class Cart extends Component {
-  constructor() {
-    super()
+  constructor(props) {
+    super(props);
 
     this.state = {
-      cart: [],
-      recipients: [],
+      cart: [], // [{event, item}]
+      recipients: {} // {event_id: new_event_id}
     }
   }
 
   componentDidMount() { 
-    this.fetchRecipients(() => {
-      this.fetchCart();
-    });
+    this.fetchCart();
   }
 
   fetchCart() {
@@ -24,98 +23,58 @@ export default class Cart extends Component {
           this.setState({cart: res.data});
         }
       })
-      .catch(err => console.log(err.response))
+      .catch((err) => {
+        console.log(err);
+      });
   }
 
-  fetchRecipients(cb) {
-    axios.get('/api/myrecipients')
-      .then( res => {
-        this.setState({recipients: res.data}, cb);
-      })
-      .catch(err => console.log(err.response));
-  }
-
-  getUsername(recipient_id) {
-    let username = null;
-    this.state.recipients.forEach((recipient) => {
-      if (recipient._id === recipient_id) {
-        username = recipient.username;
-        return;
-      }
+  updateCart(event_id, item_id) {
+    axios.post("/api/mycart/update", {event_id, item_id})
+    .then((res) => {
+      console.log(res.data);
+    })
+    .catch((err) => {
+      console.log(err.response);
     });
-    return username;
   }
 
-  onChangeRecipient(item, old_id, new_id) {
-    const cart = this.state.cart;
-    cart.map((itemRecipientPair, i ) => {
-      if (itemRecipientPair[0]._id === item._id) {
-        cart[i][1][cart[i][1].indexOf(old_id)] = new_id;
-      }
+  // Removes {event, item} from cart
+  removeItem(e) {
+
+  }
+
+  // Handles swapping recipients
+  swapRecipientHandler(e) {
+    let selected = this.state.selected;
+  }
+
+  cartToJSX() {
+    console.log(JSON.stringify(this.state.selected));
+    let jsx = this.state.cart.map((pair) => {
+      return (
+        <div>
+          <h2>
+            {pair.item.name}
+          </h2>
+          <img src={"api/static/images/item." + pair.item._id} alt={pair.item.name}/>
+          <p>${pair.item.usd}</p>
+          <b>Gift for {pair.event.recipient.username + "@" + pair.event.name}</b>
+        </div>
+      );
     });
-    this.setState({cart: cart});
-  }
 
-  onDelete = (e, item_id) => {
-    e.preventDefault()
-
-    axios.delete('/api/mycart/delete', {data: {item_id}})
-      .then(res => console.log(res.data))
-      .catch(err => console.log(err.response))
-    console.log(item_id)
+    return jsx;
   }
 
   render() {
-    const {
-      cart,
-      recipients
-    } = this.state;
 
     return (
       <section>
         <h1>My Cart</h1>
-        { /*Headers*/ }
-        <div>
-          <div>
-            Price
-          </div>
-        </div>
-        { /* List items */}
-        <div>
-          {
-            cart.map((item, i) => {
-              return item[1].map((recipient_id) => {
-                return (
-                  <article key={item[0]._id}>
-                    <img src="" alt="item" />
-                    <div>
-                      <h3>{item[0].name}</h3>
-                      <span>${item[0].usd}</span>
-                      <p></p>
-  
-                      {/* Recipients  */}
-                      <select
-                        value={recipient_id}
-                        onChange={(e) => this.onChangeRecipient(item[0], recipient_id, e.target.value)}>
-                        <option>Select Recipient</option>
-                        {
-                          recipients.map(recipient => {
-                            return (
-                              <option value={recipient._id} key={recipient._id}>{recipient.username}</option>
-                            )
-                          })
-                        }
-                      </select>
-                    </div>
-                    <button onClick={(e) => this.onDelete(e, item[0]._id)}>Delete</button>
-                  </article>
-                );
-              });
-
-            })
-          }
-        </div>
-        <button>Proceed to checkout</button>
+        {this.cartToJSX()}
+        <Link to="/store/payment">Proceed to checkout</Link>
+        <p>OR</p>
+        <Link to="/store">Continue Shopping</Link>
       </section>
     )
   }

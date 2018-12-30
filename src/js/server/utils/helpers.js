@@ -3,43 +3,94 @@ const schema = require('./schema.js');
 const User = schema.User;
 const Event = schema.Event;
 
+// Returns a random integer between min (inclusive) and max (exclusive)
+function getRandom(min, max) {
+  if (min === max) {
+    return min;
+  }
+  min = Math.ceil(min);
+  max = Math.floor(max);
+  return Math.floor(Math.random() * (max - min + 1)) + min;
+}
 
 module.exports = {
-  getRecipients: function(user, callback) {
-    // Get user events
-    User.findOne({_id: new ObjectID(user._id)}, {events: 1}, (err, user) => {
-      if (err) { return callback(500, null); }
-      if (!user) { return callback(404, null); }
+  // Middleware that allows NONE OR MORE whitelisted req.body keys.
+  whitelist: function (whitelist) {
+    if (!whitelist) {
+      whitelist = [];
+    }
 
-      console.log("EVENTS: " + user.events.length);
+    return function(req, res, next) {
+      if (!req.body) {
+        return next();
+      }
 
-      // Get ssList for each event
-      Event.find({_id: {$in: user.events}}, {ssList: 1, closed: 1}, (err, events) => {
-        if (err) { return callback(500, null); }
-        if (!events) { return callback(404, null); }
-
-        // Find my [user_id, recipient_id] pair(s) in the list
-        const recipients_ids = events.map((event) => {
-          if (event.closed || !event.ssList || event.ssList.length === 0) {
-            return null;
-          }
-
-          for (let i = 0; i < event.ssList.length; i++) {
-            if (ObjectID.toString(event.ssList[i][0]) === ObjectID.toString(user._id)) {
-              if (event.ssList[i][1]) {
-                return event.ssList[i][1];
-              }
-            }
-          }
-        });
-
-        User.find({_id: {$in: recipients_ids}}, {username: 1}, (err, recipients) => {
-          if (err) { return callback(500, null); }
-          if (!recipients) { return callback(404, null); }
+      const edits = Object.keys(req.body);
     
-          return callback(null, recipients);
-        });
-      });
-    });
+      if (!edits || edits.length > whitelist.length) {
+        return res.sendStatus(400);
+      }
+    
+      for (let i = 0; i < edits.length; i++) {
+        if (whitelist.indexOf(edits[i]) === -1) {
+          return res.sendStatus(400);
+        }
+      }
+    
+      return next();
+    }
+  },
+  // Middleware that requires ALL req.body keys.
+  required: function (required) {
+    if (!required) {
+      return next();
+    }
+
+    return function(req, res, next) {
+      if (!req.body) {
+        return res.status(400).send(JSON.stringify(required) + " fields required.");
+      }
+
+      const keys = Object.keys(req.body);
+    
+      if (!keys) {
+        return res.sendStatus(400);
+      }
+    
+      for (let i = 0; i < required.length; i++) {
+        if (!req.body[required[i]]) {
+          return res.status(400).send(JSON.stringify(required) + " fields required.");
+        }
+      }
+    
+      return next();
+    }
+
+  },
+  // Generates a Secret Santa list for a given event
+  // {sender_id: reciever_id, ...}
+  generateSS: function(event) {
+    var members = event.members;
+    members.push(event.author._id);
+
+    // Not enough people!
+    if (!members || members.length < 2) {
+      return null;
+    }
+
+    var senders = members.slice();
+    var used = [];
+    var ssList = {};
+
+    for (let i = 0; i < senders.length; i++) {
+      let random = getRandom(0, members.length);
+      while (random === i || used.indexOf(random) !== -1) {
+        random = getRandom(0, members.length);
+      }
+      ssList[senders[i]] = members[random];
+      used.push(random);
+    }
+
+    return ssList;
   }
 }

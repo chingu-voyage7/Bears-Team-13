@@ -19,7 +19,7 @@ const Event = ({event, handleEventClick}) => {
           <P>draw date: <Span> {moment(event.startDate).format("dddd, MM/DD/YY")}</Span></P>
           <P>exchange date: <Span> {moment(event.endDate).format("dddd, MM/DD/YY")}</Span></P>
 
-        <P>author:  <AuthorSpan> {event.author[1]}</AuthorSpan></P>
+        <P>author:  <AuthorSpan> {event.author.username}</AuthorSpan></P>
       
     </OneEventWrap>
   )

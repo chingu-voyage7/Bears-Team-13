@@ -1,22 +1,23 @@
 import React, { Component } from 'react'
 import axios from 'axios'
 export default class Item extends Component {
-  constructor() {
-    super();
+  constructor(props) {
+    super(props);
     this.state = {
-      item: [],
-      recipients: [],
-      selectedRecipient: ""
+      item: {},
+      item_id: this.props.match.params.item_id,
+      events: [],
+      selected: ""
     }
   }
 
+  componentDidMount() {
+    this.fetchItem();
+    this.fetchRecipients();
+  }
+
   fetchItem() {
-    const { item_id } = this.props.match.params
-
-    console.log(item_id)
-
-    axios
-      .get(`/api/item?item_id=${item_id}`)
+    axios.get(`/api/item?item_id=${this.state.item_id}`)
       .then(res => {
         this.setState({
           item: res.data
@@ -28,40 +29,29 @@ export default class Item extends Component {
   fetchRecipients() {
     axios.get('/api/myrecipients')
       .then(res => {
-        const recipients = res.data.filter( recipient => recipient !== null )
-        this.setState({
-          recipients
-        });
+        this.setState({events: res.data});
       })
       .catch(err => console.log(err.response))
   }
 
-  handleChange = (e) => {
-    this.setState({selectedRecipient: e.target.value})
-    console.log('changed')
-  }
-
   addToCart = (e) => {
     e.preventDefault()
-    const { item_id } = this.props.match.params
-    const { selectedRecipient: recipient_id } = this.state;
+    const { selected } = this.state;
 
-    axios.post('/api/mycart/add', { item_id, recipient_id })
+    console.log("EVENT_ID: " + selected);
+
+    axios.post('/api/mycart/update', { item_id: this.state.item_id, event_id: selected })
       .then( res => console.log(res.data) )
       .catch( err => console.log(err.response))
   }
 
-  componentDidMount() {
-    this.fetchItem()
-    this.fetchRecipients()
+  handleChange = (e) => {
+    this.setState({selected: e.target.value})
+    console.log('changed')
   }
 
   render() {
-    const {
-      item,
-      recipients,
-      selectedRecipient
-    } = this.state
+    const { item, selected, events } = this.state;
 
     return <section>
         <article>
@@ -75,21 +65,20 @@ export default class Item extends Component {
         </article>
 
         <form onSubmit={this.addToCart}>
-          <select value={selectedRecipient} onChange={this.handleChange}>
+          <select value={selected} onChange={this.handleChange}>
             <option>
               Select a recipient
             </option>
-            {
-              recipients.map(recipient => {
+            { events.map((event) => {
+              console.log(JSON.stringify(event));
                 return (
                   <option
-                    value={recipient._id}
-                    key={recipient._id}>
-                    {recipient.username}
-                  </option>
-                )
-              })
-            }
+                    value={event._id}
+                    key={event._id}>
+                    {event.recipient.username + '@"' + event.name + '"'}
+                  </option> 
+                  );
+              })}
           </select>
           <input type="submit" value="Add to cart" />
         </form>

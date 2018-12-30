@@ -60,7 +60,7 @@ router.post('/acceptinvite', isAuth, (req, res) => {
         console.log("User's events & invites updated.");
 
         Event.updateOne({_id: req.body.event_id}, { 
-          $addToSet: {members: {_id: req.user._id}}
+          $addToSet: {members: req.user._id}
         }, (err, event) => {
           if (err) { return res.sendStatus(500); }
           if (!event) { return res.sendStatus(404).send("Event not found"); }

@@ -36,10 +36,26 @@ router.get('/myuser', isAuth, function (req, res) {
 
 // Returns a list of your secret santa { users }
 router.get("/myrecipients", isAuth, function (req, res) {
-  helpers.getRecipients(req.user, (err, result) => {
-    if (err) { return res.sendStatus(err); }
-    return res.json(result);
-  })
+  
+  User.findOne({_id: new ObjectID(req.user._id)}, {events: 1}, (err, user) => {
+    if (err) { return res.sendStatus(500); }
+    if (!user) { return res.sendStatus(404); }
+
+    Event.find({_id: {$in: user.events}}, {ssList: 1, closed: 1}, (err, events) => {
+      if (err) { return res.sendStatus(500); }
+      if (!events) { return res.sendStatus(404); }
+      
+      const recipients = [];
+      
+      events.forEach((event) => {
+        if (!event.closed && event.ssList) {
+          recipients.push(event.ssList[user._id]);
+        }
+      });
+
+      return res.json(recipients);
+    })
+  });
 });
 
 // Adds user to the DB

@@ -8,13 +8,14 @@ const bcrypt = require('bcrypt-nodejs');
 // EVENT
 var eventSchema = new Schema({
   name: String,
-  author: Array,
+  author: Object,
   public: false,
   startDate: {type:Date, required: true}, // Secret Santa assignment date! 401 cannot join after this date.
   endDate: {type:Date, required: true},   // Gift Exchange date!
   members: Array,  // [{_id: ObjectID, role: "member"}, {_id: ObjectID, role: "admin"}]
-  ssList: Array,
-  closed: Boolean
+  ssList: Object,
+  closed: Boolean,
+  recipient: String // Temporary
 }, { collection: "events"} );
 
 // ITEM

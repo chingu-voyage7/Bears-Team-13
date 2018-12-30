@@ -18,7 +18,7 @@ const Event = ({event, handleEventClick}) => {
     
           <P>starts on: <Span> {moment(event.startDate).format("dddd, MM/DD/YY")}</Span></P>
 
-        <P>author:  <AuthorSpan> {event.author[1]}</AuthorSpan></P>
+        <P>author:  <AuthorSpan> {event.author.username}</AuthorSpan></P>
       
     </OneEventWrap>
   )

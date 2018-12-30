@@ -29,7 +29,7 @@ export default class Event extends Component {
 
   isAuthor() {
     if (this.props.globals.user._id && this.state.event.author) {
-      if (this.props.globals.user._id === this.state.event.author[0]) {
+      if (this.props.globals.user._id === this.state.event.author._id) {
         return true;
       }
     }
@@ -80,6 +80,7 @@ export default class Event extends Component {
   getEvent() {
     axios.get('/api/event?event_id=' + this.state.event_id)
     .then((res) => {
+      alert(JSON.stringify(res.data));
       this.setState({message: ""}, () => {
         this.setState({event: res.data}, () => {
           this.getMembers(res.data._id);
@@ -123,22 +124,38 @@ export default class Event extends Component {
     }
   }
 
-
-handleInviteClick = () => {
- if(!this.state.inviteClicked){
-   this.setState({
-     inviteClicked: true
-   })
+  recipientToJSX() {
+    if (this.state.event && this.state.event.recipient) {
+      return this.state.event.recipient.username;
+    }
+    return "Recipient coming soon...";
   }
- }
 
- closePopUp = ()  => {
-  if(this.state.inviteClicked === true){
-      this.setState({
-          inviteClicked: false,
-      })
+  startEvent() {
+    axios.post('/api/startevent', {event_id: this.state.event_id})
+    .then((res) => {
+      alert(res.data);
+    })
+    .catch((err) => {
+      alert(err.response.status);
+    });
   }
-}
+
+  handleInviteClick = () => {
+  if(!this.state.inviteClicked){
+    this.setState({
+      inviteClicked: true
+    })
+    }
+  }
+
+  closePopUp = ()  => {
+    if(this.state.inviteClicked === true){
+        this.setState({
+            inviteClicked: false,
+        })
+    }
+  }
 
   render() {
     
@@ -148,7 +165,7 @@ handleInviteClick = () => {
 
       <EventTitle>{this.state.event?this.state.event.name:""}</EventTitle>
       <Time> Exchange Date : <TimeSpan>{this.state.event?moment(this.state.event.startDate).format("dddd, MM/DD/YY"):""}</TimeSpan></Time>
-      <RecipientName> recipient's name coming soon </RecipientName>
+      <RecipientName> {this.recipientToJSX.bind(this)} </RecipientName>
      
       
 
@@ -165,6 +182,7 @@ handleInviteClick = () => {
 
        
       {this.state.inviteClicked ? <InvitePopUp closePopUp={this.closePopUp} eventId={this.state.event_id}></InvitePopUp> : ""}
+      {this.isAuthor() && (this.state.event && this.state.event.members.length > 0) && (this.state.event && (!this.state.event.ssList && !this.state.event.closed))?<button onClick={this.startEvent.bind(this)}>Start Event</button>:""}
       {/* {this.isAuthor()?(
         <form onSubmit={this.editEvent.bind(this)}>
           <label>Event name</label><br/>

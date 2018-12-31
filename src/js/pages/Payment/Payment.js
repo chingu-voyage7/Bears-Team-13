@@ -54,7 +54,7 @@ export default class Cart extends Component {
 
     return (
       <CartWrap>
-        <Greeting>My Cart</Greeting>
+        <Greeting>Finalize Payment</Greeting>
 
         {/* List items */}
         <ItemsWrap>

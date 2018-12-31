@@ -1,20 +1,20 @@
 import React, { Component } from 'react'
 import axios from 'axios'
+import {CartWrap, ItemsWrap, Item, ImageWrap, ImagePriceWrap, PriceSelectWrap, ItemName, Price, Delete, Checkout} from './cart-style';
+import {Greeting} from '../MyAccount/myAccount-style'
+import { Link } from 'react-router-dom';
 
 export default class Cart extends Component {
-  constructor() {
-    super()
+  constructor(props) {
+    super(props);
 
     this.state = {
-      cart: [],
-      recipients: [],
+      cart: [], // [{event, item}]
     }
   }
 
   componentDidMount() { 
-    this.fetchRecipients(() => {
-      this.fetchCart();
-    });
+    this.fetchCart();
   }
 
   fetchCart() {
@@ -24,99 +24,68 @@ export default class Cart extends Component {
           this.setState({cart: res.data});
         }
       })
-      .catch(err => console.log(err.response))
+      .catch((err) => {
+        console.log(err);
+      });
   }
 
-  fetchRecipients(cb) {
-    axios.get('/api/myrecipients')
-      .then( res => {
-        this.setState({recipients: res.data}, cb);
-      })
-      .catch(err => console.log(err.response));
-  }
-
-  getUsername(recipient_id) {
-    let username = null;
-    this.state.recipients.forEach((recipient) => {
-      if (recipient._id === recipient_id) {
-        username = recipient.username;
-        return;
-      }
-    });
-    return username;
-  }
-
-  onChangeRecipient(item, old_id, new_id) {
-    const cart = this.state.cart;
-    cart.map((itemRecipientPair, i ) => {
-      if (itemRecipientPair[0]._id === item._id) {
-        cart[i][1][cart[i][1].indexOf(old_id)] = new_id;
-      }
-    });
-    this.setState({cart: cart});
-  }
-
-  onDelete = (e, item_id) => {
-    e.preventDefault()
-
-    axios.delete('/api/mycart/delete', {data: {item_id}})
-      .then(res => console.log(res.data))
-      .catch(err => console.log(err.response))
-    console.log(item_id)
+  // Removes {event, item} from cart
+  onDelete(e, event_id) {
+    axios.delete('/api/mycart/delete', { data: {event_id} })
+    .then((res) => alert("Untested delete success"))
+    .catch(err => alert("Untested delete failure"));
   }
 
   render() {
     const {
       cart,
-      recipients
     } = this.state;
+    const that = this;
 
     return (
-      <section>
-        <h1>My Cart</h1>
-        { /*Headers*/ }
-        <div>
-          <div>
-            Price
-          </div>
-        </div>
-        { /* List items */}
-        <div>
-          {
-            cart.map((item, i) => {
-              return item[1].map((recipient_id) => {
-                return (
-                  <article key={item[0]._id}>
-                    <img src="" alt="item" />
-                    <div>
-                      <h3>{item[0].name}</h3>
-                      <span>${item[0].usd}</span>
-                      <p></p>
-  
-                      {/* Recipients  */}
-                      <select
-                        value={recipient_id}
-                        onChange={(e) => this.onChangeRecipient(item[0], recipient_id, e.target.value)}>
-                        <option>Select Recipient</option>
-                        {
-                          recipients.map(recipient => {
-                            return (
-                              <option value={recipient._id} key={recipient._id}>{recipient.username}</option>
-                            )
-                          })
-                        }
-                      </select>
-                    </div>
-                    <button onClick={(e) => this.onDelete(e, item[0]._id)}>Delete</button>
-                  </article>
-                );
-              });
+      <CartWrap>
+        <Greeting>My Cart</Greeting>
 
-            })
-          }
-        </div>
-        <button>Proceed to checkout</button>
-      </section>
+        { /* List items */}
+        <ItemsWrap>
+          {function() {
+            if (!cart || cart.length === 0) {
+              return "No Items in cart.";
+            }
+
+            return cart.map((pair) => {
+              const {event, item} = pair;
+              console.log(JSON.stringify(item));
+
+              return (
+                <Item key={event._id}>
+                  <ItemName>{item.name}</ItemName>
+                  <ImagePriceWrap>
+                      <ImageWrap>
+                        <img src={"/api/static/images/item." + item._id} alt="item" />
+                      </ImageWrap>
+                      <PriceSelectWrap>
+                          <Price>${item.usd}</Price>
+                          <p>Gift for {event.recipient.username} @ {event.name}</p>
+                          <Delete onClick={(e) => that.onDelete(e, event._id)}>Delete</Delete>
+                      </PriceSelectWrap>
+                  </ImagePriceWrap>
+                </Item>
+              );
+            });
+          }()}
+          <p>Total: $ { function() {
+            let total = 0;
+            cart.forEach((pair) => {
+              total += pair.item.usd;
+            });
+
+            return total;
+          }() }</p>
+        </ItemsWrap>
+        <Link to="/store">Continue Shopping</Link>
+        <Checkout>Proceed to checkout</Checkout>
+      </CartWrap>
     )
   }
 }

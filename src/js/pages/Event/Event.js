@@ -38,7 +38,7 @@ export default class Event extends Component {
 
   isAuthor() {
     if (this.props.globals.user._id && this.state.event.author) {
-      if (this.props.globals.user._id === this.state.event.author[0]) {
+      if (this.props.globals.user._id === this.state.event.author._id) {
         return true;
       }
     }
@@ -119,11 +119,15 @@ export default class Event extends Component {
 
   async getPurchasedItems() {
     try {
+      // Get purchases from api
       const purchases = await axios.get('/api/mypurchases')
+      // Array of arrays [[recipient_id, item_id], ...]
       const arrayPurchases = Object.entries(purchases.data)
       let purchasedItems = []
 
+      // Loop to array to get item from api
       for (const [recipientId, itemId] of arrayPurchases) {
+        // Get item from api
         const item = await axios.get(`/api/item?item_id=${itemId}`)
         purchasedItems.push(item.data)
       }
@@ -151,20 +155,38 @@ export default class Event extends Component {
     }
   }
 
+  recipientToJSX() {
+    if (this.state.event && this.state.event.recipient) {
+      let user = this.state.event.recipient.username;
+      user = user[0].toUpperCase() + user.substring(1);
+      return "You are " + user + "'s Secret Santa!";
+    }
+    return "Recipient coming soon...";
+  }
+
+  startEvent() {
+    axios.post('/api/startevent', {event_id: this.state.event_id})
+    .then((res) => {
+      alert("Event Started!");
+    })
+    .catch((err) => {
+      alert(err.response.status);
+    });
+  }
 
   handleInviteClick = () => {
-    if (!this.state.inviteClicked) {
-      this.setState({
-        inviteClicked: true
-      })
+  if(!this.state.inviteClicked){
+    this.setState({
+      inviteClicked: true
+    })
     }
   }
 
-  closePopUp = () => {
-    if (this.state.inviteClicked === true) {
-      this.setState({
-        inviteClicked: false,
-      })
+  closePopUp = ()  => {
+    if(this.state.inviteClicked === true){
+        this.setState({
+            inviteClicked: false,
+        })
     }
   }
 

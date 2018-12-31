@@ -5,6 +5,9 @@ const ObjectID = require('mongodb').ObjectID;
 const schema = require('../utils/schema.js');
 const User = schema.User;
 const Item = schema.Item;
+const Event = schema.Event;
+const helpers = require('../utils/helpers.js');
+const required = helpers.required;
 
 // Returns an item given an item_id
 router.get("/item", (req, res) => {
@@ -66,84 +69,144 @@ router.post('/additem', isAuth, (req, res) => {
 // Cart CRUD
 //
 
-// Returns { item: [{ recipients }, ...], ... }
+
+// Returns [{{event}, {item}}... ]
 router.get('/mycart', isAuth, (req, res) => {
   if (!req.user || !req.user._id) {
     return res.sendStatus(500);
   }
 
-  // Get cart
+  // Generate Cart from {"event_id": "item_id"}
   User.findOne({_id: new ObjectID(req.user._id)}, {cart: 1}, (err, user) => {
     if (err) { return res.sendStatus(500); }
     if (!user) { return res.status(404).send("User not found."); }
     if (!user.cart) { return res.json({}); }
 
-    console.log(user);
-    const item_ids = Object.keys(user.cart);
+    // Set event & item ids
+    const event_ids = Object.keys(user.cart);
+    const item_ids = [];
     
-    // Get Items
-    Item.find({ _id: { $in: item_ids}}, (err, items) => {
-      if (err) { return res.sendStatus(500); }
-      if (!items) { return res.status(400).send("Items not found"); }
+    event_ids.forEach((event_id) => {
+      if (user.cart[event_id]) {
+        item_ids.push(user.cart[event_id]);
+      }
+    });
 
-      const cart = items.map((item) => {
-        return [item, user.cart[item._id]];
+    // Get Events
+    Event.find({_id: {$in: event_ids}}, {name: 1, ssList: 1, closed: 1}, (err, events) => {
+      if (err) { return res.sendStatus(500); }
+      if (!events) { return res.status(404).send("Events not found"); }
+
+      // Set recipient_ids
+      const recipient_ids = events.map((event, i) => {
+        if (!event.closed && event.ssList) {
+          event.recipient = { _id: event.ssList[user._id]};
+          return event.ssList[user._id];
+        }
       });
 
-      return res.json(cart);
+
+      // Get recipients. Set event.recipient
+      User.find({_id: {$in: recipient_ids}}, {username: 1}, (err, recipients) => {
+        if (err) { return res.sendStatus(500); }
+        if (!recipients) { return res.status(404).send("Recipients not found"); }
+
+        events.forEach((event, i) => {
+          recipients.some((recipient) => {
+            if (event.recipient._id.equals(recipient._id)) {
+              console.log("Match. Setting recipient to\n" + recipient);
+              events[i].recipient = recipient;
+              return true;
+            }
+          });
+        });
+
+        // Get Items
+        Item.find({_id: { $in: item_ids}}, (err, items) => {
+          if (err) { return res.sendStatus(500); }
+          if (!items) { return res.status(400).send("Items not found"); }
+
+          console.log(items);
+
+          // Finish generating cart
+          const cart = [];
+          Object.keys(user.cart).forEach((event_id) => {
+            let _event, _item = {};
+
+            // Set { event, recipient }
+            for (let i = 0; i < events.length; i++) {
+              if (events[i]._id.equals(event_id)) {
+                _event = events[i];
+                i = events.length;
+              }
+            }
+
+            // Set { item }
+            for (let i = 0; i < items.length; i++) {
+              // Note: cart = {event_id: item_id}
+              if (items[i]._id.equals(user.cart[event_id])) {
+                _item = items[i];
+                i = items.length;
+              }
+            }
+
+            if (_event && _item) {
+              cart.push({event: _event, item: _item});
+            }
+          });
+
+          console.log(cart);
+
+          return res.json(cart);
+        });
+      });
     });
   });
 });
 
-// Adds item to session user's cart given {item_id, recipient}
-// To add ONLY an item (no recipient), make recipient=="";
-// Note: a recipient MUST be added later.
-router.post("/mycart/add", isAuth, (req, res) => {
-  if (!req.body || !req.body.item_id || !req.body.recipient_id) {
-    return res.sendStatus(400);
-  }
+// Adds item to session user's cart given {event_id, item_id}
+// Note: Stored as {"event_id": "item_id", ...}
+router.post("/mycart/update", isAuth, required(["event_id", "item_id"]), (req, res) => {
+  console.log("Adding {event, item (for recipient)} pair to cart...");
+  console.log(req.body);
 
-  // Item exists?
-  Item.findOne({_id: new ObjectID(req.body.item_id)}, {_id: 1}, (err, item) => {
+  // Verify "event_id" exists
+  Event.findOne({_id: new ObjectID(req.body.event_id)}, {_id: 1}, (err, event) => {
     if (err) { return res.sendStatus(500); }
-    if (!item) { return res.sendStatus(404); }
+    if (!event) { return res.status(404).send("Event not found"); }
 
-    // User exists?
-    User.findOne({_id: new ObjectID(req.body.recipient_id)}, {_id: 1}, (err, user) => {
+    // Verify "item_id" exists
+    Item.findOne({_id: new ObjectID(req.body.item_id)}, {_id: 1}, (err, item) => {
       if (err) { return res.sendStatus(500); }
-      if (!user) { return res.sendStatus(404); }
+      if (!item) { return res.status(404).send("Item not found"); }
 
-      const cartDotItem = "cart." + req.body.item_id;
-      console.log(cartDotItem);
+      // Set cartDotEvent
+      const cartDotEvent = "cart." + req.body.event_id;
 
-      // Add item to cart
-      User.updateOne({_id: new ObjectID(req.user._id)}, {$push: {[cartDotItem]: user._id}}, (err, result) => {
+      // Set {"event_id": "item_id"}
+      User.updateOne({_id: new ObjectID(req.user._id)}, {$set: {[cartDotEvent]: req.body.item_id}}, {upsert: true}, (err, result) => {
         if (err) { return res.sendStatus(500); }
         if (!result) { return res.sendStatus(500); }
-
-        console.log("nModified= " + result.nModified);
+        console.log("nModified=" + result.nModified);
         return res.sendStatus(200);
       });
     });
-  });
+  })
 });
 
 // Removes item from session user's cart
-router.delete("/mycart/delete", isAuth, (req, res) => {
-  if (!req.body || !req.body.item_id || !req.user._id) {
-    return res.sendStatus(400);
-  }
+router.delete("/mycart/delete", isAuth, required(["event_id"]), (req, res) => {
 
-  const cartDotItem = "cart." + req.body.item_id;
+  const cartDotEvent = "cart." + req.body.event_id;
   console.log("Removing key, value from cart...");
-  console.log(cartDotItem);
+  console.log(cartDotEvent);
 
-  User.updateOne({_id: new ObjectID(req.user._id)}, {$unset: {[cartDotItem]: 1}}, (err, result) => {
+  User.updateOne({_id: new ObjectID(req.user._id)}, {$unset: {[cartDotEvent]: 1}}, (err, result) => {
     if (err) { return res.sendStatus(500); }
     if (!result) { return res.sendStatus(500); }
-    console.log("nmodified= " + result.nModified);
+    console.log("nModified= " + result.nModified);
     return res.sendStatus(200);
-  })
+  });
 });
 
 // Get ALL purchased items.

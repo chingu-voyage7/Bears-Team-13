@@ -24,7 +24,7 @@ font-size:15px;
 color:#13491c;
 margin-top:-5px;
 margin-bottom:40px;
-padding-bottom:20px;
+padding-bottom:40px;
 border-bottom:1px dashed #45c132;
 `
 
@@ -48,6 +48,8 @@ text-align:center;
 const ButtonWrap = styled.div`
 width:100%;
 display:flex;
+margin-top:20px;
+padding-bottom:40px;
 justify-content:space-between;
 `
 

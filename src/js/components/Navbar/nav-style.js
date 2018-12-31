@@ -39,7 +39,10 @@ display:flex;
 width:380px;
 justify-content:space-between; 
 padding-right:30px;
+/* border:1px red solid; */
+margin-top:20px;
 @media only screen and (max-width:600px){
+margin-top:-10px;
 width:80px;
 flex-direction:column;
 background-color:rgba(255,255,255,.8);

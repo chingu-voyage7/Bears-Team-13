@@ -48,7 +48,7 @@ export default class Navbar extends Component {
       this.setState({redirect: false});
       return (<Redirect to="/"/>)
     }
-    
+
 
     return (
       <Nav>
@@ -57,12 +57,12 @@ export default class Navbar extends Component {
         {this.props.globals.user.username?(
 
           <MainNavWrap>
-          
+
           <i onClick={this.handleClick} className="fa fa-bars mobile-nav"></i>
-         
-         
+
+
           <LinksContainerLoggedIn mobileClicked={this.state.mobileMenuClicked}>
-           
+
             <NavLink
             activeClassName="active" style={{ textDecoration: 'none' }} to="/store"><LinkStyle>shop </LinkStyle></NavLink>
             <NavLink activeClassName="active"   style={{ textDecoration: 'none' }} to="/myevents"><LinkStyle>my events </LinkStyle></NavLink>

@@ -1,6 +1,13 @@
 import React, { Component } from 'react';
 import axios from 'axios';
-import {OneEventWrap, EventTitle, Time, TimeSpan, RecipientName, ButtonWrap, ExchangDate} from './event-style';
+import {
+  OneEventWrap,
+  EventTitle,
+  Time,
+  TimeSpan,
+  RecipientName,
+  ButtonWrap, ExchangDate
+} from './event-style';
 import {Button} from '../MyAccount/myAccount-style';
 import InvitePopUp from '../../components/InvitePopUp/InvitePopUp'
 
@@ -19,12 +26,14 @@ export default class Event extends Component {
       members: [],
       inviteBody: {},
       editEvent: {},
-      inviteClicked:false
+      inviteClicked:false,
+      purchasedItems: []
     }
   }
 
   componentDidMount() {
     this.getEvent();
+    this.getPurchasedItems();
   }
 
   isAuthor() {
@@ -108,6 +117,29 @@ export default class Event extends Component {
     });
   }
 
+  async getPurchasedItems() {
+    try {
+      // Get purchases from api
+      const purchases = await axios.get('/api/mypurchases')
+      // Array of arrays [[recipient_id, item_id], ...]
+      const arrayPurchases = Object.entries(purchases.data)
+      let purchasedItems = []
+
+      // Loop to array to get item from api
+      for (const [recipientId, itemId] of arrayPurchases) {
+        // Get item from api
+        const item = await axios.get(`/api/item?item_id=${itemId}`)
+        purchasedItems.push(item.data)
+      }
+
+      this.setState({
+        purchasedItems
+      })
+    } catch(err) {
+      console.error(err.response)
+    }
+  }
+
   membersToJSX() {
     if (this.state.members) {
       console.log(this.state.members)
@@ -159,40 +191,81 @@ export default class Event extends Component {
   }
 
   render() {
-    
+    const { purchasedItems } = this.state
     return (
-    <OneEventWrap>
-      {this.state.message}<br/>
+      <>
+        <OneEventWrap>
+          {this.state.message}<br />
 
-      <EventTitle>{this.state.event?this.state.event.name:""}</EventTitle>
+          <EventTitle>{this.state.event ? this.state.event.name : ""}</EventTitle>
+          <Time>
+            Draw Date :
+            <TimeSpan>
+              { this.state.event
+                  ? moment(this.state.event.startDate).format("dddd, MM/DD/YY")
+                  : ""
+              }
+            </TimeSpan>
+            <ExchangDate>
+              Exchange Date :
+              <TimeSpan>
+                { this.state.event
+                    ? moment(this.state.event.endDate).format("dddd, MM/DD/YY")
+                    : ""
+                }
+              </TimeSpan>
+            </ExchangDate>
+          </Time>
 
-      <Time> Exchange Date : <TimeSpan>{this.state.event?moment(this.state.event.startDate).format("dddd, MM/DD/YY"):""}</TimeSpan></Time>
-      <RecipientName> {this.recipientToJSX()} </RecipientName>
-      
+          <RecipientName> recipient's name coming soon </RecipientName>
 
-       <ButtonWrap>
-         <div className="dropdown">
-           <button className="dropbtn">Members</button>
-           <div className="dropdown-content">
-           {this.membersToJSX()}
-           </div>
-         </div>
+          <ButtonWrap>
+            <div className="dropdown">
+              <button className="dropbtn">Members</button>
+              <div className="dropdown-content">
+                {this.membersToJSX()}
+              </div>
+            </div>
 
-        <Button onClick={this.handleInviteClick}> invite friend </Button>
-       </ButtonWrap>
+            <Button onClick={this.handleInviteClick}> invite friend </Button>
+          </ButtonWrap>
 
-       
-      {this.state.inviteClicked ? <InvitePopUp closePopUp={this.closePopUp} eventId={this.state.event_id}></InvitePopUp> : ""}
-      {this.isAuthor() && (this.state.event && this.state.event.members.length > 0) && (this.state.event && (!this.state.event.ssList && !this.state.event.closed))?<button onClick={this.startEvent.bind(this)}>Start Event</button>:""}
-      {/* {this.isAuthor()?(
-        <form onSubmit={this.editEvent.bind(this)}>
-          <label>Event name</label><br/>
-          <input name="name" type="text" placeholder={this.state.event.name} value={this.state.editEvent.name} onChange={this.handleEdit.bind(this)}/><br/>
-          <label>Public</label><br/>
-          <input name="public" type="checkbox" checked={this.state.editEvent.public} onChange={this.handleEdit.bind(this)}/><br/>
-          <input type="submit"/>
-        </form>
-      ):""} */}
-    </OneEventWrap>);
+
+          {
+            this.state.inviteClicked
+              ? <InvitePopUp closePopUp={this.closePopUp} eventId={this.state.event_id}></InvitePopUp>
+              : ""
+          }
+          {/* {this.isAuthor()?(
+            <form onSubmit={this.editEvent.bind(this)}>
+              <label>Event name</label><br/>
+              <input name="name" type="text" placeholder={this.state.event.name} value={this.state.editEvent.name} onChange={this.handleEdit.bind(this)}/><br/>
+              <label>Public</label><br/>
+              <input name="public" type="checkbox" checked={this.state.editEvent.public} onChange={this.handleEdit.bind(this)}/><br/>
+              <input type="submit"/>
+            </form>
+            ):""} */
+          }
+        </OneEventWrap>
+        <section>
+          <h2>My Purchases</h2>
+          {
+            purchasedItems.map( item => {
+              return (
+                <article>
+                  <div>
+                    <h3>{item.name}</h3>
+                    <span>${item.usd}</span>
+                  </div>
+                  <div>
+                    <img src="" alt="Item" />
+                  </div>
+                </article>
+              )
+            })
+          }
+        </section>
+      </>
+    );
   }
 }

@@ -1,5 +1,5 @@
 import React, { Component } from 'react';
-import {BrowserRouter as Router, Route,} from 'react-router-dom';
+import {BrowserRouter as Router, Route, Switch, Redirect} from 'react-router-dom';
 import Navbar from '../Navbar/Navbar.js';
 import {MainContainer, SpaceBottom, SpaceTop} from './app-style';
 import Footer from '../Footer/Footer.js';
@@ -7,54 +7,7 @@ import './app.css';
 //import './normalize.css';
 import axios from 'axios';
 
-const ROUTES = [{
-  path: '/',
-  component: require('../../pages/Index/Index.js').default,
-  exact: true
-}, {
-  path: '/signup',
-  component: require('../../pages/Signup/Signup.js').default,
-  exact: true
-}, {
-  path: '/login',
-  component: require('../../pages/Login/Login.js').default,
-  exact: true
-}, {
-  path: '/myevents',
-  component: require('../../pages/Dashboard/Dashboard.js').default,
-  exact: true
-}, {
-  path: '/myevents/invites',
-  component: require('../../pages/Invites/Invites.js').default,
-  exact: true
-}, {
-  path: '/myevents/create',
-  component: require('../../pages/CreateEvent/CreateEvent.js').default,
-  exact: true
-}, {
-  path: '/event/:event_id',
-  component: require('../../pages/Event/Event.js').default,
-  exact: true
-}, {
-  path: '/myaccount',
-  component: require('../../pages/MyAccount/MyAccount.js').default,
-  exact: true
-}, {
-  path: '/store',
-  component: require('../../pages/Store/Store.js').default,
-  exact: true
-}, {
-  path: '/cart',
-  component: require('../../pages/Cart/Cart.js').default,
-}, {
-  path: '/store/item/:item_id',
-  component: require('../../pages/Item/Item.js').default,
-  exact: true
-}, {
-  path: '/payment',
-  component: require('../../pages/Payment/Payment.js').default,
-  exact: true
-}];
+const ROUTES = require('./routes.js').ROUTES;
 
 class App extends Component {
   constructor(props) {
@@ -85,24 +38,40 @@ class App extends Component {
         <MainContainer>
           <Navbar globals={this.state} setGlobal={this.setGlobal.bind(this)}/>
           <SpaceTop></SpaceTop>
-          {ROUTES.map(({path, component: C, exact}) => {
-            if (exact) {
-              return (
-                <Route
-                  key={path}
-                  path={path}
-                  render={(props) => <C {...props} setGlobal={this.setGlobal.bind(this)} globals={this.state}/>}
-                  exact
-                />);
-            } else {
-              return (
-                <Route
-                  key={path}
-                  path={path}
-                  render={(props) => <C {...props} setGlobal={this.setGlobal.bind(this)} globals={this.state}/>}
-                />);
-            }
-          })}
+          <Switch>
+            {ROUTES.map(({path, component: C, exact, auth}) => {
+
+              // Handle rendering "auth" (private) or !auth routes (public)
+              const render = (props) => {
+                if (auth) {
+                  if (this.state.user._id) {
+                    return <C {...props} setGlobal={this.setGlobal.bind(this)} globals={this.state}/>;
+                  } else {
+                  return <Redirect to={"/login?redirect=" + props.location.pathname}/>;
+                  }
+                }
+                return <C {...props} setGlobal={this.setGlobal.bind(this)} globals={this.state}/>;
+              };
+
+              // Handle "exact routes"
+              if (exact) {
+                return (
+                  <Route
+                    key={path}
+                    path={path}
+                    render={render}
+                    exact
+                  />);
+              } else {
+                return (
+                  <Route
+                    key={path}
+                    path={path}
+                    render={render}
+                  />);
+              }
+            })}
+          </Switch>
           <SpaceBottom></SpaceBottom>
           <Footer></Footer>
 

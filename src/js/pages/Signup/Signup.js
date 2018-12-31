@@ -9,8 +9,6 @@ export default class Signup extends Component {
     super(props);
 
     this.state = {
-      redirect: false,
-      redirectTo: String,
       user: {
         firstName: String,
         email: String,
@@ -18,10 +16,6 @@ export default class Signup extends Component {
         password: String
       }
     }
-  }
-
-  componentDidMount() {
-    this.setState({redirectTo: queryString.parse(this.props.location.search).redirect});
   }
 
   handleChange(e) {
@@ -34,39 +28,19 @@ export default class Signup extends Component {
     e.preventDefault();
     axios.post('/api/adduser', this.state.user)
     .then((res) => {
-      axios.post('/api/login', {
-        username: this.state.user.username,
-        password: this.state.user.password
-      })
-      .then((res) => {
-        alert("Login success?");
-        if (this.state.redirectTo && this.state.redirectTo.length > 0) {
-          this.setState({redirect: true});
-        } else {
-          this.props.setGlobal({user: res.data}, () => {
-            this.setState({redirectTo: "/myevents", redirect: true});
-          });
-        }
-      })
-      .catch((err) => {
-        alert("Login bad!");
-        if (this.state.redirectTo && this.state.redirectTo.length > 0) {
-          this.setState({redirect: true});
-        } else {
-          this.props.setGlobal({user: res.data}, () => {
-            this.setState({redirectTo: "/myevents", redirect: true});
-          });        }
-      });
+      const redirect = queryString.parse(this.props.location.search).redirect;
+      if (redirect) {
+        this.props.history.push(redirect);
+      } else {
+        this.props.history.push("/myevents");
+      }
     })
     .catch((err) => {
-    })
+      console.log(err);
+    });
   }
 
   render() {
-    if (this.state.redirect && this.state.redirectTo && this.state.redirectTo.length > 0) {
-      return <Redirect to={this.state.redirectTo}/>;
-    }
-
     return(
       <SignupContainer>
         <TextSignup>CHRISTMAS JOY IS JUST A FEW QUESTIONS AWAY</TextSignup>

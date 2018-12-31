@@ -1,4 +1,5 @@
 const router = require('express').Router();
+const path = require('path');
 const fileUpload = require('express-fileupload');
 const schema = require('../utils/schema');
 const User = schema.User;
@@ -14,7 +15,7 @@ router.get('/static/images/:filename', (req ,res) => {
 
   Image.findOne({filename: req.params.filename}, {data: 1}, (err, doc) => {
     if (err) { return res.sendStatus(500); }
-    if (!doc) { return res.sendStatus(404); }
+    if (!doc) { return res.sendFile(path.join(__dirname, '../../../assets/images/gift.jpg')); }
 
     return res.send(doc.data);
   });

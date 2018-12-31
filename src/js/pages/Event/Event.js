@@ -24,10 +24,10 @@ export default class Event extends Component {
       message: "Loading event...",
       event: {},
       members: [],
+      purchase: {},
       inviteBody: {},
       editEvent: {},
       inviteClicked:false,
-      purchasedItems: []
     }
   }
 
@@ -117,32 +117,25 @@ export default class Event extends Component {
     });
   }
 
-  async getPurchasedItems() {
-    try {
-      // Get purchases from api
-      const purchases = await axios.get('/api/mypurchases')
-      // Array of arrays [[recipient_id, item_id], ...]
-      const arrayPurchases = Object.entries(purchases.data)
-      let purchasedItems = []
-
-      // Loop to array to get item from api
-      for (const [recipientId, itemId] of arrayPurchases) {
-        // Get item from api
-        const item = await axios.get(`/api/item?item_id=${itemId}`)
-        purchasedItems.push(item.data)
-      }
-
-      this.setState({
-        purchasedItems
+  getPurchasedItems() {
+    axios.get("/api/mypurchases")
+    .then((res) => {
+      const purchases = res.data;
+      axios.get("/api/item?item_id=" + purchases[this.state.event_id])
+      .then((res) => {
+        this.setState({purchase: res.data});
       })
-    } catch(err) {
-      console.error(err.response)
-    }
+      .catch((err) => {
+        console.log(err);
+      });
+    })
+    .catch((err) => {
+      console.log(err);
+    });
   }
 
   membersToJSX() {
     if (this.state.members) {
-      console.log(this.state.members)
       return this.state.members.map((member, i) => {
         return (
           <div  key={"m-"+i}>
@@ -162,6 +155,16 @@ export default class Event extends Component {
       return "You are " + user + "'s Secret Santa!";
     }
     return "Recipient coming soon...";
+  }
+
+  purchaseToJSX() {
+    let item = this.state.purchase;
+    return (
+      <div>
+        <b>{item.name}</b>
+        <img src={"/api/static/images/item." + item._id} alt={item.name}></img>
+      </div>
+    );
   }
 
   startEvent() {
@@ -217,7 +220,11 @@ export default class Event extends Component {
             </ExchangDate>
           </Time>
 
-          <RecipientName> recipient's name coming soon </RecipientName>
+          <RecipientName> 
+            {this.recipientToJSX()} 
+          </RecipientName>
+
+          {this.purchaseToJSX()}
 
           <ButtonWrap>
             <div className="dropdown">
@@ -229,7 +236,6 @@ export default class Event extends Component {
 
             <Button onClick={this.handleInviteClick}> invite friend </Button>
           </ButtonWrap>
-
 
           {
             this.state.inviteClicked
@@ -247,24 +253,6 @@ export default class Event extends Component {
             ):""} */
           }
         </OneEventWrap>
-        <section>
-          <h2>My Purchases</h2>
-          {
-            purchasedItems.map( item => {
-              return (
-                <article>
-                  <div>
-                    <h3>{item.name}</h3>
-                    <span>${item.usd}</span>
-                  </div>
-                  <div>
-                    <img src="" alt="Item" />
-                  </div>
-                </article>
-              )
-            })
-          }
-        </section>
       </>
     );
   }

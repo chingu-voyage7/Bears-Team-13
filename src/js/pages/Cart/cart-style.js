@@ -80,7 +80,7 @@ transition:.2s all linear;
 `
 
 const Checkout = styled.button`
-margin-top:40px;
+/* margin-top:40px; */
 border:1px #13491c solid;
 background-color:#13491c;
 color:white;
@@ -100,4 +100,8 @@ float:right;
 }
 `
 
-export {CartWrap, ItemsWrap, Item, ImageWrap, ImagePriceWrap, PriceSelectWrap, ItemName, Price, Delete, Checkout}
+const ButtonsWrap = styled.div`
+margin-top:40px;
+`
+
+export {CartWrap, ItemsWrap, Item, ImageWrap, ImagePriceWrap, PriceSelectWrap, ItemName, Price, Delete, Checkout, ButtonsWrap}

@@ -156,11 +156,59 @@ const ImageInfoWrap = styled.div`
 display:flex;
 `
 
-const ImageUploadWrap = styled.div`
-width:80%;`
+const Form = styled.form`
+width:90%;
+/* border:1px red solid; */
+margin-left:20px;
+display:flex;
+flex-direction:column;
+height:70px;
+justify-content:space-between;
+align-items:center;
+`
 
-const SmallButton = styled.button`
+const AddImageButton = styled.input`
+width:240px;
+border-radius:10px;
 
 `
 
-export {Name, MyAccountWrap, NameButtonsWrap, ButtonsWrap, Button, Greeting, PasswordButton, AboutWrap, H2, P, Span, Image, InfoWrap, UserImage, ImageInfoWrap, SmallButton, ImageUploadWrap}
+const Submit = styled.input`
+height:30px;
+border-radius:5px;
+border:1px #D10A0A solid;
+color:#D10A0A;
+font-size:15px;
+/* box-shadow:1px 1px 1px rgba(0,0,0,0.5); */
+transition:.2s all linear;
+background-color:white;
+
+ &:hover {
+    background: #D10A0A;
+    color:white;
+    cursor:pointer;
+  }
+
+  &:focus{
+      outline:0;
+  }
+  &:active{
+    box-shadow:0px 0px 0px;
+    top:2px;
+    background-color:#13491c;
+    border-color:#13491c;
+  }
+`
+
+const H4= styled.h4`
+color:#D10A0A;
+text-align:center;
+border-top:1px #D10A0A solid;
+padding-top:30px;
+width:80%;
+margin:0 auto;
+margin-bottom:30px;
+letter-spacing:1px;
+`
+
+export {Name, MyAccountWrap, NameButtonsWrap, ButtonsWrap, Button, Greeting, PasswordButton, AboutWrap, H2, P, Span, Image, InfoWrap, UserImage, ImageInfoWrap, AddImageButton, Form, Submit, H4}

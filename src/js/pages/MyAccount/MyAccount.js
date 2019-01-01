@@ -1,5 +1,5 @@
 import React, { Component } from 'react';
-import {Name, MyAccountWrap, NameButtonsWrap, ButtonsWrap, Button, Greeting,  AboutWrap, H2, P, Span, Image, InfoWrap, UserImage, ImageInfoWrap} from "./myAccount-style";
+import {Name, MyAccountWrap, NameButtonsWrap, ButtonsWrap, Button, Greeting,  AboutWrap, H2, P, Span, InfoWrap, UserImage, ImageInfoWrap, Form, AddImageButton, Submit, H4} from "./myAccount-style";
 import PasswordPopUp from "../../components/PopUp/PopUp";
 import axios from 'axios';
 
@@ -102,10 +102,12 @@ export default class MyAccount extends Component {
                       
                   </InfoWrap>
               </ImageInfoWrap>
-              <form onSubmit={this.uploadFile.bind(this)}>
-                    <input name="" type="file" onChange={this.setSelectedFile.bind(this)}/>
-                    <input type="submit"/>
-                  </form>
+                  <H4> add/change your photo </H4>
+                  <Form onSubmit={this.uploadFile.bind(this)}>
+                    <AddImageButton name="" type="file" onChange={this.setSelectedFile.bind(this)}/>
+                    <Submit type="submit"/>
+                  </Form>
+     
               {/* <Image></Image> */}
           </AboutWrap>
 

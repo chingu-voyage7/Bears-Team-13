@@ -27,4 +27,10 @@ color:gray;
 font-size:20px;
 `
 
-export {FooterStyle, IconsFooterContainer, IconFooter };
+
+const P = styled.p `
+margin-right:10px;
+font-size:14px;
+color:#13491C;
+`
+export {FooterStyle, IconsFooterContainer, IconFooter, P };

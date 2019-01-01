@@ -12,7 +12,7 @@ background-color:#D10A0A;
 font-weight:bold;
 box-shadow:2px 2px 2px rgba(0,0,0,0.5);
 transition:.2s all linear;
-
+background-color:white;
  &:hover {
     background: white;
     color:#D10A0A;
@@ -32,8 +32,8 @@ transition:.2s all linear;
 
 const InvitePopUpWrap = styled.div`
     height:350px;
-    width:380px;
-    border:4px #d10a0a solid;
+    width:360px;
+    /* border:4px #d10a0a solid; */
     display:flex;
     flex-direction:column;
     position:fixed;

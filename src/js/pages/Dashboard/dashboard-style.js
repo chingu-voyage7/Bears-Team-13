@@ -3,7 +3,7 @@ import myImage from '../../../assets/images/pine-cones.jpeg';
 
 
 const DashboardWrap = styled.div`
-width:380px;
+width:370px;
 margin:0 auto;
 `
 

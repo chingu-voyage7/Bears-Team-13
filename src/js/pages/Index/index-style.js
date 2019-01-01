@@ -5,7 +5,7 @@ const IndexContainer = styled.div`
 display:flex;
 flex-direction:column;
 /* border:1px red solid; */
-width:380px;
+width:370px;
 margin:20px auto;
 `
 
@@ -88,19 +88,23 @@ font-size:16px;
 `
 
 const Grid = styled.div`
+margin:0 auto;
 margin-top:30px;
 display:grid;
-grid-template-columns: repeat(auto-fill, minmax(182px, 1fr));
+grid-template-columns: repeat(auto-fill, minmax(160px, 1fr));
 grid-gap: 15px;
+/* border:1px red solid; */
 
 `
 const GridItem = styled.div`
-  height:182px;
-  width:182px;
+
+  height:160px;
+  width:160px;
   border-radius:5px;
   border:1px #45c132 solid;
   text-align:center;
   position: relative;
+  margin: 0 auto;
   &:hover{
       cursor:pointer;
   }

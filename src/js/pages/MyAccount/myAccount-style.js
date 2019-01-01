@@ -38,6 +38,7 @@ color:#D10A0A;
 font-size:15px;
 /* box-shadow:1px 1px 1px rgba(0,0,0,0.5); */
 transition:.2s all linear;
+background-color:white;
 
  &:hover {
     background: #D10A0A;
@@ -65,7 +66,7 @@ box-shadow:none;
 padding:5px;
 width:150px;
 margin:0 auto;
-
+background-color:white;
 transition:.2s all linear;
 &:hover {
     cursor:pointer;
@@ -88,15 +89,13 @@ transition:.2s all linear;
 const AboutWrap = styled.div`
 display:flex;
 border:1px dashed #45c132;
-border-bottom:1px rgba(0,0,0,0) solid;
+/* border-bottom:1px rgba(0,0,0,0) solid; */
 flex-direction:column;
-/* border:1px gray solid; */
 background-color:white;
-/* box-shadow:5px 5px 5px rgba(0,0,0,0.5); */
 border-radius:10px;
 margin-top:20px;
-height:340px;
-padding:0%;
+padding:0;
+padding-bottom:20px;
 
 `
 
@@ -118,8 +117,8 @@ const P = styled.p`
 color:#D10A0A;
 margin:0px;
 padding-left:30px;
-margin-top:10px;
-margin-bottom:10px;
+margin-top:5px;
+margin-bottom:5px;
 /* margin-left:40px; */
 
 `
@@ -141,12 +140,27 @@ margin:0 auto;
 margin-top:10px;
 `
 
-const InfoWrap = styled.div`
-/* border:1px dashed #45c132;
-padding:0;
-padding:10px;
-width:340px;
-margin:0 auto; */
+const UserImage = styled.img`
+height:150px;
+width:150px;
+/* margin: 0 auto; */
+margin-left:20px;
+margin-bottom:20px;
 `
 
-export {Name, MyAccountWrap, NameButtonsWrap, ButtonsWrap, Button, Greeting, PasswordButton, AboutWrap, H2, P, Span, Image, InfoWrap}
+const InfoWrap = styled.div`
+display:flex;
+flex-direction:column;
+`
+const ImageInfoWrap = styled.div`
+display:flex;
+`
+
+const ImageUploadWrap = styled.div`
+width:80%;`
+
+const SmallButton = styled.button`
+
+`
+
+export {Name, MyAccountWrap, NameButtonsWrap, ButtonsWrap, Button, Greeting, PasswordButton, AboutWrap, H2, P, Span, Image, InfoWrap, UserImage, ImageInfoWrap, SmallButton, ImageUploadWrap}

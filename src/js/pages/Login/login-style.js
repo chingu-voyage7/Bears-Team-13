@@ -2,7 +2,7 @@ import styled from 'styled-components';
 import myImage from '../../../assets/images/christmas.jpeg';
 
 const LoginContainer = styled.div`
-width:380px;
+width:370px;
 display:flex;
 flex-direction:column;
 /* border:1px red solid; */
@@ -51,7 +51,7 @@ color:#D10A0A;
 font-weight:bold;
 box-shadow:2px 2px 2px rgba(0,0,0,0.5);
 transition:.2s all linear;
-
+background-color:white;
  &:hover {
     background: #D10A0A;
     color:white;

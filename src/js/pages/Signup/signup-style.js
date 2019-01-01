@@ -4,7 +4,7 @@ import myImage from '../../../assets/images/red_ball.jpg';
 
 
 const SignupContainer = styled.div`
-width:380px;
+width:370px;
 margin:0 auto;
 margin-top:40px;
 `
@@ -69,6 +69,7 @@ color:#D10A0A;
 font-weight:bold;
 box-shadow:2px 2px 2px rgba(0,0,0,0.5);
 transition:.2s all linear;
+background-color:white;
 
  &:hover {
     background: #D10A0A;

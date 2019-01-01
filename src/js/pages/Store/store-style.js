@@ -1,12 +1,13 @@
 import styled from 'styled-components';
 
 const StoreWrap = styled.div`
-width:380px;
+width:370px;
 margin:0 auto;
 `
 
 const SearchForm = styled.form`
- width:100%;
+ width:90%;
+ margin:0 auto;
  border:3px #d10a0a solid;
  border-radius:5px;
  /* height:100px; */

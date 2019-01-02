@@ -100,7 +100,8 @@ router.post('/adduser', function (req, res) {
       User.create(req.body, (err, doc) => {
         if (err) { return res.sendStatus(500); }
         if (!doc) { return res.sendStatus(500); }
-        console.log(doc);
+
+        passport.authenticate('local');
         return res.sendStatus(200);
       });
 
@@ -110,15 +111,14 @@ router.post('/adduser', function (req, res) {
       User.updateOne({_id: new ObjectID(user._id)}, req.body, {upsert: true}, (err, doc) => {
         if (err) { return res.sendStatus(500); }
         if (!doc) { return res.sendStatus(404); }
-        console.log("User " + req.body.username + " was added.");
+
         passport.authenticate('local');
         res.sendStatus(200);
       });
 
       // User exists
     } else {
-      console.log("ERR: username or email already exists.");
-      return res.json({error: "username or email already exists."}).status(400);
+      return res.status(400).json({error: "username or email already exists."});
     }
   });
 });

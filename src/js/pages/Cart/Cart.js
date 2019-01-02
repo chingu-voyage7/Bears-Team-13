@@ -15,7 +15,7 @@ export default class Cart extends Component {
     }
   }
 
-  componentDidMount() { 
+  componentDidMount() {
     this.fetchCart();
   }
 
@@ -44,52 +44,59 @@ export default class Cart extends Component {
     } = this.state;
     const that = this;
 
-    return (
-      <CartWrap>
+    return <CartWrap>
         <Greeting>My Cart</Greeting>
 
-        { /* List items */}
+        {/* List items */}
         <ItemsWrap>
-          {function() {
+          {(function() {
             if (!cart || cart.length === 0) {
               return "No Items in cart.";
             }
 
-            return cart.map((pair) => {
-              const {event, item} = pair;
+            return cart.map(pair => {
+              const { event, item } = pair;
               console.log(JSON.stringify(item));
 
-              return (
-                <Item key={event._id}>
+              return <Item key={event._id}>
                   <ItemName>{item.name}</ItemName>
                   <ImagePriceWrap>
-                      <ImageWrap>
-                        <img src={"/api/static/images/item." + item._id} alt="item" />
-                      </ImageWrap>
-                      <PriceSelectWrap>
-                          <Price>${item.usd}</Price>
-                          <p>Gift for {event.recipient.username} @ {event.name}</p>
-                          <Delete onClick={(e) => that.onDelete(e, event._id)}>Delete</Delete>
-                      </PriceSelectWrap>
+                    <ImageWrap>
+                      <img src={"/api/static/images/item." + item._id} alt="item" />
+                    </ImageWrap>
+                    <PriceSelectWrap>
+                      <Price>${item.usd}</Price>
+                      <p>
+                        Gift for {event.recipient.username} @ {event.name}
+                      </p>
+                      <Delete onClick={e => that.onDelete(e, event._id)}>
+                        Delete
+                      </Delete>
+                    </PriceSelectWrap>
                   </ImagePriceWrap>
-                </Item>
-              );
+                </Item>;
             });
-          }()}
-          <p>Total: $ { function() {
-            let total = 0;
-            cart.forEach((pair) => {
-              total += pair.item.usd;
-            });
+          })()}
+          <p>
+            Total: $ {(function() {
+              let total = 0;
+              cart.forEach(pair => {
+                total += pair.item.usd;
+              });
 
-            return total;
-          }() }</p>
+              return total;
+            })()}
+          </p>
         </ItemsWrap>
         <ButtonsWrap>
           <Link to="/store"><Button>Continue Shopping</Button></Link>
-          <Checkout>Proceed to checkout</Checkout>
+          <Checkout onClick={() => this.props.history.push("/payment")}>Proceed to checkout</Checkout>
         </ButtonsWrap>
       </CartWrap>
-    )
+    // )
+      //   <Link to="/store">Continue Shopping</Link>
+      //   <Checkout onClick={() => this.props.history.push("/payment")}>
+      
+      // </CartWrap>;
   }
 }

@@ -36,11 +36,14 @@ function handlePublic(req, res, event) {
 
 // Returns an event given event_id
 router.get('/event', (req, res) => {
+
+  // Get event
   Event.findOne({_id: new ObjectID(req.query.event_id)}, (err, event) => {
     if (err) { return res.sendStatus(500); }
     if (!event) { return res.sendStatus(404); }
 
-    if (!event.closed && event.ssList && event.ssList[req.user._id]) {
+    // If event started, get user's recipient
+    if (event.ssList && event.ssList[req.user._id]) {
       User.findOne({_id: new ObjectID(event.ssList[req.user._id])}, {username: 1}, (err, recipient) => {
         if (err) { return res.sendStatus(500); }
         event.recipient = recipient;
@@ -51,7 +54,7 @@ router.get('/event', (req, res) => {
       handlePublic(req, res, event);
     }
   });
-})
+});
 
 // Returns a list of events
 // Given ["key", "value", "key", "value"...]

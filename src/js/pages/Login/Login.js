@@ -1,5 +1,6 @@
 import React, {Component} from 'react';
 import axios from 'axios';
+import queryString from 'query-string';
 import {LoginContainer, Form, Input, Submit, Label } from './login-style'
 
 export default class Login extends Component {
@@ -18,7 +19,6 @@ export default class Login extends Component {
 
   onSubmit(e) {
     e.preventDefault();
-    // alert(JSON.stringify(this.state));
     axios.post('/api/login', {
       username: this.state.usernameOrEmail,
       password: this.state.password
@@ -26,7 +26,12 @@ export default class Login extends Component {
     .then((res) => {
       this.props.setGlobal({user: res.data}, () => {
         const history = this.props.history;
-        history.push("/myevents");
+        const redirect = queryString.parse(this.props.location.search).redirect;
+        if (redirect) {
+          history.push(redirect);
+        } else {
+          history.push("/myevents");
+        }
       });
     })
     .catch((err) => {

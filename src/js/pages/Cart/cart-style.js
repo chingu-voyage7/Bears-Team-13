@@ -28,6 +28,11 @@ border-radius:10px;
 margin-top:-10px;
 `
 
+const Image = styled.img`
+width:100px;
+height:100px;
+`
+
 const ImagePriceWrap = styled.div`
 display:flex;
 justify-content:space-between;
@@ -104,4 +109,4 @@ const ButtonsWrap = styled.div`
 margin-top:40px;
 `
 
-export {CartWrap, ItemsWrap, Item, ImageWrap, ImagePriceWrap, PriceSelectWrap, ItemName, Price, Delete, Checkout, ButtonsWrap}
+export {CartWrap, ItemsWrap, Item, ImageWrap, ImagePriceWrap, PriceSelectWrap, ItemName, Price, Delete, Checkout, ButtonsWrap, Image}

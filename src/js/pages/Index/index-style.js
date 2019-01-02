@@ -97,7 +97,6 @@ grid-gap: 15px;
 
 `
 const GridItem = styled.div`
-
   height:160px;
   width:160px;
   border-radius:5px;
@@ -126,4 +125,10 @@ margin:0;
 width:80px;
 `
 
-export {IndexContainer, TitleIndex, AboutContainer,SantaImage, AboutTextContainer, ButtonContainer, AboutText,StartExchange, Button, TitleGift, Grid, GridItem, ItemName, ItemPrice};
+const Image = styled.img`
+width:120px;
+height:120px;
+`
+
+
+export {IndexContainer, TitleIndex, AboutContainer,SantaImage, AboutTextContainer, ButtonContainer, AboutText,StartExchange, Button, TitleGift, Grid, GridItem, ItemName, ItemPrice,Image};

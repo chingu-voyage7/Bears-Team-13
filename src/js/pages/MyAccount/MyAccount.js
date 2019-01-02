@@ -1,5 +1,5 @@
 import React, { Component } from 'react';
-import {Name, MyAccountWrap, NameButtonsWrap, ButtonsWrap, Button, Greeting,  AboutWrap, H2, P, Span, Image, InfoWrap} from "./myAccount-style";
+import {Name, MyAccountWrap, NameButtonsWrap, ButtonsWrap, Button, Greeting,  AboutWrap, H2, P, Span, InfoWrap, UserImage, ImageInfoWrap, Form, AddImageButton, Submit, H4} from "./myAccount-style";
 import PasswordPopUp from "../../components/PopUp/PopUp";
 import axios from 'axios';
 
@@ -90,17 +90,25 @@ export default class MyAccount extends Component {
           <AboutWrap>
          
                 <H2> your info </H2>
-                <img src={"/api/static/images/user." + this.props.globals.user._id} alt="no pic"/>
-                <form onSubmit={this.uploadFile.bind(this)}>
-                  <input name="" type="file" onChange={this.setSelectedFile.bind(this)}/>
-                  <input type="submit"/>
-                </form>
-                <InfoWrap>
-                <P> <Span>name :</Span> {user.firstName}</P>
-                <P> <Span>email : </Span>{user.email} </P>
-                <P> <Span>username : </Span>{user.username} </P>
-              </InfoWrap>
-              <Image></Image>
+              
+
+              <ImageInfoWrap>
+                  <UserImage src={"/api/static/images/user." + this.props.globals.user._id} alt="no pic"/>
+                    
+                  <InfoWrap>
+                      <P> <Span>name :</Span> {user.firstName}</P>
+                      <P> <Span>email : </Span>{user.email} </P>
+                      <P> <Span>username : </Span>{user.username} </P>
+                      
+                  </InfoWrap>
+              </ImageInfoWrap>
+                  <H4> add/change your photo </H4>
+                  <Form onSubmit={this.uploadFile.bind(this)}>
+                    <AddImageButton name="" type="file" onChange={this.setSelectedFile.bind(this)}/>
+                    <Submit type="submit"/>
+                  </Form>
+     
+              {/* <Image></Image> */}
           </AboutWrap>
 
        {this.state.passwordPopUpShown ? <PasswordPopUp user={user} whichButtonClicked={this.state.whichButtonClicked} closePopUp={this.closePopUp}   /> : <div></div> }

@@ -60,8 +60,8 @@ export default class Item extends Component {
              </ImageWrap>
              <Price>${item.usd}</Price>
 
-        <form onSubmit={this.addToCart}>
-          <select value={selected} onChange={this.handleChange}>
+        <Form onSubmit={this.addToCart}>
+          <Select value={selected} onChange={this.handleChange}>
             <option>
               Select a recipient
             </option>
@@ -75,9 +75,9 @@ export default class Item extends Component {
                   </option> 
                   );
               })}
-          </select>
-          <input type="submit" value="Add to cart" />
-        </form>
+          </Select>
+          <Submit type="submit" value="Add to cart" />
+        </Form>
       </ItemWrap>;
   }
 }

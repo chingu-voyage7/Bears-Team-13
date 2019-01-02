@@ -1,8 +1,10 @@
 import React, { Component } from 'react'
 import axios from 'axios'
-import {CartWrap, ItemsWrap, Item, ImageWrap, ImagePriceWrap, PriceSelectWrap, ItemName, Price, Delete, Checkout} from './cart-style';
+import {CartWrap, ItemsWrap, Item, ImageWrap, ImagePriceWrap, PriceSelectWrap, ItemName, Price, Delete, Checkout, ButtonsWrap} from './cart-style';
+import {Button} from '../MyAccount/myAccount-style'
 import {Greeting} from '../MyAccount/myAccount-style'
 import { Link } from 'react-router-dom';
+import { fromBits } from 'long';
 
 export default class Cart extends Component {
   constructor(props) {
@@ -86,10 +88,15 @@ export default class Cart extends Component {
             })()}
           </p>
         </ItemsWrap>
-        <Link to="/store">Continue Shopping</Link>
-        <Checkout onClick={() => this.props.history.push("/payment")}>
-          Proceed to checkout
-        </Checkout>
-      </CartWrap>;
+        <ButtonsWrap>
+          <Link to="/store"><Button>Continue Shopping</Button></Link>
+          <Checkout onClick={() => this.props.history.push("/payment")}>Proceed to checkout</Checkout>
+        </ButtonsWrap>
+      </CartWrap>
+    // )
+      //   <Link to="/store">Continue Shopping</Link>
+      //   <Checkout onClick={() => this.props.history.push("/payment")}>
+      
+      // </CartWrap>;
   }
 }

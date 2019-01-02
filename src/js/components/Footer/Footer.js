@@ -1,6 +1,6 @@
 import React, {Component} from 'react';
 import {Link} from 'react-router-dom';
-import {FooterStyle, IconsFooterContainer} from './footer-style'
+import {FooterStyle, IconsFooterContainer, P} from './footer-style'
 
 const iconStyle = {
   fontSize: '22px',
@@ -14,10 +14,12 @@ export default class Footer extends Component {
   render() {
     return (
         <FooterStyle>
+          <P> made by </P>
             <IconsFooterContainer>
-                <Link style={{ textDecoration: 'none' }} to="#"><i style={iconStyle} className="fab fa-github-square"></i></Link>
-                <Link style={{ textDecoration: 'none' }} to="#"><i style={iconStyle} className="fab fa-github-square"></i></Link>
-                <Link style={{ textDecoration: 'none' }} to="#"><i style={iconStyle}  className="fab fa-github-square"></i></Link>
+                
+                <a style={{ textDecoration: 'none' }} target="_blank" href="https://alex-cannon.github.io/"><i style={iconStyle} className="fas fa-user-alt"></i></a>
+                <a style={{ textDecoration: 'none' }} target="_blank" href="https://designbyinna.com"><i style={iconStyle} className="fas fa-user-alt"></i></a>
+                <a style={{ textDecoration: 'none' }} target="_blank" href="https://github.com/gabrielgs"><i style={iconStyle}  className="fas fa-user-alt"></i></a>
             </IconsFooterContainer>
           </FooterStyle>
     );

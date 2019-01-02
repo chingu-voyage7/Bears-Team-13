@@ -6,7 +6,7 @@ border-radius:5px;
 margin:0 auto;
 margin-top:40px;
 padding:10px;
-
+background-color:white;
 border:1px #D10A0A solid;
 color:#D10A0A;
 font-weight:bold;
@@ -67,7 +67,7 @@ box-shadow:none;
 
 const Form = styled.form`
  height:700px;
-    width:380px;
+    width:360px;
     border:4px #d10a0a solid;
     display:flex;
     flex-direction:column;

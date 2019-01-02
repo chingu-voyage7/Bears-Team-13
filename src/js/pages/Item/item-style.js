@@ -65,6 +65,7 @@ transition:.2s all linear;
 
 const Select = styled.select`
 border-color:#D10A0A;
+width:150px;
 &:focus{
     outline:0;
     border:2px #D10A0A solid;

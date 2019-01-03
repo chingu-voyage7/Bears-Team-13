@@ -10,7 +10,7 @@ const Item = ({item, handleItemClick}) => {
 
     <GridItem onClick={handleItemClick}>
       <ItemName>{item.name}</ItemName>
-      <img src="" alt="img "/>
+      <img src={"/api/static/images/item." + item._id} alt="img "/>
 
         <ItemPrice>{item.usd}</ItemPrice>
 
@@ -31,7 +31,6 @@ export default class Store extends Component {
   }
 
   componentDidMount() {
-    console.log('mounted')
 
     axios.get('/api/items')
       .then(res => {

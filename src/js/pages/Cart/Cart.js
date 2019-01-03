@@ -4,7 +4,7 @@ import {CartWrap, ItemsWrap, Item, ImageWrap, ImagePriceWrap, PriceSelectWrap, I
 import {Button} from '../MyAccount/myAccount-style'
 import {Greeting} from '../MyAccount/myAccount-style'
 import { Link } from 'react-router-dom';
-import { fromBits } from 'long';
+//import { fromBits } from 'long';
 
 export default class Cart extends Component {
   constructor(props) {

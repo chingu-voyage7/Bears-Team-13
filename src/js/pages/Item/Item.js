@@ -62,7 +62,10 @@ export default class Item extends Component {
     const { selected } = this.state;
 
     axios.post('/api/mycart/update', { item_id: this.state.item_id, event_id: selected })
-      .then( res => console.log(res.data) )
+      .then( res => {
+        console.log(res.data);
+        this.fetchCart();
+      })
       .catch( err => console.log(err.response));
 
       this.fetchCart();

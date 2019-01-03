@@ -27,14 +27,15 @@ module.exports = {
     });
 
   },
-  endDate: function(user, event) {
+  endDate: function(user, yourSS, event) {
     sgMail.send({
       to: user.email,
       from: 'inna@'+process.env.HOST_NAME,
       subject: "Gift Exchange Ended for " + event.name + "!",
       html: 
         '<body> The Gift Exchange ended for ' + event.name + "." +
-        '<a href="'+process.env.HOST_URI+'/event/'+event._id+'> Click here to see the results</a>!' + 
+        '<p>User ' + yourSS.username + ' was your Secret Santa! Your gift is shipping now. :)</p>' +
+        '<a href="'+process.env.HOST_URI+'/event/'+event._id+'> Click here to view the results</a>!' + 
         '</body>'
     });
 

@@ -104,6 +104,10 @@ const GridItem = styled.div`
   text-align:center;
   position: relative;
   margin: 0 auto;
+  background-image:url(${props => props.image});
+   background-size:cover;
+   background-position:right;
+   background-repeat:no-repeat;
   &:hover{
       cursor:pointer;
   }

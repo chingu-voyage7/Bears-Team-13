@@ -7,9 +7,9 @@ import {Link} from 'react-router-dom';
 const Item = ({ item, handleItemClick }) => {
   return (
 
-    <GridItem img={"/api/static/images/item." + item._id} alt={item.name} onClick={handleItemClick}>
+    <GridItem image={"/api/static/images/item." + item._id} alt={item.name} onClick={handleItemClick}>
       <ItemName>{item.name}</ItemName>
-      <Image src={"/api/static/images/item." + item._id} alt={item.name} />
+      {/* <Image src={"/api/static/images/item." + item._id} alt={item.name} /> */}
 
       <ItemPrice>{item.usd}</ItemPrice>
 

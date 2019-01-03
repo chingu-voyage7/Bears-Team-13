@@ -71,4 +71,28 @@ width:150px;
     border:2px #D10A0A solid;
 }
 `
-export {ItemWrap, ImageWrap, H2, Form, Price, Submit, Select}
+
+const NameCartWrap = styled.div`
+display:flex;
+align-items:center;
+/* border:1px red solid; */
+width:170px;
+margin:0 auto;
+justify-content:space-between;
+`
+
+const CartSpan = styled.span`
+font-size:16px;
+margin-left:5px;
+/* border:1px red solid; */
+`
+
+const CartWrap = styled.div`
+margin-bottom:40px;
+/* border:1px red solid; */
+width:90%;
+margin: 0 auto;
+display:flex;
+justify-content:flex-end;
+`
+export {ItemWrap, ImageWrap, H2, Form, Price, Submit, Select, NameCartWrap, CartSpan, CartWrap}

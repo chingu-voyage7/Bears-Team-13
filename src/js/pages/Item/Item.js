@@ -1,6 +1,13 @@
 import React, { Component } from 'react';
 import axios from 'axios';
-import {ItemWrap, ImageWrap, H2, Form, Price, Submit, Select} from "./item-style";
+import {ItemWrap, ImageWrap, H2, Form, Price, Submit, Select, NameCartWrap, CartSpan, CartWrap} from "./item-style";
+import { Link} from 'react-router-dom';
+
+const iconStyle = {
+  fontSize: '22px',
+  color: '#13491C',
+  textDecoration: 'none',
+};
 
 export default class Item extends Component {
   constructor(props) {
@@ -9,13 +16,15 @@ export default class Item extends Component {
       item: {},
       item_id: this.props.match.params.item_id,
       events: [],
-      selected: ""
+      selected: "",
+      cartItemsLength:0
     }
   }
 
   componentDidMount() {
     this.fetchItem();
     this.fetchRecipients();
+    this.fetchCart();
   }
 
   fetchItem() {
@@ -36,13 +45,27 @@ export default class Item extends Component {
       .catch(err => console.log(err.response))
   }
 
+  fetchCart() {
+    axios.get('/api/mycart')
+      .then( res => {
+   
+          this.setState({cartItemsLength: res.data.length});
+          console.log("cart fetched on button click " + res.data.length);
+      })
+      .catch((err) => {
+        console.log(err);
+      });
+  }
+
   addToCart = (e) => {
     e.preventDefault()
     const { selected } = this.state;
 
     axios.post('/api/mycart/update', { item_id: this.state.item_id, event_id: selected })
       .then( res => console.log(res.data) )
-      .catch( err => console.log(err.response))
+      .catch( err => console.log(err.response));
+
+      this.fetchCart();
   }
 
   handleChange = (e) => {
@@ -54,6 +77,11 @@ export default class Item extends Component {
     const { item, selected, events } = this.state;
 
     return <ItemWrap>
+        
+             <CartWrap>
+               <Link style={{ textDecoration: 'none' }} to="/cart"> <i  style={iconStyle} className="fas fa-shopping-cart"></i><CartSpan>{this.state.cartItemsLength} </CartSpan>  </Link>
+             </CartWrap>
+            
              <H2>{item.name}</H2>
              <ImageWrap>
               <img src="" alt="Item" />

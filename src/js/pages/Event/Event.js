@@ -121,13 +121,16 @@ export default class Event extends Component {
     axios.get("/api/mypurchases")
     .then((res) => {
       const purchases = res.data;
-      axios.get("/api/item?item_id=" + purchases[this.state.event_id])
-      .then((res) => {
-        this.setState({purchase: res.data});
-      })
-      .catch((err) => {
-        console.log(err);
-      });
+      if (purchases[this.state.event_id]) {
+        axios.get("/api/item?item_id=" + purchases[this.state.event_id])
+        .then((res) => {
+          alert("hit");
+          this.setState({purchase: res.data});
+        })
+        .catch((err) => {
+          console.log(err);
+        });  
+      }
     })
     .catch((err) => {
       console.log(err);
@@ -158,6 +161,9 @@ export default class Event extends Component {
   }
 
   purchaseToJSX() {
+    if (!this.state.purchase.name) {
+      return "";
+    }
     let item = this.state.purchase;
     return (
       <div>

@@ -1,15 +1,15 @@
 import React, {Component} from 'react';
 import axios from 'axios';
 
-import {IndexContainer, TitleIndex, AboutContainer, SantaImage, AboutTextContainer, ButtonContainer, AboutText, StartExchange,Button, TitleGift, Grid, GridItem, ItemName, ItemPrice} from './index-style'
+import {IndexContainer, TitleIndex, AboutContainer, SantaImage, AboutTextContainer, ButtonContainer, AboutText, StartExchange,Button, TitleGift, Grid, GridItem, ItemName, ItemPrice, Image} from './index-style'
 import {Link} from 'react-router-dom';
 
 const Item = ({ item, handleItemClick }) => {
   return (
 
-    <GridItem onClick={handleItemClick}>
+    <GridItem image={"/api/static/images/item." + item._id} alt={item.name} onClick={handleItemClick}>
       <ItemName>{item.name}</ItemName>
-      <img src={"/api/static/images/item." + item._id} alt={item.name} />
+      {/* <Image src={"/api/static/images/item." + item._id} alt={item.name} /> */}
 
       <ItemPrice>{item.usd}</ItemPrice>
 

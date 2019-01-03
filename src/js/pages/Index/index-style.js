@@ -97,7 +97,6 @@ grid-gap: 15px;
 
 `
 const GridItem = styled.div`
-
   height:160px;
   width:160px;
   border-radius:5px;
@@ -105,6 +104,10 @@ const GridItem = styled.div`
   text-align:center;
   position: relative;
   margin: 0 auto;
+  background-image:url(${props => props.image});
+   background-size:cover;
+   background-position:right;
+   background-repeat:no-repeat;
   &:hover{
       cursor:pointer;
   }
@@ -113,7 +116,10 @@ const GridItem = styled.div`
 
 const ItemName = styled.p`
 color:#D10A0A;
+background-color:rgba(255,255,255,0.5);
+padding:10px;
 font-weight:bold;
+margin-top:0;
 `
 
 const ItemPrice = styled.p`
@@ -126,4 +132,10 @@ margin:0;
 width:80px;
 `
 
-export {IndexContainer, TitleIndex, AboutContainer,SantaImage, AboutTextContainer, ButtonContainer, AboutText,StartExchange, Button, TitleGift, Grid, GridItem, ItemName, ItemPrice};
+const Image = styled.img`
+width:120px;
+height:120px;
+`
+
+
+export {IndexContainer, TitleIndex, AboutContainer,SantaImage, AboutTextContainer, ButtonContainer, AboutText,StartExchange, Button, TitleGift, Grid, GridItem, ItemName, ItemPrice,Image};

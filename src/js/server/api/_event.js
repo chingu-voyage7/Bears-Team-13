@@ -124,7 +124,7 @@ router.get('/myevents', isAuth, function(req, res) {
 });
 
 // POSTS an event to our db
-router.post('/addevent', isAuth, whitelist(["name", "public", "startDate", "endDate"]), (req, res) => {
+router.post('/addevent', isAuth, required(["name", "startDate", "endDate"]), (req, res) => {
   console.log("Creating event...");
   console.log("BUG: Must restrict start, end dates to the future.");
   var event = req.body;

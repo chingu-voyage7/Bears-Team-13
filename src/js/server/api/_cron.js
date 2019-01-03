@@ -43,7 +43,7 @@ function handleDateChecks(user, tries) {
               if (!users) { return console.log("404 no users"); }
 
               users.map((user) => {
-                mailer.endDate(user, event);
+                mailer.endDate(user, users[users.indexOf(ssList[user._id])], event);
               });
             });
           });

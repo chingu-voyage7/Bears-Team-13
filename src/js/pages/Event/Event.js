@@ -157,7 +157,7 @@ export default class Event extends Component {
       user = user[0].toUpperCase() + user.substring(1);
       return "You are " + user + "'s Secret Santa!";
     }
-    return "Recipient coming soon...";
+    return "Discover your Secret Santa on " + moment(this.state.event.startDate).format("dddd, MM/DD/YY") + " :)";
   }
 
   purchaseToJSX() {

@@ -8,9 +8,9 @@ import {Grid, GridItem, ItemName, ItemPrice} from '../Index/index-style.js';
 const Item = ({item, handleItemClick}) => {
   return (
 
-    <GridItem onClick={handleItemClick}>
+    <GridItem image={"/api/static/images/item." + item._id} alt="img" onClick={handleItemClick}>
       <ItemName>{item.name}</ItemName>
-      <img src={"/api/static/images/item." + item._id} alt="img "/>
+      {/* <img src={"/api/static/images/item." + item._id} alt="img "/> */}
 
         <ItemPrice>{item.usd}</ItemPrice>
 

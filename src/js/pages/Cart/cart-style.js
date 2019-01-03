@@ -16,7 +16,7 @@ flex-direction:column;
 const Item = styled.div`
 margin-bottom:40px 0;
 border-top:1px #13491c solid;
-border-bottom:1px #13491c solid;
+/* border-bottom:1px #13491c solid; */
 padding-bottom:20px;
 `
 
@@ -42,9 +42,12 @@ justify-content:space-between;
 const PriceSelectWrap = styled.div`
 display:flex;
 flex-direction:column;
-align-items:flex-end;
+/* align-items:flex-end; */
 justify-content:space-between;
 /* border:1px blue solid; */
+margin-left:5px;
+width:180px;
+
 `
 
 const ItemName = styled.div`
@@ -66,6 +69,9 @@ color:#D10A0A;
 font-size:15px;
 /* box-shadow:1px 1px 1px rgba(0,0,0,0.5); */
 transition:.2s all linear;
+background-color:white;
+width:100px;
+
 
  &:hover {
     background: #D10A0A;

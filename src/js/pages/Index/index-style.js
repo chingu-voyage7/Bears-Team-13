@@ -116,7 +116,10 @@ const GridItem = styled.div`
 
 const ItemName = styled.p`
 color:#D10A0A;
+background-color:rgba(255,255,255,0.5);
+padding:10px;
 font-weight:bold;
+margin-top:0;
 `
 
 const ItemPrice = styled.p`

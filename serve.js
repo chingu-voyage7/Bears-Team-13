@@ -21,7 +21,7 @@ mongoUtil.connectToServers((err, connection) => {
   if (err) throw err;
 
   console.log("DB connections success.");
-  require('./src/js/server/utils/passportUtil.js').setupPassport();
+  require('./src/js/server/utils/passportUtil.js').setupPassport(app);
 
   // Setup API routes
   app.use('/api/', require('./src/js/server/api/_login.js'));

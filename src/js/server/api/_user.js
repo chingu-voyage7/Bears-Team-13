@@ -7,6 +7,7 @@ const ObjectID = require('mongodb').ObjectID;
 const schema = require('../utils/schema.js');
 const User = schema.User;
 const Event = schema.Event;
+const Image = schema.Image;
 var userUtil = new User();
 
 // Returns User's PUBLIC info
@@ -179,12 +180,18 @@ router.put('/edituser', isAuth, function (req, res) {
 
 // Delete User Document
 router.delete('/deleteuser', isAuth, function (req, res) {
-  req.logout();
-  User.deleteOne({username: req.user.username}, (err, doc) => {
+  User.deleteOne({_id: new ObjectID(req.user._id)}, (err, doc) => {
     if (err) { return res.sendStatus(500); }
     if (!doc) { return res.sendStatus(400); }
-    console.log("User " + req.user.username + " was deleted.");
-    res.sendStatus(200);
+
+    Image.deleteOne({filename: "user." + req.user._id}, (err, result) => {
+      if (err) { return res.sendStatus(500); }
+
+      
+      console.log("User " + req.user.username + " was deleted.");
+      req.logout();
+      return res.sendStatus(200);  
+    });
   });
 });
 

@@ -4,7 +4,6 @@ const express = require('express');
 const app = express();
 const path = require('path');
 const bodyParser = require('body-parser');
-const passportUtil = require('./src/js/server/utils/passportUtil.js');
 const mongoUtil = require('./src/js/server/utils/mongoUtil.js');
 
 const PORT = process.env.PORT || 80;
@@ -12,9 +11,6 @@ const PORT = process.env.PORT || 80;
 // Allow JSON and urlencoded
 app.use(bodyParser.urlencoded({extended: true}));
 app.use(bodyParser.json());
-
-// Setup/Configure passport
-passportUtil.setupPassport(app);
 
 // Allow static files
 app.use(express.static(path.join(__dirname, 'build')));
@@ -25,6 +21,7 @@ mongoUtil.connectToServers((err, connection) => {
   if (err) throw err;
 
   console.log("DB connections success.");
+  require('./src/js/server/utils/passportUtil.js').setupPassport();
 
   // Setup API routes
   app.use('/api/', require('./src/js/server/api/_login.js'));

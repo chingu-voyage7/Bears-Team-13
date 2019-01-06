@@ -73,4 +73,23 @@ font-weight:normal;
 font-size:30px;
 margin-top:10px;
 `
-export {OneEventWrap, EventTitle, Time, TimeSpan, RecipientName, Title, ButtonWrap, ExchangDate, TitleEditWrap, CountdownWrap}
+
+const EditPopUp = styled.div`
+    height:400px;
+    width:370px;
+    border:4px #d10a0a solid;
+    display:flex;
+    flex-direction:column;
+    position:fixed;
+    top : 100px;
+    margin:0 auto;
+    padding:20px;
+    background-color:rgba(255,255,255,.95);
+    text-align:center;
+    margin-left:-30px;
+`
+
+const Form = styled.form`
+border:1px red solid;
+`
+export {OneEventWrap, EventTitle, Time, TimeSpan, RecipientName, Title, ButtonWrap, ExchangDate, TitleEditWrap, CountdownWrap, EditPopUp, Form}

@@ -1,7 +1,7 @@
 import styled from 'styled-components';
 
 const OneEventWrap = styled.div`
-width:380px;
+width:370px;
 margin:0 auto;
 background-color:rgba(255,255,255,.9);
 border:1px dashed #45c132;

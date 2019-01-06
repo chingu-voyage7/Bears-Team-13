@@ -11,7 +11,7 @@ text-transform:capitalize;
 `
 
 const MyAccountWrap = styled.div`
-width:380px;
+width:370px;
 margin:0 auto;
 `
 const NameButtonsWrap = styled.div`

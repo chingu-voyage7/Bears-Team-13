@@ -17,6 +17,7 @@ const TitleEditWrap = styled.div`
 display:flex;
 align-items:center;
 justify-content:space-between;
+/* margin-bottom:5px; */
 `
 
 
@@ -65,4 +66,11 @@ const ExchangDate = styled.div`
 margin-top:5px;
 font-size:15px;
 `
-export {OneEventWrap, EventTitle, Time, TimeSpan, RecipientName, Title, ButtonWrap, ExchangDate, TitleEditWrap}
+
+const CountdownWrap = styled.div`
+color:#13491c;
+font-weight:normal;
+font-size:30px;
+margin-top:10px;
+`
+export {OneEventWrap, EventTitle, Time, TimeSpan, RecipientName, Title, ButtonWrap, ExchangDate, TitleEditWrap, CountdownWrap}

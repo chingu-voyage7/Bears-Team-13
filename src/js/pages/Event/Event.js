@@ -6,7 +6,7 @@ import {
   Time,
   TimeSpan,
   RecipientName,
-  ButtonWrap, ExchangDate, TitleEditWrap 
+  ButtonWrap, ExchangDate, TitleEditWrap , CountdownWrap
 } from './event-style';
 import {Button} from '../MyAccount/myAccount-style';
 import InvitePopUp from '../../components/InvitePopUp/InvitePopUp'
@@ -28,7 +28,8 @@ export default class Event extends Component {
       inviteBody: {},
       editEvent: {},
       inviteClicked:false,
-      countdown: ""
+      countdown: "",
+      editClicked:false,
     }
   }
 
@@ -177,7 +178,7 @@ export default class Event extends Component {
     }
     return (
       <div>
-        <b>{this.state.countdown}</b>
+        <CountdownWrap>{this.state.countdown}</CountdownWrap>
         <p>
           Discover your Secret Santa on {moment(this.state.event.startDate).format("dddd, MM/DD/YY")} :)
         </p>
@@ -337,7 +338,7 @@ class Countdown extends Component {
 
     return (
       <div>
-        <p>{this.props.title}</p>
+        {/* <p>{this.props.title}</p> */}
         {days}:{hours}:{minutes}:{seconds}
       </div>
     );

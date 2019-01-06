@@ -1,7 +1,7 @@
 import styled from 'styled-components';
 
 const OneEventWrap = styled.div`
-width:380px;
+width:370px;
 margin:0 auto;
 background-color:rgba(255,255,255,.9);
 border:1px dashed #45c132;
@@ -12,6 +12,15 @@ flex-direction:column;
 border-radius:5px;
 padding:10px 30px;
 `
+
+const TitleEditWrap = styled.div`
+display:flex;
+align-items:center;
+justify-content:space-between;
+/* margin-bottom:5px; */
+`
+
+
 
 const EventTitle = styled.h1`
 color:#D10A0A;
@@ -57,4 +66,30 @@ const ExchangDate = styled.div`
 margin-top:5px;
 font-size:15px;
 `
-export {OneEventWrap, EventTitle, Time, TimeSpan, RecipientName, Title, ButtonWrap, ExchangDate}
+
+const CountdownWrap = styled.div`
+color:#13491c;
+font-weight:normal;
+font-size:30px;
+margin-top:10px;
+`
+
+const EditPopUp = styled.div`
+    height:400px;
+    width:370px;
+    border:4px #d10a0a solid;
+    display:flex;
+    flex-direction:column;
+    position:fixed;
+    top : 100px;
+    margin:0 auto;
+    padding:20px;
+    background-color:rgba(255,255,255,.95);
+    text-align:center;
+    margin-left:-30px;
+`
+
+const Form = styled.form`
+border:1px red solid;
+`
+export {OneEventWrap, EventTitle, Time, TimeSpan, RecipientName, Title, ButtonWrap, ExchangDate, TitleEditWrap, CountdownWrap, EditPopUp, Form}

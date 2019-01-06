@@ -5,6 +5,7 @@ const ObjectID = require('mongodb').ObjectID;
 const schema = require('../utils/schema.js');
 const Event = schema.Event;
 const User = schema.User;
+const whitelist = require('../utils/helpers.js').whitelist;
 const mailer = require('../utils/mailer.js');
 
 // Sends Email Invite
@@ -40,36 +41,51 @@ router.post('/invite', isAuth, (req, res) => {
 });
 
 // Accept Email Invite
-router.post('/acceptinvite', isAuth, (req, res) => {
-  if (!req.body || !req.body.event_id) {
-    return res.sendStatus(404).send("Event ID required.");
-  }
+router.post('/acceptinvite', isAuth, whitelist(["event_id"]), (req, res) => {
 
   console.log(req.user.username + " accepting invite...");
   console.log("event_id = " + req.body.event_id);
-  User.findOne({_id: new ObjectID(req.user._id), invites: req.body.event_id}, {_id: 1}, (err, user) => {
+
+  // Verify Invite
+  User.findOne({_id: new ObjectID(req.user._id)}, {invites: 1}, (err, user) => {
     if (err) { return res.sendStatus(500); }
-    if (!user) { return res.status(404).send("User or Invite not found."); }
-    
-    User.updateOne({invites: req.body.event_id}, {
+    if (!user) { return res.status(404).send("User not found"); }
+    if (!user.invites || user.invites.indexOf(req.body.event_id) === -1) { return res.status(404).send("Invite not found."); }
+
+    // Verify Start Date < Current Date
+    Event.findOne({_id: req.body.event_id}, {startDate: 1}, (err, event) => {
+      if (err) { return res.sendStatus(500); }
+      if (!event) { return res.status(404).send("Event not found."); } 
+
+      const date = new Date();
+      if (event.startDate.getTime() <= date.getTime()) {
+        User.updateOne({_id: new ObjectID(req.user._id)}, {$pull: {invites: req.body.event_id}});
+        return res.status(401).send("Cannot join past start date.");
+      }
+
+      // Update User & Event docs
+      User.updateOne({_id: new ObjectID(req.user._id), invites: req.body.event_id}, {
         $pull: {invites: req.body.event_id},
         $addToSet: {events: req.body.event_id}
-      }, (err, user) => {
+      }, (err, result) => {
         if (err) { return res.sendStatus(500); }
-        if (!user) { return res.sendStatus(404).send("User not found."); }
+        if (!result) { return res.sendStatus(404).send("User not found."); }
+        
         console.log("User's events & invites updated.");
-
+  
         Event.updateOne({_id: req.body.event_id}, { 
           $addToSet: {members: req.user._id}
         }, (err, event) => {
           if (err) { return res.sendStatus(500); }
-          if (!event) { return res.sendStatus(404).send("Event not found"); }
+          if (!event) { return res.status(404).send("Event not found"); }
           console.log("Event members updated.");
           console.log("SUCCESS! User joined the event.");
           return res.sendStatus(200);
         });
       });
+    });
   });
+
 
 });
 

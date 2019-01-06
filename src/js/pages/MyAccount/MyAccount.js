@@ -42,6 +42,18 @@ export default class MyAccount extends Component {
     }
   }
 
+  deleteAccount() {
+    axios.delete("/api/deleteuser")
+    .then((res) => {
+
+      this.props.history.push('/');
+      window.location.reload();
+    })
+    .catch((err) => {
+      alert(err.response);
+    })
+  }
+
   setSelectedFile(e) {
     this.setState({selectedFile: e.target.files[0], loaded: 0});
   }
@@ -58,18 +70,13 @@ export default class MyAccount extends Component {
     data.append('file', file, "user." + this.props.globals.user._id);
     data.append('contentType', file.name.split('.').pop())
 
-    axios.post('/api/static/images/', data, {
-      /*onUploadProgress: (e) => {
-        this.setState({loaded: e.loaded / e.total * 100});
-      }*/
-    })
+    axios.post('/api/static/images/', data)
     .then((res) => {
-      alert(res.status);
+      window.location.reload();
     })
     .catch((err) => {
       alert(err.response.status);
     })
-
   }
 
   render() {
@@ -78,41 +85,40 @@ export default class MyAccount extends Component {
     return (
       
       <MyAccountWrap>
-          <NameButtonsWrap>
-            <Greeting> Hello, <Name>{user.firstName}</Name></Greeting>
-            <ButtonsWrap>
-              {/* <Button> make event </Button> */}
-              <Button onClick={this.openInfoPopUp} id="editProfile"> edit profile </Button>
-              <Button  onClick={this.openPasswordPopUp} id="editPassword"> change password </Button>
-            </ButtonsWrap>
-          </NameButtonsWrap>
+        <NameButtonsWrap>
+          <Greeting> Hello, <Name>{user.firstName}</Name></Greeting>
+          <ButtonsWrap>
+            {/* <Button> make event </Button> */}
+            <Button onClick={this.openInfoPopUp} id="editProfile"> edit profile </Button>
+            <Button  onClick={this.openPasswordPopUp} id="editPassword"> change password </Button>
+          </ButtonsWrap>
+        </NameButtonsWrap>
 
-          <AboutWrap>
-         
-                <H2> your info </H2>
-              
+        <AboutWrap>
+          <H2> your info </H2>
 
-              <ImageInfoWrap>
-                  <UserImage src={"/api/static/images/user." + this.props.globals.user._id} alt="no pic"/>
-                    
-                  <InfoWrap>
-                      <P> <Span>name :</Span> {user.firstName}</P>
-                      <P> <Span>email : </Span>{user.email} </P>
-                      <P> <Span>username : </Span>{user.username} </P>
-                      
-                  </InfoWrap>
-              </ImageInfoWrap>
-                  <H4> add/change your photo </H4>
-                  <Form onSubmit={this.uploadFile.bind(this)}>
-                    <AddImageButton name="" type="file" onChange={this.setSelectedFile.bind(this)}/>
-                    <Submit type="submit"/>
-                  </Form>
-     
-              {/* <Image></Image> */}
-          </AboutWrap>
+            <ImageInfoWrap>
+              <UserImage src={"/api/static/images/user." + this.props.globals.user._id} alt="no pic"/>
+                
+              <InfoWrap>
+                  <P> <Span>name :</Span> {user.firstName}</P>
+                  <P> <Span>email : </Span>{user.email} </P>
+                  <P> <Span>username : </Span>{user.username} </P>
+                  
+              </InfoWrap>
+            </ImageInfoWrap>
+            <H4> add/change your photo </H4>
+            <Form onSubmit={this.uploadFile.bind(this)}>
+              <AddImageButton name="" type="file" onChange={this.setSelectedFile.bind(this)}/>
+              <Submit type="submit"/>
+            </Form>
+    
+          <br/>
+          <Button onClick={this.deleteAccount.bind(this)}>Delete Account</Button>
+        </AboutWrap>
 
        {this.state.passwordPopUpShown ? <PasswordPopUp user={user} whichButtonClicked={this.state.whichButtonClicked} closePopUp={this.closePopUp}   /> : <div></div> }
       </MyAccountWrap>
-      );
+    );
   }
 }

@@ -40,25 +40,29 @@ export default class Login extends Component {
   }
 
   render() {
+    const redirect = queryString.parse(this.props.location.search).redirect;
 
     return(
-      <LoginContainer>
-        <Form onSubmit={this.onSubmit.bind(this)}>
-          <Label>Username or Email</Label>
-          <Input 
-            name="usernameOrEmail"
-            type="text"
-            onChange={this.handleChange.bind(this)}/>
-          <Label>Password</Label>
-          <Input 
-            name="password"
-            type="password"
-            onChange={this.handleChange.bind(this)}/>
-          <Submit
-            type="submit"
-          />
-        </Form>
-      </LoginContainer>
+      <div>
+        {redirect?<p>Login to access "{redirect}".</p>:""}
+        <LoginContainer>
+          <Form onSubmit={this.onSubmit.bind(this)}>
+            <Label>Username or Email</Label>
+            <Input 
+              name="usernameOrEmail"
+              type="text"
+              onChange={this.handleChange.bind(this)}/>
+            <Label>Password</Label>
+            <Input 
+              name="password"
+              type="password"
+              onChange={this.handleChange.bind(this)}/>
+            <Submit
+              type="submit"
+            />
+          </Form>
+        </LoginContainer>
+      </div>
     );
   }
 }

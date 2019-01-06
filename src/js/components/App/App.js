@@ -14,17 +14,55 @@ class App extends Component {
     super(props);
 
     this.state = {
-      user: {}
+      user: {},
+      done: false
     };
   }
 
-  componentDidMount() {
+  componentWillMount() {
     axios.get('/api/myuser')
     .then((res) => {
-      this.setState({user: res.data});
+      this.setState({user: res.data, done: true});
     })
     .catch((err) => {
+      this.setState({done: true});
       console.log(err);
+    });
+  }
+
+  getRoutes() {
+    // Set each route
+    return ROUTES.map(({path, component: C, exact, auth}) => {
+
+      // Handle Auth/Non-Auth routes
+      const render = auth?(props) => {
+        if (this.state.user._id) {
+          return <C {...props} setGlobal={this.setGlobal.bind(this)} globals={this.state}/>;
+        }
+        return <Redirect to={"/login?redirect=" + props.location.pathname}/>;  
+
+      // Non-Auth routes
+      }:(props) => {
+        return <C {...props} setGlobal={this.setGlobal.bind(this)} globals={this.state}/>;
+      };
+
+      // Handle exact routes
+      if (exact) {
+        return (
+          <Route
+            key={path}
+            path={path}
+            render={render}
+            exact
+          />);
+      } else {
+        return (
+          <Route
+            key={path}
+            path={path}
+            render={render}
+          />);
+      }
     });
   }
 
@@ -33,51 +71,31 @@ class App extends Component {
   }
 
   render() {
-    return (
-      <Router>
+    if (!this.state.done) {
+      return (
         <MainContainer>
-          <Navbar globals={this.state} setGlobal={this.setGlobal.bind(this)}/>
           <SpaceTop></SpaceTop>
-          <Switch>
-            {ROUTES.map(({path, component: C, exact, auth}) => {
-
-              // Handle rendering "auth" (private) or !auth routes (public)
-              const render = (props) => {
-                if (auth) {
-                  if (this.state.user._id) {
-                    return <C {...props} setGlobal={this.setGlobal.bind(this)} globals={this.state}/>;
-                  } else {
-                  return <Redirect to={"/login?redirect=" + props.location.pathname}/>;
-                  }
-                }
-                return <C {...props} setGlobal={this.setGlobal.bind(this)} globals={this.state}/>;
-              };
-
-              // Handle "exact routes"
-              if (exact) {
-                return (
-                  <Route
-                    key={path}
-                    path={path}
-                    render={render}
-                    exact
-                  />);
-              } else {
-                return (
-                  <Route
-                    key={path}
-                    path={path}
-                    render={render}
-                  />);
-              }
-            })}
-          </Switch>
+          <b>Loading...</b>
           <SpaceBottom></SpaceBottom>
           <Footer></Footer>
-
         </MainContainer>
-      </Router>
-    );
+      );
+    } else {
+      return (
+        <Router>
+          <MainContainer>
+            <Navbar globals={this.state} setGlobal={this.setGlobal.bind(this)}/>
+            <SpaceTop></SpaceTop>
+            <Switch>
+              {this.getRoutes()}
+            </Switch>
+            <SpaceBottom></SpaceBottom>
+            <Footer></Footer>
+  
+          </MainContainer>
+        </Router>
+      );
+    }
   }
 }
 

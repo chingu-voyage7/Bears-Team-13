@@ -43,7 +43,7 @@ function handleDateChecks(user, tries) {
               if (!users) { return console.log("404 no users"); }
 
               users.map((user) => {
-                mailer.endDate(user, event);
+                mailer.endDate(user, users[users.indexOf(ssList[user._id])], event);
               });
             });
           });
@@ -62,7 +62,11 @@ function handleDateChecks(user, tries) {
             });
           });
         }
-  
+      } else {
+        const weekAfter = event.endDate.setDate(event.endDate.getDate() + 7);
+        if (afterDate(weekAfter)) {
+          Event.deleteOne({_id: new ObjectID(event._id)});
+        }
       }
 
     });

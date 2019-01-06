@@ -13,6 +13,14 @@ border-radius:5px;
 padding:10px 30px;
 `
 
+const TitleEditWrap = styled.div`
+display:flex;
+align-items:center;
+justify-content:space-between;
+`
+
+
+
 const EventTitle = styled.h1`
 color:#D10A0A;
 text-transform:capitalize;
@@ -57,4 +65,4 @@ const ExchangDate = styled.div`
 margin-top:5px;
 font-size:15px;
 `
-export {OneEventWrap, EventTitle, Time, TimeSpan, RecipientName, Title, ButtonWrap, ExchangDate}
+export {OneEventWrap, EventTitle, Time, TimeSpan, RecipientName, Title, ButtonWrap, ExchangDate, TitleEditWrap}

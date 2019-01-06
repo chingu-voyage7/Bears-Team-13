@@ -6,7 +6,7 @@ import {
   Time,
   TimeSpan,
   RecipientName,
-  ButtonWrap, ExchangDate
+  ButtonWrap, ExchangDate, TitleEditWrap 
 } from './event-style';
 import {Button} from '../MyAccount/myAccount-style';
 import InvitePopUp from '../../components/InvitePopUp/InvitePopUp'
@@ -205,8 +205,10 @@ export default class Event extends Component {
       <>
         <OneEventWrap>
           {this.state.message}<br />
-
-          <EventTitle>{this.state.event ? this.state.event.name : ""}</EventTitle>
+           <TitleEditWrap>
+              <EventTitle>{this.state.event ? this.state.event.name : ""}</EventTitle>
+              <Button> edit </Button> 
+           </TitleEditWrap>
           <Time>
             Draw Date :
             <TimeSpan>

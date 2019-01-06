@@ -62,7 +62,11 @@ function handleDateChecks(user, tries) {
             });
           });
         }
-  
+      } else {
+        const weekAfter = event.endDate.setDate(event.endDate.getDate() + 7);
+        if (afterDate(weekAfter)) {
+          Event.deleteOne({_id: new ObjectID(event._id)});
+        }
       }
 
     });

@@ -1,14 +1,11 @@
 import React, { Component } from 'react';
 import axios from 'axios';
-import {
-  OneEventWrap,
-  EventTitle,
-  Time,
-  TimeSpan,
-  RecipientName,
-  ButtonWrap, ExchangDate
-} from './event-style';
+import { OneEventWrap, EventTitle, Time, TimeSpan,RecipientName,ButtonWrap, ExchangDate, TitleEditWrap , CountdownWrap, EditPopUp, Form} from './event-style';
 import {Button} from '../MyAccount/myAccount-style';
+import {CloseButton, Input} from '../../components/PopUp/popup-style'
+import {Submit,   Label} from '../../components/InvitePopUp/invitePopup-style'
+
+
 import InvitePopUp from '../../components/InvitePopUp/InvitePopUp'
 
 import moment from "moment";
@@ -28,7 +25,8 @@ export default class Event extends Component {
       inviteBody: {},
       editEvent: {},
       inviteClicked:false,
-      countdown: ""
+      countdown: "",
+      editClicked:false,
     }
   }
 
@@ -177,7 +175,7 @@ export default class Event extends Component {
     }
     return (
       <div>
-        <b>{this.state.countdown}</b>
+        <CountdownWrap>{this.state.countdown}</CountdownWrap>
         <p>
           Discover your Secret Santa on {moment(this.state.event.startDate).format("dddd, MM/DD/YY")} :)
         </p>
@@ -217,10 +215,20 @@ export default class Event extends Component {
     }
   }
 
+  handleEditClick = () => {
+    if(!this.state.editClicked){
+      this.setState({
+        editClicked: true
+      })
+     }
+
+  }
+
   closePopUp = ()  => {
-    if(this.state.inviteClicked === true){
+    if(this.state.inviteClicked === true || this.state.editClicked){
         this.setState({
             inviteClicked: false,
+            editClicked:false
         })
     }
   }
@@ -231,8 +239,10 @@ export default class Event extends Component {
       <>
         <OneEventWrap>
           {this.state.message}<br />
-
-          <EventTitle>{this.state.event ? this.state.event.name : ""}</EventTitle>
+           <TitleEditWrap>
+              <EventTitle>{this.state.event ? this.state.event.name : ""}</EventTitle>
+              { this.isAuthor() ? <Button onClick={this.handleEditClick}> edit </Button> : "" }
+           </TitleEditWrap>
           <Time>
             Draw Date : 
             <TimeSpan>
@@ -274,16 +284,28 @@ export default class Event extends Component {
               ? <InvitePopUp closePopUp={this.closePopUp} eventId={this.state.event_id}></InvitePopUp>
               : ""
           }
-          {/* {this.isAuthor()?(
-            <form onSubmit={this.editEvent.bind(this)}>
-              <label>Event name</label><br/>
-              <input name="name" type="text" placeholder={this.state.event.name} value={this.state.editEvent.name} onChange={this.handleEdit.bind(this)}/><br/>
-              <label>Public</label><br/>
-              <input name="public" type="checkbox" checked={this.state.editEvent.public} onChange={this.handleEdit.bind(this)}/><br/>
-              <input type="submit"/>
-            </form>
-            ):""} */
+          { this.state.editClicked ? (
+            <EditPopUp>
+              <CloseButton onClick={this.closePopUp}> X </CloseButton>
+            <Form onSubmit={this.editEvent.bind(this)}>
+              <Label>Event name</Label><br/>
+              <Input name="name" type="text" placeholder={this.state.event.name} value={this.state.editEvent.name} onChange={this.handleEdit.bind(this)}/><br/>
+              <Label>Public</Label><br/>
+              <Input name="public" type="checkbox" checked={this.state.editEvent.public} onChange={this.handleEdit.bind(this)}/><br/>
+              <Submit type="submit"/>
+            </Form>
+            </EditPopUp>
+            ):""
+            
           }
+
+          {
+            this.state.inviteClicked
+              ? <InvitePopUp closePopUp={this.closePopUp} eventId={this.state.event_id}></InvitePopUp>
+              : ""
+          }
+
+      
         </OneEventWrap>
       </>
     );
@@ -335,7 +357,7 @@ class Countdown extends Component {
 
     return (
       <div>
-        <p>{this.props.title}</p>
+        {/* <p>{this.props.title}</p> */}
         {days}:{hours}:{minutes}:{seconds}
       </div>
     );

@@ -50,7 +50,7 @@ export default class Item extends Component {
       .then( res => {
    
           this.setState({cartItemsLength: res.data.length});
-          console.log("cart fetched on button click " + res.data.length);
+          console.log("cart length fetched " + res.data.length);
       })
       .catch((err) => {
         console.log(err);
@@ -62,10 +62,7 @@ export default class Item extends Component {
     const { selected } = this.state;
 
     axios.post('/api/mycart/update', { item_id: this.state.item_id, event_id: selected })
-      .then( res => {
-        console.log(res.data);
-        this.fetchCart();
-      })
+      .then( res => console.log(res.data), this.fetchCart() )
       .catch( err => console.log(err.response));
 
       this.fetchCart();
@@ -86,8 +83,8 @@ export default class Item extends Component {
              </CartWrap>
             
              <H2>{item.name}</H2>
-             <ImageWrap>
-              <img src="" alt="Item" />
+             <ImageWrap image={"/api/static/images/item." + item._id} alt={item.name}>
+              {/* <img src="" alt="Item" /> */}
              </ImageWrap>
              <Price>${item.usd}</Price>
 

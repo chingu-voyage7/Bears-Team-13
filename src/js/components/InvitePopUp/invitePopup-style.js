@@ -1,21 +1,21 @@
 import styled from 'styled-components';
 
 const Submit= styled.input `
-width:200px;
+width:100px;
 border-radius:5px;
 margin:0 auto;
 margin-top:60px;
 padding:10px;
 border:1px #D10A0A solid;
-color:white;
+color:#D10A0A;
 background-color:#D10A0A;
 font-weight:bold;
 box-shadow:2px 2px 2px rgba(0,0,0,0.5);
 transition:.2s all linear;
 background-color:white;
  &:hover {
-    background: white;
-    color:#D10A0A;
+    background: #D10A0A;
+    color:white;
     cursor:pointer;
   }
 
@@ -31,9 +31,9 @@ background-color:white;
 
 
 const InvitePopUpWrap = styled.div`
-    height:350px;
-    width:360px;
-    /* border:4px #d10a0a solid; */
+    height:400px;
+    width:370px;
+    border:4px #d10a0a solid;
     display:flex;
     flex-direction:column;
     position:fixed;

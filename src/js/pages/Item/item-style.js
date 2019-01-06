@@ -22,11 +22,17 @@ height:150px;
 border:1px #45c132 solid;
 border-radius:10px;
 margin-top:30px;
+background-image:url(${props => props.image});
+background-size:cover;
+background-repeat:no-repeat;
+background-position:right;
+margin-top:0px;
 `
 
 const H2 = styled.h2`
 color:#D10A0A;
 font-size:20px;
+margin-top:20px;
 `
 
 const Form = styled.form`

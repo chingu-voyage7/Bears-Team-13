@@ -90,6 +90,33 @@ const EditPopUp = styled.div`
 `
 
 const Form = styled.form`
-border:1px red solid;
+/* border:1px red solid; */
+height:350px;
+display:flex;
+flex-direction:column;
+align-items:center;
+justify-items:space-around;
+/* justify-content:center; */
 `
-export {OneEventWrap, EventTitle, Time, TimeSpan, RecipientName, Title, ButtonWrap, ExchangDate, TitleEditWrap, CountdownWrap, EditPopUp, Form}
+
+const PublicWrap = styled.div`
+display:flex;
+align-items:center;
+/* border:1px red solid; */
+/* height:20px; */
+width:90px;
+justify-content:space-between;
+margin-top:20px;
+`
+
+const Checkbox = styled.input.attrs({ type: 'checkbox' })`
+height:20px;
+width:20px;
+/* margin:auto auto; */
+`
+
+const PublicLabel = styled.label`
+color:#d10a0a;
+`
+
+export {OneEventWrap, EventTitle, Time, TimeSpan, RecipientName, Title, ButtonWrap, ExchangDate, TitleEditWrap, CountdownWrap, EditPopUp, Form, PublicWrap, Checkbox, PublicLabel}

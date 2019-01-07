@@ -14,10 +14,11 @@ let setupPassport = function (app) {
   if (setup) return;
 
   app.use(session({
+    name: "secretSantaCookie",
     secret: process.env.SESSION_SECRET,
     resave: true,
     saveUninitialized: true,
-    store: new MongoStore({mongooseConnection: mongoUtil.getConnection()})
+    store: new MongoStore({mongooseConnection: mongoUtil.getConnection()}),
   }));
   app.use(passport.initialize());
   app.use(passport.session());

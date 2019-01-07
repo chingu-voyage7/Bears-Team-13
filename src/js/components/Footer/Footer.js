@@ -17,9 +17,9 @@ export default class Footer extends Component {
           <P> made by </P>
             <IconsFooterContainer>
                 
-                <a style={{ textDecoration: 'none' }} target="_blank" href="https://alex-cannon.github.io/"><i style={iconStyle} className="fas fa-user-alt"></i></a>
-                <a style={{ textDecoration: 'none' }} target="_blank" href="https://designbyinna.com"><i style={iconStyle} className="fas fa-user-alt"></i></a>
-                <a style={{ textDecoration: 'none' }} target="_blank" href="https://github.com/gabrielgs"><i style={iconStyle}  className="fas fa-user-alt"></i></a>
+                <a style={{ textDecoration: 'none' }} target="_blank" href="https://alex-cannon.github.io/">Alex Cannon<i style={iconStyle} className="fas fa-user-alt"></i></a>
+                <a style={{ textDecoration: 'none' }} target="_blank" href="https://designbyinna.com">Inna<i style={iconStyle} className="fas fa-user-alt"></i></a>
+                <a style={{ textDecoration: 'none' }} target="_blank" href="https://github.com/gabrielgs">Gabriel<i style={iconStyle}  className="fas fa-user-alt"></i></a>
             </IconsFooterContainer>
           </FooterStyle>
     );

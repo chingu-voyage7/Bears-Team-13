@@ -302,12 +302,6 @@ export default class Event extends Component {
             
           }
 
-          {
-            this.state.inviteClicked
-              ? <InvitePopUp closePopUp={this.closePopUp} eventId={this.state.event_id}></InvitePopUp>
-              : ""
-          }
-
       
         </OneEventWrap>
       </>

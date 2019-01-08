@@ -149,7 +149,7 @@ export default class Event extends Component {
         })
         .catch((err) => {
           console.log(err);
-        });  
+        });
       }
     })
     .catch((err) => {
@@ -183,7 +183,7 @@ export default class Event extends Component {
       if (this.state.recipient) {
         let user = this.state.event.recipient.username;
         user = user[0].toUpperCase() + user.substring(1);
-        return "You are " + user + "'s Secret Santa!";  
+        return "You are " + user + "'s Secret Santa!";
       }
     }
     return (
@@ -247,7 +247,8 @@ export default class Event extends Component {
   }
 
   render() {
-    const { purchasedItems } = this.state
+    const { purchasedItems, event } = this.state
+    const { globals } = this.props
     return (
       <>
         <OneEventWrap>
@@ -257,7 +258,7 @@ export default class Event extends Component {
               { this.isAuthor() ? <Button onClick={this.handleEditClick}> edit </Button> : "" }
            </TitleEditWrap>
           <Time>
-            Draw Date : 
+            Draw Date :
             <TimeSpan>
               { this.state.event
                   ? moment(this.state.event.startDate).format("dddd, MM/DD/YY")
@@ -265,7 +266,7 @@ export default class Event extends Component {
               }
             </TimeSpan>
             <ExchangDate>
-              Exchange Date : 
+              Exchange Date :
               <TimeSpan>
                 { this.state.event
                     ? moment(this.state.event.endDate).format("dddd, MM/DD/YY")
@@ -275,8 +276,8 @@ export default class Event extends Component {
             </ExchangDate>
           </Time>
 
-          <RecipientName> 
-            {this.recipientToJSX()} 
+          <RecipientName>
+            {this.recipientToJSX()}
           </RecipientName>
 
           {this.purchaseToJSX()}
@@ -291,6 +292,11 @@ export default class Event extends Component {
 
             <Button onClick={this.handleInviteClick}> invite friend </Button>
           </ButtonWrap>
+
+          {
+            this.isAuthor() &&
+              <Button onClick={this.onDeleteEvent}>Delete Event</Button>
+          }
 
           {
             this.state.inviteClicked
@@ -309,7 +315,7 @@ export default class Event extends Component {
             </Form>
             </EditPopUp>
             ):""
-            
+
           }
 
           {
@@ -318,7 +324,7 @@ export default class Event extends Component {
               : ""
           }
 
-      
+
         </OneEventWrap>
       </>
     );

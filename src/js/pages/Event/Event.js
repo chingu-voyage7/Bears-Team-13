@@ -64,6 +64,19 @@ export default class Event extends Component {
     this.setState({editEvent: temp});
   }
 
+  onDeleteEvent = () => {
+    const { event_id } = this.state
+    const { history } = this.props
+
+    axios.delete('/api/deleteevent', { data: {event_id: event_id} })
+      .then(res => {
+        history.push('/myevents')
+        alert('Event event_id deleted')
+      })
+      .catch(err => console.log(err.response))
+
+  }
+
   sendInvite(e) {
     e.preventDefault();
 

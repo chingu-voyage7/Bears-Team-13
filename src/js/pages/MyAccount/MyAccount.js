@@ -1,5 +1,5 @@
 import React, { Component } from 'react';
-import {Name, MyAccountWrap, NameButtonsWrap, ButtonsWrap, Button, Greeting,  AboutWrap, H2, P, Span, InfoWrap, UserImage, ImageInfoWrap, Form, AddImageButton, Submit, H4} from "./myAccount-style";
+import {Name, MyAccountWrap, NameButtonsWrap, ButtonsWrap, Button, Greeting,  AboutWrap, H2, P, Span, InfoWrap, UserImage, ImageInfoWrap, Form, AddImageButton, Submit, H4, DeleteButtonWrap, DeleteButton} from "./myAccount-style";
 import PasswordPopUp from "../../components/PopUp/PopUp";
 import axios from 'axios';
 
@@ -113,8 +113,9 @@ export default class MyAccount extends Component {
               <Submit type="submit"/>
             </Form>
     
-          <br/>
-          <Button onClick={this.deleteAccount.bind(this)}>Delete Account</Button>
+           <DeleteButtonWrap>
+             <DeleteButton onClick={this.deleteAccount.bind(this)}>Delete Account</DeleteButton>
+          </DeleteButtonWrap>
         </AboutWrap>
 
        {this.state.passwordPopUpShown ? <PasswordPopUp user={user} whichButtonClicked={this.state.whichButtonClicked} closePopUp={this.closePopUp}   /> : <div></div> }

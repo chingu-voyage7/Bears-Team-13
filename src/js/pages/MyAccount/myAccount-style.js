@@ -32,6 +32,9 @@ align-items:center;
 
 const Button = styled.button`
 height:30px;
+/* width:140px; */
+margin:0 auto;
+margin-top:20px;
 border-radius:5px;
 border:1px #D10A0A solid;
 color:#D10A0A;
@@ -39,6 +42,7 @@ font-size:15px;
 /* box-shadow:1px 1px 1px rgba(0,0,0,0.5); */
 transition:.2s all linear;
 background-color:white;
+
 
  &:hover {
     background: #D10A0A;
@@ -211,4 +215,36 @@ margin-bottom:30px;
 letter-spacing:1px;
 `
 
-export {Name, MyAccountWrap, NameButtonsWrap, ButtonsWrap, Button, Greeting, PasswordButton, AboutWrap, H2, P, Span, Image, InfoWrap, UserImage, ImageInfoWrap, AddImageButton, Form, Submit, H4}
+const DeleteButtonWrap = styled.div`
+padding-top:40px;
+border-top:1px #D10A0A solid;
+width:80%;
+margin:0 auto;
+padding-bottom:40px;
+
+margin-top:40px;
+display:flex;
+justify-content:center;
+`
+const DeleteButton = styled.button`
+border:1px #D10A0A solid;
+background-color:#D10A0A;
+color:white;
+box-shadow:2px 2px 2px rgba(0,0,0,0.5);
+border-radius:5px;
+padding:10px;
+/* margin:0 auto; */
+font-size:16px;
+transition:.2s all linear;
+&:hover{
+  cursor:pointer;
+  color:#D10A0A;
+  background-color:white;
+  &:focus{
+    outline:0;
+  }
+}
+`
+
+
+export {Name, MyAccountWrap, NameButtonsWrap, ButtonsWrap, Button, Greeting, PasswordButton, AboutWrap, H2, P, Span, Image, InfoWrap, UserImage, ImageInfoWrap, AddImageButton, Form, Submit, H4, DeleteButtonWrap, DeleteButton}

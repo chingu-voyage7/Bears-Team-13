@@ -187,7 +187,6 @@ router.delete('/deleteuser', isAuth, function (req, res) {
     Image.deleteOne({filename: "user." + req.user._id}, (err, result) => {
       if (err) { return res.sendStatus(500); }
 
-      
       console.log("User " + req.user.username + " was deleted.");
       req.logout();
       return res.sendStatus(200);  

@@ -274,18 +274,9 @@ export default class Event extends Component {
             <Submit type="submit"/>
           </Form>
           </EditPopUp>
-          ):""
-          
-        }
+          ):""}
 
-
-            <Button onClick={this.handleInviteClick}> invite friend </Button>
-          </ButtonWrap>
-
-          {
-            this.isAuthor() &&
-              <Button onClick={this.onDeleteEvent}>Delete Event</Button>
-          }
+          {this.isAuthor()?<Button onClick={this.onDeleteEvent}>Delete Event</Button>:"" }
 
           {
             this.state.inviteClicked
@@ -317,8 +308,7 @@ export default class Event extends Component {
           }
 
 
-        </OneEventWrap>
-      </>
+        </OneEventWrap> 
     );
   }
 }

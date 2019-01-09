@@ -31,7 +31,7 @@ function handlePublic(req, res, event) {
     }
     return res.sendStatus(401);
   }
-  return res.json(event);
+  return res.json(event);  
 }
 
 // Returns an event given event_id
@@ -72,7 +72,7 @@ router.get("/getevents", (req, res) => {
     if (err) { return res.sendStatus(500); }
     if (!docs) { return res.sendStatus(404); } // 404 proper code?
     // event.public || event.members.indexOf(req.user._id) !== -1? OK : BAD AUTH
-
+    
     res.json(docs);
   }).skip(req.query.page * 10).limit(10);
 });
@@ -95,9 +95,9 @@ router.get("/eventmembers", (req, res) => {
     delete projection.event_id;
 
     if (!event.public) {
-      if (event.author._id === req.user._id || event.members.indexOf({_id: new ObjectID(req.user._id), role: "admin"})) {
+      if (event.author._id === req.user._id || event.members.indexOf({_id: new ObjectID(req.user._id), role: "admin"})) { 
         return getMembers(res, members, projection);
-      }
+      } 
       return res.sendStatus(401);
     } else {
       return getMembers(res, members, projection);
@@ -128,7 +128,7 @@ router.post('/addevent', isAuth, required(["name", "startDate", "endDate"]), (re
   console.log("Creating event...");
   console.log("BUG: Must restrict start, end dates to the future.");
   var event = req.body;
-  event.author = {_id: req.user._id, username: req.user.username};
+  event.author = {_id: req.user._id, username: req.user.username};  
 
   // Create the Event
   Event.create(event, (err, event) => {
@@ -176,26 +176,15 @@ router.delete('/deleteevent', isAuth, required(["event_id"]), (req, res) => {
     if (err) { return res.sendStatus(500); }
     if (!event) { return res.sendStatus(400); }
 
-    console.log(JSON.stringify(event.members));
-    console.log(req.user.username);
-
     // Authorized to delete?
-    if ( ObjectID.toString(event.author._id) === ObjectID.toString(req.user._id) ) {
+    if (ObjectID.toString(event.author._id) === ObjectID.toString(req.user._id)) {
+
       // Delete event
-      Event.deleteOne(
-        { _id: new ObjectID(req.body.event_id) },
-        (err, doc) => {
-          if (err) {
-            return res.sendStatus(500);
-          }
-          if (!doc) {
-            return res.sendStatus(400);
-          }
-          console.log("Deleted event " + event.name + ".");
-          console.log(doc);
-          res.send(doc);
-        }
-      );
+      Event.deleteOne({_id: new ObjectID(req.body.event_id)}, (err, doc) => {
+        if (err) { return res.sendStatus(500); }
+        if (!doc) { return res.sendStatus(400); }
+        res.send(doc);
+      });
     } else {
       res.sendStatus(401);
     }
@@ -207,7 +196,7 @@ router.post("/startevent", isAuth, required(["event_id"]), (req, res) => {
   Event.findOne({_id: new ObjectID(req.body.event_id)}, {members: 1, author: 1}, (err, event) => {
     if (err) { return res.sendStatus(500); }
     if (!event || !event.author) { return res.status(404).send("Event or event author not found"); }
-
+    
     // Authorized to edit this event?
     console.log(event.author._id);
     console.log(req.user._id);

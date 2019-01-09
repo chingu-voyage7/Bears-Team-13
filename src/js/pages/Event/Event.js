@@ -1,9 +1,10 @@
 import React, { Component } from 'react';
 import axios from 'axios';
-import { OneEventWrap, EventTitle, Time, TimeSpan,RecipientName,ButtonWrap, ExchangDate, TitleEditWrap , CountdownWrap, EditPopUp, Form, PublicWrap, Checkbox, PublicLabel} from './event-style';
+import { OneEventWrap, EventTitle, Time, TimeSpan,RecipientName,ButtonWrap, ExchangDate, TitleEditWrap , CountdownWrap, EditPopUp, Form, PublicWrap, Checkbox, PublicLabel, ItemWrap, ItemName, P} from './event-style';
+import {Image} from '../Cart/cart-style';
 import {Button} from '../MyAccount/myAccount-style';
-import {CloseButton, Input} from '../../components/PopUp/popup-style'
-import {Submit,   Label} from '../../components/InvitePopUp/invitePopup-style'
+import {CloseButton, Input} from '../../components/PopUp/popup-style';
+import {Submit,   Label} from '../../components/InvitePopUp/invitePopup-style';
 
 
 import InvitePopUp from '../../components/InvitePopUp/InvitePopUp'
@@ -123,7 +124,7 @@ export default class Event extends Component {
       if (purchases[this.state.event_id]) {
         axios.get("/api/item?item_id=" + purchases[this.state.event_id])
         .then((res) => {
-          alert("hit");
+          // alert("hit");
           this.setState({purchase: res.data});
         })
         .catch((err) => {
@@ -156,10 +157,11 @@ export default class Event extends Component {
     }
     let item = this.state.purchase;
     return (
-      <div>
-        <b>{item.name}</b>
-        <img src={"/api/static/images/item." + item._id} alt={item.name}></img>
-      </div>
+     
+      <ItemWrap>
+         <P> You purchased <ItemName>{item.name}</ItemName> for {this.state.event.recipient.username} </P>
+        <Image src={"/api/static/images/item." + item._id} alt={item.name}></Image>
+      </ItemWrap>
     );
   }
 

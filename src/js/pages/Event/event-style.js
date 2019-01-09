@@ -60,6 +60,8 @@ display:flex;
 margin-top:20px;
 padding-bottom:40px;
 justify-content:space-between;
+/* border:1px red solid; */
+/* align-items:center; */
 `
 
 const ExchangDate = styled.div`
@@ -75,7 +77,7 @@ margin-top:10px;
 `
 
 const EditPopUp = styled.div`
-    height:400px;
+    height:480x;
     width:370px;
     border:4px #d10a0a solid;
     display:flex;
@@ -115,8 +117,34 @@ width:20px;
 /* margin:auto auto; */
 `
 
+
 const PublicLabel = styled.label`
 color:#d10a0a;
 `
 
-export {OneEventWrap, EventTitle, Time, TimeSpan, RecipientName, Title, ButtonWrap, ExchangDate, TitleEditWrap, CountdownWrap, EditPopUp, Form, PublicWrap, Checkbox, PublicLabel}
+const ItemWrap = styled.div`
+display:flex;
+flex-direction:column;
+padding-top:10px;
+padding-bottom:40px;
+border-bottom:1px dashed green;
+align-items:center;
+/* border:1px red solid; */
+
+`
+
+const ItemName = styled.span`
+color:#D10A0A;
+font-weight:bold;
+/* padding-bottom:10px; */
+
+`
+
+const P =styled.p`
+/* border:1px red solid; */
+width:100%;
+text-align:center;
+color:#13491c;
+`
+
+export {OneEventWrap, EventTitle, Time, TimeSpan, RecipientName, Title, ButtonWrap, ExchangDate, TitleEditWrap, CountdownWrap, EditPopUp, Form, PublicWrap, Checkbox, PublicLabel, ItemWrap, ItemName, P}

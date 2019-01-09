@@ -33,8 +33,8 @@ align-items:center;
 const Button = styled.button`
 height:30px;
 /* width:140px; */
-margin:0 auto;
-margin-top:20px;
+/* margin:0 auto; */
+/* margin-top:20px; */
 border-radius:5px;
 border:1px #D10A0A solid;
 color:#D10A0A;

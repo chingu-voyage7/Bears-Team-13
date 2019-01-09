@@ -64,6 +64,19 @@ export default class Event extends Component {
     this.setState({editEvent: temp});
   }
 
+  onDeleteEvent = () => {
+    const { event_id } = this.state
+    const { history } = this.props
+
+    axios.delete('/api/deleteevent', { data: {event_id: event_id} })
+      .then(res => {
+        history.push('/myevents')
+        alert('Event event_id deleted')
+      })
+      .catch(err => console.log(err.response))
+
+  }
+
   sendInvite(e) {
     e.preventDefault();
 
@@ -128,7 +141,7 @@ export default class Event extends Component {
         })
         .catch((err) => {
           console.log(err);
-        });  
+        });
       }
     })
     .catch((err) => {
@@ -200,7 +213,6 @@ export default class Event extends Component {
   }
 
   render() {
-    console.log("Rendering...");
     return (
       <OneEventWrap>
         {this.state.message}<br />
@@ -271,6 +283,11 @@ export default class Event extends Component {
           </ButtonWrap>
 
           {
+            this.isAuthor() &&
+              <Button onClick={this.onDeleteEvent}>Delete Event</Button>
+          }
+
+          {
             this.state.inviteClicked
               ? <InvitePopUp closePopUp={this.closePopUp} eventId={this.state.event_id}></InvitePopUp>
               : ""
@@ -290,7 +307,7 @@ export default class Event extends Component {
             </Form>
             </EditPopUp>
             ):""
-            
+
           }
 
           {
@@ -299,7 +316,7 @@ export default class Event extends Component {
               : ""
           }
 
-      
+
         </OneEventWrap>
       </>
     );

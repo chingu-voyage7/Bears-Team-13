@@ -114,7 +114,7 @@ margin-top:20px;
 const Checkbox = styled.input.attrs({ type: 'checkbox' })`
 height:20px;
 width:20px;
-/* margin:auto auto; */
+margin:auto auto;
 `
 
 

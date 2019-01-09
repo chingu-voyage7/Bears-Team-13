@@ -257,10 +257,12 @@ export default class Event extends Component {
           <EditPopUp>
             <CloseButton onClick={this.closePopUp}> X </CloseButton>
           <Form onSubmit={this.editEvent.bind(this)}>
-            <Label>Event name</Label><br/>
-            <Input name="name" type="text" placeholder={this.state.event.name} value={this.state.editEvent.name} onChange={this.handleEdit.bind(this)}/><br/>
-            <Label>Public</Label><br/>
-            <Input name="public" type="checkbox" checked={this.state.editEvent.public} onChange={this.handleEdit.bind(this)}/><br/>
+            <Label>Event name</Label>
+            <Input name="name" type="text" placeholder={this.state.event.name} value={this.state.editEvent.name} onChange={this.handleEdit.bind(this)}/>
+            <PublicWrap>
+              <Label>Public</Label>
+              <Checkbox name="public" type="checkbox" checked={this.state.editEvent.public} onChange={this.handleEdit.bind(this)}/>
+            </PublicWrap>
             <Submit type="submit"/>
           </Form>
           </EditPopUp>

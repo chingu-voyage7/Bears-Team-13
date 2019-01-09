@@ -266,36 +266,11 @@ export default class Event extends Component {
           
         }
 
-
-            <Button onClick={this.handleInviteClick}> invite friend </Button>
-          </ButtonWrap>
-
-          {
-            this.state.inviteClicked
-              ? <InvitePopUp closePopUp={this.closePopUp} eventId={this.state.event_id}></InvitePopUp>
-              : ""
-          }
-          { this.state.editClicked ? (
-            <EditPopUp>
-              <CloseButton onClick={this.closePopUp}> X </CloseButton>
-            <Form onSubmit={this.editEvent.bind(this)}>
-              <Label>Event name</Label>
-              <Input name="name" type="text" placeholder={this.state.event.name} value={this.state.editEvent.name} onChange={this.handleEdit.bind(this)}/>
-              <PublicWrap>
-                 <PublicLabel>Public</PublicLabel>
-                 <Checkbox name="public" type="checkbox" checked={this.state.editEvent.public} onChange={this.handleEdit.bind(this)}/>
-              </PublicWrap>
-              
-              <Submit type="submit"/>
-            </Form>
-            </EditPopUp>
-            ):""
-            
-          }
+        
 
       
         </OneEventWrap>
-      </>
+   
     );
   }
 }

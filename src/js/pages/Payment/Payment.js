@@ -4,14 +4,14 @@ import {
   CartWrap,
   ItemsWrap,
   Item,
-  ImageWrap,
+  Image,
   ImagePriceWrap,
   PriceSelectWrap,
   ItemName,
   Price,
-  Delete,
+  ButtonsWrap,
   Checkout
-} from "./cart-style";
+} from "../Cart/cart-style";
 import { Greeting } from "../MyAccount/myAccount-style";
 import { Link } from "react-router-dom";
 
@@ -44,7 +44,7 @@ export default class Cart extends Component {
   onCompletePurchase = () => {
     axios
       .post("/api/mycart/purchase")
-      .then(res => console.log(res.data))
+      .then(res => console.log(res.data), this.setState({ cart: []}), alert("Your purchase is complete!"))
       .catch(err => console.log(err.response));
   }
 
@@ -71,12 +71,8 @@ export default class Cart extends Component {
                 <Item key={event._id}>
                   <ItemName>{item.name}</ItemName>
                   <ImagePriceWrap>
-                    <ImageWrap>
-                      <img
-                        src={"/api/static/images/item." + item._id}
-                        alt="item"
+                      <Image src={"/api/static/images/item." + item._id}alt="item"
                       />
-                    </ImageWrap>
                     <PriceSelectWrap>
                       <Price>${item.usd}</Price>
                       <p>
@@ -100,8 +96,9 @@ export default class Cart extends Component {
             })()}
           </p>
         </ItemsWrap>
-
-        <Checkout onClick={this.onCompletePurchase}>Complete purchase</Checkout>
+         <ButtonsWrap>
+          <Checkout onClick={this.onCompletePurchase}>Complete purchase</Checkout>
+        </ButtonsWrap>
       </CartWrap>
     );
   }

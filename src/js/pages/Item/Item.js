@@ -17,14 +17,14 @@ export default class Item extends Component {
       item_id: this.props.match.params.item_id,
       events: [],
       selected: "",
-      cartItemsLength:0
+      cartLength:0
     }
   }
 
   componentDidMount() {
     this.fetchItem();
     this.fetchRecipients();
-    this.fetchCart();
+    this.fetchCartLength();
   }
 
   fetchItem() {
@@ -45,12 +45,10 @@ export default class Item extends Component {
       .catch(err => console.log(err.response))
   }
 
-  fetchCart() {
-    axios.get('/api/mycart')
-      .then( res => {
-   
-          this.setState({cartItemsLength: res.data.length});
-          console.log("cart length fetched " + res.data.length);
+  fetchCartLength() {
+    axios.get('/api/mycart/length')
+      .then((res) => {
+        this.setState({cartLength: res.data.length});
       })
       .catch((err) => {
         console.log(err);
@@ -62,10 +60,10 @@ export default class Item extends Component {
     const { selected } = this.state;
 
     axios.post('/api/mycart/update', { item_id: this.state.item_id, event_id: selected })
-      .then( res => console.log(res.data), this.fetchCart() )
+      .then( res => console.log(res.data), this.fetchCartLength() )
       .catch( err => console.log(err.response));
 
-      this.fetchCart();
+      this.fetchCartLength();
   }
 
   handleChange = (e) => {
@@ -79,7 +77,7 @@ export default class Item extends Component {
     return <ItemWrap>
         
              <CartWrap>
-               <Link style={{ textDecoration: 'none' }} to="/cart"> <i  style={iconStyle} className="fas fa-shopping-cart"></i><CartSpan>{this.state.cartItemsLength} </CartSpan>  </Link>
+               <Link style={{ textDecoration: 'none' }} to="/cart"> <i  style={iconStyle} className="fas fa-shopping-cart"></i><CartSpan>{this.state.cartLength} </CartSpan>  </Link>
              </CartWrap>
             
              <H2>{item.name}</H2>
@@ -94,7 +92,6 @@ export default class Item extends Component {
               Select a recipient
             </option>
             { events.map((event) => {
-              console.log(JSON.stringify(event));
                 return (
                   <option
                     value={event._id}

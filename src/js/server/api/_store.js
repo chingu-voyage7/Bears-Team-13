@@ -113,7 +113,7 @@ router.get('/mycart', isAuth, (req, res) => {
 
         events.forEach((event, i) => {
           recipients.some((recipient) => {
-            if (event.recipient._id.equals(recipient._id)) {
+            if (event.recipient._id === recipient._id) {
               console.log("Match. Setting recipient to\n" + recipient);
               events[i].recipient = recipient;
               return true;
@@ -161,6 +161,14 @@ router.get('/mycart', isAuth, (req, res) => {
         });
       });
     });
+  });
+});
+
+router.get("/mycart/length", isAuth, (req, res) => {
+  User.findOne({_id: new ObjectID(req.user._id)}, {cart: 1}, (err, user) => {
+    if (err) { return res.sendStatus(500); }
+    if (!user) { return res.sendStatus(404); }
+    return res.json({length: Object.keys(user.cart).length});
   });
 });
 

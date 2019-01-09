@@ -6,6 +6,7 @@ import Footer from '../Footer/Footer.js';
 import './app.css';
 import './normalize.css';
 import axios from 'axios';
+import { connect } from 'mongoose';
 
 const ROUTES = require('./routes.js').ROUTES;
 

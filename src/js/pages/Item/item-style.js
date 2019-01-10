@@ -95,10 +95,16 @@ margin-left:5px;
 
 const CartWrap = styled.div`
 margin-bottom:40px;
+margin-top:10px;
 /* border:1px red solid; */
-width:90%;
-margin: 0 auto;
+/* width:90%; */
+/* margin: 0 auto; */
 display:flex;
 justify-content:flex-end;
+border-bottom:3px #D10A0A solid;
+padding-bottom:10px;
+width:70px;
+float:right;
+margin-left:70%;
 `
 export {ItemWrap, ImageWrap, H2, Form, Price, Submit, Select, NameCartWrap, CartSpan, CartWrap}

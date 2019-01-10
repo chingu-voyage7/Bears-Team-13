@@ -4,6 +4,7 @@
     border:none;
     border-bottom:1px #D10A0A solid;
     color:#D10A0A;
+    background-color:white;
     font-size:15px;
     /* box-shadow:1px 1px 1px rgba(0,0,0,0.5); */
     transition:.2s all linear;

@@ -1,9 +1,10 @@
 import React, { Component } from 'react';
 import axios from 'axios';
-import { OneEventWrap, EventTitle, Time, TimeSpan,RecipientName,ButtonWrap, ExchangDate, TitleEditWrap , CountdownWrap, EditPopUp, Form, PublicWrap, Checkbox, PublicLabel} from './event-style';
+import { OneEventWrap, EventTitle, Time, TimeSpan,RecipientName,ButtonWrap, ExchangDate, TitleEditWrap , CountdownWrap, EditPopUp, Form, PublicWrap, Checkbox, PublicLabel, ItemWrap, ItemName, P} from './event-style';
+import {Image} from '../Cart/cart-style';
 import {Button} from '../MyAccount/myAccount-style';
-import {CloseButton, Input} from '../../components/PopUp/popup-style'
-import {Submit,   Label} from '../../components/InvitePopUp/invitePopup-style'
+import {CloseButton, Input} from '../../components/PopUp/popup-style';
+import {Submit,   Label} from '../../components/InvitePopUp/invitePopup-style';
 
 
 import InvitePopUp from '../../components/InvitePopUp/InvitePopUp'
@@ -136,7 +137,7 @@ export default class Event extends Component {
       if (purchases[this.state.event_id]) {
         axios.get("/api/item?item_id=" + purchases[this.state.event_id])
         .then((res) => {
-          alert("hit");
+          // alert("hit");
           this.setState({purchase: res.data});
         })
         .catch((err) => {
@@ -169,10 +170,11 @@ export default class Event extends Component {
     }
     let item = this.state.purchase;
     return (
-      <div>
-        <b>{item.name}</b>
-        <img src={"/api/static/images/item." + item._id} alt={item.name}></img>
-      </div>
+     
+      <ItemWrap>
+         <P> You purchased <ItemName>{item.name}</ItemName> for {this.state.event.recipient.username} </P>
+        <Image src={"/api/static/images/item." + item._id} alt={item.name}></Image>
+      </ItemWrap>
     );
   }
 
@@ -267,10 +269,12 @@ export default class Event extends Component {
           <EditPopUp>
             <CloseButton onClick={this.closePopUp}> X </CloseButton>
           <Form onSubmit={this.editEvent.bind(this)}>
-            <Label>Event name</Label><br/>
-            <Input name="name" type="text" placeholder={this.state.event.name} value={this.state.editEvent.name} onChange={this.handleEdit.bind(this)}/><br/>
-            <Label>Public</Label><br/>
-            <Input name="public" type="checkbox" checked={this.state.editEvent.public} onChange={this.handleEdit.bind(this)}/><br/>
+            <Label>Event name</Label>
+            <Input name="name" type="text" placeholder={this.state.event.name} value={this.state.editEvent.name} onChange={this.handleEdit.bind(this)}/>
+            <PublicWrap>
+              <Label>Public</Label>
+              <Checkbox name="public" type="checkbox" checked={this.state.editEvent.public} onChange={this.handleEdit.bind(this)}/>
+            </PublicWrap>
             <Submit type="submit"/>
           </Form>
           </EditPopUp>

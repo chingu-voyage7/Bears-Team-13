@@ -65,6 +65,19 @@ export default class Event extends Component {
     this.setState({editEvent: temp});
   }
 
+  onDeleteEvent = () => {
+    const { event_id } = this.state
+    const { history } = this.props
+
+    axios.delete('/api/deleteevent', { data: {event_id: event_id} })
+      .then(res => {
+        history.push('/myevents')
+        alert('Event event_id deleted')
+      })
+      .catch(err => console.log(err.response))
+
+  }
+
   sendInvite(e) {
     e.preventDefault();
 
@@ -129,7 +142,7 @@ export default class Event extends Component {
         })
         .catch((err) => {
           console.log(err);
-        });  
+        });
       }
     })
     .catch((err) => {
@@ -202,7 +215,6 @@ export default class Event extends Component {
   }
 
   render() {
-    console.log("Rendering...");
     return (
       <OneEventWrap>
         {this.state.message}<br />
@@ -266,15 +278,41 @@ export default class Event extends Component {
             <Submit type="submit"/>
           </Form>
           </EditPopUp>
-          ):""
-          
-        }
+          ):""}
 
-        
+          {this.isAuthor()?<Button onClick={this.onDeleteEvent}>Delete Event</Button>:"" }
 
-      
-        </OneEventWrap>
-   
+          {
+            this.state.inviteClicked
+              ? <InvitePopUp closePopUp={this.closePopUp} eventId={this.state.event_id}></InvitePopUp>
+              : ""
+          }
+          { this.state.editClicked ? (
+            <EditPopUp>
+              <CloseButton onClick={this.closePopUp}> X </CloseButton>
+            <Form onSubmit={this.editEvent.bind(this)}>
+              <Label>Event name</Label>
+              <Input name="name" type="text" placeholder={this.state.event.name} value={this.state.editEvent.name} onChange={this.handleEdit.bind(this)}/>
+              <PublicWrap>
+                 <PublicLabel>Public</PublicLabel>
+                 <Checkbox name="public" type="checkbox" checked={this.state.editEvent.public} onChange={this.handleEdit.bind(this)}/>
+              </PublicWrap>
+              
+              <Submit type="submit"/>
+            </Form>
+            </EditPopUp>
+            ):""
+
+          }
+
+          {
+            this.state.inviteClicked
+              ? <InvitePopUp closePopUp={this.closePopUp} eventId={this.state.event_id}></InvitePopUp>
+              : ""
+          }
+
+
+        </OneEventWrap> 
     );
   }
 }

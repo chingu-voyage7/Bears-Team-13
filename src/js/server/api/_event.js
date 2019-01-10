@@ -176,18 +176,13 @@ router.delete('/deleteevent', isAuth, required(["event_id"]), (req, res) => {
     if (err) { return res.sendStatus(500); }
     if (!event) { return res.sendStatus(400); }
 
-    console.log(JSON.stringify(event.members));
-    console.log(req.user.username);
-
     // Authorized to delete?
-    if (event.author._id === req.user._id) {
+    if (ObjectID.toString(event.author._id) === ObjectID.toString(req.user._id)) {
 
       // Delete event
       Event.deleteOne({_id: new ObjectID(req.body.event_id)}, (err, doc) => {
         if (err) { return res.sendStatus(500); }
         if (!doc) { return res.sendStatus(400); }
-        console.log("Deleted event " + event.name + ".");
-        console.log(doc);
         res.send(doc);
       });
     } else {

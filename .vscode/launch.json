@@ -9,7 +9,7 @@
       "type": "node",
       "request": "launch",
       "name": "Launch Program",
-      "program": "${workspaceFolder}/src/js/server/server.js"
+      "program": "${workspaceFolder}/src/js/server/api.js"
     }
   ]
 }

@@ -77,16 +77,16 @@ export default class Cart extends Component {
                 </Item>;
             });
           })()}
-          <p>
+          <b>
             Total: $ {(function() {
               let total = 0;
               cart.forEach(pair => {
                 total += pair.item.usd;
               });
 
-              return total;
+              return Math.floor(total*100)/100;
             })()}
-          </p>
+          </b>
         </ItemsWrap>
         <ButtonsWrap>
           <Link to="/store"><Button>Continue Shopping</Button></Link>

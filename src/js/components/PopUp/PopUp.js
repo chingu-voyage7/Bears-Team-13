@@ -25,7 +25,6 @@ export default class PasswordPopUp extends Component {
   }
 
   
-  
   onUpdateGeneral = (e) => { 
     e.preventDefault();
     // this.props.closePopUp();

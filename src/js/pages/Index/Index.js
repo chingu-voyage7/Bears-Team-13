@@ -72,8 +72,8 @@ export default class Index extends Component {
        <AboutContainer>
          <SantaImage> </SantaImage>
          <AboutTextContainer>
-           <AboutText>Lorem ipsum dolor sit amet, consectetur adipiscing elit. Quisque bibendum odio ligula, vel ultricies sapien maximus non. Praesent ullamcorper lorem at consequat accumsan. Integer feugiat scelerisque commodo.</AboutText>
-           <StartExchange> start your exchange </StartExchange>
+           <AboutText>Start your FREE Secret Santa Gift Exchange today! 100% free, 100% online, 100% convenient. All gifts are under $20. Just for you! :)</AboutText>
+           <StartExchange> Start your exchange </StartExchange>
              <ButtonContainer>
                  <Link to="/signup" styles={{textDecoration:'none'}}><Button> sign up </Button></Link>
                  <Link to="/login" style={{ textDecoration: 'none' }}> <Button> log in </Button></Link>

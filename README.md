@@ -16,6 +16,6 @@ This is a project for Chingu Voyage 7.
 
 
 ## Start The App
-* Run "npm build" to build production. Then run "node serve.js" to run production"
+* Run "npm build" to build production. Then run "node serve.js" to run production
 * Run "npm start" to run the frontend (development)
 * Run "npm run beast" to run the frontend and backend (development)

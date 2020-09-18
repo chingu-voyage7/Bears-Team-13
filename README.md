@@ -1,19 +1,14 @@
-# Secret Santa Website
+# Secret Santa Shop
 http://secret-santa-13.herokuapp.com
 
-Hello and welcome to our Secret Santa Website repository. I'm Alexander Cannon, website builder and project manager for Chingu Voyage 7, bears-team-13.
-
-
 ## What it is
-Secret Santa online. You can create events and purchase gifts for your secret santa.
-This is a project for Chingu Voyage 7.
+A simple, online secret santa shop built during [Chingu Voyage](https://www.chingu.io/) 7.
+This is a side-project developed as a _learning experience_ for the authors below: 
 
 ## Authors
-* Alex - https://github.com/alex-cannon
-* Inna - https://github.com/innaleikina
-* Gabriel - https://github.com/gabrielgs
-
-
+* Alexander Cannon - Team Lead & Full-Stack Developer - https://github.com/alex-cannon
+* Inna - Designer & Front-end Developer - https://github.com/innaleikina
+* Gabriel - Front-End Developer - https://github.com/gabrielgs
 
 ## Start The App
 * Run "npm build" to build production. Then run "node serve.js" to run production
